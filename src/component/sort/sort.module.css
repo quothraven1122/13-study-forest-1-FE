@@ -1,6 +1,5 @@
 .sortContainer {
   display: flex;
-  width: 180px;
   padding: 9px 20px;
   flex-direction: column;
   align-items: flex-start;
