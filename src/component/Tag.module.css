@@ -1,0 +1,26 @@
+/* 태그 묶음 */
+.tagGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 태그 공통 스타일 */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #3d3d3d; /* 피그마의 어두운 배경 */
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* 아이콘 */
+.icon {
+  font-size: 14px;
+  line-height: 1;
+}
