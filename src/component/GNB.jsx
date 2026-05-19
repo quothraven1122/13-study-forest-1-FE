@@ -1,16 +1,13 @@
 import styles from './GNB.module.css';
-import logo from '../asset/img/logo.png'; // 로고 이미지 경로 (실제 파일명에 맞게 수정)
+import logo from '../asset/img/logo.png';
 
 function GNB() {
   return (
     <header className={styles.gnb}>
       <div className={styles.inner}>
-        {/* 로고 */}
         <a href='/' className={styles.logo}>
           <img src={logo} alt='공부의 숲 로고' />
         </a>
-
-        {/* 스터디 만들기 버튼 */}
         <button className={styles.createBtn}>스터디 만들기</button>
       </div>
     </header>

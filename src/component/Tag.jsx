@@ -1,18 +1,17 @@
 import styles from './Tag.module.css';
+import pointIcon from '../asset/icon/ic_point.svg';
 
-// point: 포인트 숫자, memberCount: 멤버 수
-function Tag({ point = 0, memberCount = 0 }) {
+function Tag({ point = 0, memberCount = 0, status = 'light' }) {
+  const tagClass = status === 'dark' ? styles.tagDark : styles.tagLight;
+
   return (
     <div className={styles.tagGroup}>
-      {/* 포인트 태그 */}
-      <span className={styles.tag}>
-        <span className={styles.icon}>🌿</span>
+      <span className={`${styles.tag} ${tagClass}`}>
+        <img src={pointIcon} alt='포인트' className={styles.icon} />
         {point}P 획득
       </span>
-
-      {/* 멤버 수 태그 */}
-      <span className={styles.tag}>
-        <span className={styles.icon}>👤</span>
+      <span className={`${styles.tag} ${tagClass}`}>
+        <span className={styles.icon}>👩🏻‍💻</span>
         {memberCount}
       </span>
     </div>

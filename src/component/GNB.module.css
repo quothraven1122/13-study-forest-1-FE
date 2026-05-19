@@ -1,14 +1,11 @@
-/* GNB 전체 바 */
 .gnb {
   width: 100%;
-  background-color: #f5f0e8; /* 피그마의 크림색 배경 */
-  border-bottom: 1px solid #e0d9cc;
+  background-color: #f6f4ef;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-/* 내부 레이아웃 - 양쪽 정렬 */
 .inner {
   max-width: 1200px;
   margin: 0 auto;
@@ -18,15 +15,13 @@
   justify-content: space-between;
 }
 
-/* 로고 이미지 */
 .logo img {
   height: 48px;
   display: block;
 }
 
-/* 스터디 만들기 버튼 */
 .createBtn {
-  background-color: #6aaa64; /* 피그마의 초록색 */
+  background-color: #99c08e;
   color: #ffffff;
   border: none;
   border-radius: 20px;
@@ -41,7 +36,6 @@
   background-color: #5a9455;
 }
 
-/* 태블릿 (768px 이하) */
 @media (max-width: 768px) {
   .inner {
     padding: 10px 24px;
@@ -57,7 +51,6 @@
   }
 }
 
-/* 모바일 (375px 이하) */
 @media (max-width: 375px) {
   .inner {
     padding: 8px 16px;
