@@ -1,6 +1,6 @@
 ---
 name: 'refactor: 리팩토링'
-about: 기능 변경 없이 코드 수정할 시 이슈 템플
+about: 기능 변경 없이 코드 수정할 시 이슈 템플릿
 title: ''
 labels: ''
 assignees: ''

@@ -1,6 +1,6 @@
 ---
 name: 'fix: 버그 고치기'
-about: 버그 이슈 템플
+about: 버그 이슈 템플릿
 title: ''
 labels: ''
 assignees: ''
