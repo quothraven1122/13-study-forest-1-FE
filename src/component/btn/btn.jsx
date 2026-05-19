@@ -3,7 +3,7 @@ import styles from './btn.module.css';
 export default function Button({
   children,
   variant = 'primary',
-  size = 'large',
+  size = 'medium',
   shape = 'default',
   width,
   height,
