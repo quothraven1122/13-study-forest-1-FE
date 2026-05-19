@@ -20,22 +20,6 @@
   display: block;
 }
 
-.createBtn {
-  background-color: #99c08e;
-  color: #ffffff;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 24px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.createBtn:hover {
-  background-color: #5a9455;
-}
-
 @media (max-width: 768px) {
   .inner {
     padding: 10px 24px;
@@ -43,11 +27,6 @@
 
   .logo img {
     height: 36px;
-  }
-
-  .createBtn {
-    font-size: 14px;
-    padding: 8px 16px;
   }
 }
 
@@ -58,10 +37,5 @@
 
   .logo img {
     height: 28px;
-  }
-
-  .createBtn {
-    font-size: 12px;
-    padding: 6px 12px;
   }
 }
