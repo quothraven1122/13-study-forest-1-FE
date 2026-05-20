@@ -1,6 +1,12 @@
+import './index.css';
+import GNB from './component/GNB';
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <GNB />
+    </>
+  );
 }
 
 export default App;
