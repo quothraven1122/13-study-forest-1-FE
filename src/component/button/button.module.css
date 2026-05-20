@@ -3,6 +3,79 @@
   font-family: 'EF_jejudoldam';
   src: url('../button/EF_jejudoldam\(TTF\).ttf') format('truetype');
 }
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2')
+    format('woff2');
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2')
+    format('woff2');
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2')
+    format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2')
+    format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2')
+    format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2')
+    format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2')
+    format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2')
+    format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2')
+    format('woff2');
+  font-weight: 900;
+  font-display: swap;
+}
+
+/* 기본버튼 (모서리가 덜 둥근 애) */
 .button {
   border: none;
   border-radius: 16px;
@@ -11,80 +84,126 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px;
-  height: 58px;
+  /* padding: 10px; */
+  width: 100%;
+  height: 58px; /* 기본값 */
+  box-sizing: border-box;
 
   color: #fff;
   font-family: EF_jejudoldam;
   font-size: 18px;
   font-weight: 400;
-  text-shadow: 0px -2px #578246;
   text-align: center;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.button:focus {
+  outline: none;
 }
 
 /* 사이즈 */
+/* height만 정했고, width는 알아서.. */
 .size_very_small {
-  width: 106px;
   height: 38px;
   font-size: 11.925px;
 }
 
-.size_small {
-  width: 140px;
-  height: 58px;
+.size_all {
+  /* height: 58px; 기본값*/
   font-size: 18px;
 }
 
-.size_medium {
-  width: 252px;
-  height: 58px;
-  font-size: 18px;
+/* 버튼 모양 */
+/* 모서리가 둥근 버튼 (아이콘과 같이 있는 애) */
+.shape_round {
+  border-radius: 50px;
+  font-family: Pretendard;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+  text-shadow: none !important;
 }
 
-.size_large {
-  width: 100%;
-  height: 58px;
-  font-size: 18px;
+.shape_round.size_small {
+  height: 45px;
+  font-size: 18x;
+  text-shadow: none;
+}
+
+.shape_round.size_medium {
+  height: 60px;
+  font-size: 28px;
+  text-shadow: none;
+}
+
+/* Circle (글씨없이 동그란 애) */
+.circle {
+  width: 64px; /* 기본값 */
+  height: 64px; /* 기본값 */
+  border-radius: 50%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  flex-shrink: 0;
+  outline: none;
+}
+
+.circle:focus {
+  outline: none;
+}
+
+.circle.size_small {
+  width: 48px;
+  height: 48px;
 }
 
 /* 색상 */
 .variant_primary {
   background: var(--color-brand, #99c08e);
   color: #fff;
+  text-shadow: 0px 2px #578246;
+}
+.variant_primary.shape_round {
+  text-shadow: none;
+}
+.variant_primary:hover:not(:disabled) {
+  background: #85af7a;
 }
 
-.variant_secondary {
-  background: var(--gray-gray_818181, #818181);
-  color: #fff;
-}
-
-.variant_gray {
+/* 취소 버튼은 색이 혼자만 연해서 뺐다 */
+.variant_cancel {
   background: #ddd;
-  color: var(--gray-gray_818181, #818181);
+  color: #fff;
+  text-shadow: 0px 2px var(--gray-gray_818181, #818181);
+}
+.variant_cancel:hover:not(:disabled) {
+  background: #c9c9c9;
 }
 
-.shape_round {
-  border-radius: 50px;
-}
-
-.shape_circle {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  padding: 0;
-  box-shadow: none;
-}
-
-.shape_circle.size_small {
-  width: 48px;
-  height: 48px;
-}
-
+/* 회색 버튼(클릭못하는 버튼) */
 .button:disabled {
   background-color: var(--gray-gray_818181, #818181);
   cursor: not-allowed;
 }
+.circle:disabled {
+  background-color: var(--gray-gray_818181, #818181);
+  cursor: not-allowed;
+}
 
+/* 동그란 버튼 초록색 버튼 */
+.circle.restart {
+  background-color: #85af7a;
+}
+.circle.pause {
+  background-color: #578246;
+}
 .icon {
   display: flex;
   align-items: center;
