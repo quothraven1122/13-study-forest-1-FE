@@ -1,16 +1,16 @@
-import styles from './Modal2.module.css';
+import Modal2PC from './Modal2PC';
+import Modal2Mobile from './Modal2Mobile';
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 
-export default function Modal2({ title, message, children, onSubmit }) {
+export default function Modal2(props) {
+  const size = useResponsiveWidth();
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <h2 className={styles.title}>{title}</h2>
-        <p className={styles.message}>{message}</p>
-        <div className={styles.children}>{children}</div>
-      </div>
-
-      {/*임시 버튼 - 나중에 컴포넌트로 대체*/}
-      <button className={styles.btn}>수정하러 가기</button>
-    </div>
+    <>
+      {size === 'mobile' ? (
+        <Modal2Mobile {...props} />
+      ) : (
+        <Modal2PC {...props} />
+      )}
+    </>
   );
 }

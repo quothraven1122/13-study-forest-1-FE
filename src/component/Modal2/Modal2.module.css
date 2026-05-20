@@ -14,9 +14,30 @@
   align-items: center;
   gap: 24px;
 }
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .title {
   font-weight: 800;
   font-size: 24px;
+}
+.closeBtnPC {
+  position: absolute;
+  right: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #578246;
+  cursor: pointer;
+}
+.closeBtnMobile {
+  font-size: 16px;
+  font-weight: 500;
+  color: #578246;
+  cursor: pointer;
+  margin-top: 14px;
 }
 .message {
   font-weight: 500;
@@ -34,6 +55,7 @@
   text-align: center;
   color: #fff;
   margin-top: 40px;
+  cursor: pointer;
 }
 .children {
   text-align: left;
