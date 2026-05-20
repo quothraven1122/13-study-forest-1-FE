@@ -1,8 +1,6 @@
 import styles from './Modal2.module.css';
-import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 
 export default function Modal2PC({ title, message, children, onSubmit }) {
-  const size = useResponsiveWidth();
   return (
     <div className={styles.container}>
       <div className={styles.content}>
