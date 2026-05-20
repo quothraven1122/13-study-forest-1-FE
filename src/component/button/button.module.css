@@ -1,5 +1,5 @@
 /* Button.module.css */
-@font-face {
+/* @font-face {
   font-family: 'EF_jejudoldam';
   src: url('../button/EF_jejudoldam\(TTF\).ttf') format('truetype');
 }
@@ -73,7 +73,7 @@
     format('woff2');
   font-weight: 900;
   font-display: swap;
-}
+} */
 
 /* 기본버튼 (모서리가 덜 둥근 애) */
 .button {
