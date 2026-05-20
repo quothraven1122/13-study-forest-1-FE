@@ -1,11 +1,7 @@
-
+import Chip from './component/Chip/Chip';
 
 function App() {
-
-
-  return (
-  <></>
-  )
+  return <Chip />;
 }
 
-export default App
+export default App;
