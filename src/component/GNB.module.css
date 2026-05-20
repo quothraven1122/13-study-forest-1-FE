@@ -1,0 +1,41 @@
+.gnb {
+  width: 100%;
+  background-color: #f6f4ef;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo img {
+  height: 48px;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .inner {
+    padding: 10px 24px;
+  }
+
+  .logo img {
+    height: 36px;
+  }
+}
+
+@media (max-width: 375px) {
+  .inner {
+    padding: 8px 16px;
+  }
+
+  .logo img {
+    height: 28px;
+  }
+}
