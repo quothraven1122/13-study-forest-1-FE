@@ -16,11 +16,7 @@ export default function Dropdown({
   const [selectedValue, setSelectedValue] = useState(options[0].label);
 
   return (
-    <div
-      className={styles.sortContainer}
-      style={{ width }}
-      onClick={(e) => e.stopPropagation()}
-    >
+    <div className={styles.sortContainer} style={{ width }}>
       <div className={styles.sortBox}>
         <p>{selectedValue}</p>
         <button onClick={() => setIsOpen(!isOpen)}>
