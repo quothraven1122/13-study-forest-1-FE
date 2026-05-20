@@ -1,43 +1,31 @@
 import styles from './Button.module.css';
+// import pauseIcon from '../../assets/icon/ic_pause.svg';
+// import playIcon from '../../assets/icon/ic_play.svg'
+// import restartIcon from '../../assets/icon/ic_restart.svg'
+// import stopIcon from '../../assets/icon/ic_stop.svg'
 
 export default function Button({
   children,
-  variant = 'Primary',
-  size = 'All',
+  variant = 'Primary', // color
+  height = 'All', // height
   shape = 'Default', // 'Default' | 'Round' | 'circle'
   icon = null,
-  disabled = false,
-  onClick,
-  className = '', // circle 추가 클래스용 (restart, pause 등)
+  ...props
 }) {
-  // Circle은 완전히 다르게 처리
-  if (shape === 'circle') {
-    const sizeClass = styles[`size${size}`] || '';
-    const variantClass = styles[`variant${variant}`];
-    const customClass = className ? styles[className] : '';
-
-    const circleClass = [styles.circle, sizeClass, variantClass, customClass]
-      .filter(Boolean)
-      .join(' ');
-
-    return (
-      <button className={circleClass} disabled={disabled} onClick={onClick}>
-        {icon && <span className={styles.icon}>{icon}</span>}
-      </button>
-    );
-  }
-
-  // 일반 버튼 + Round
-  const shapeClass = shape === 'Round' ? styles.shapeRound : '';
-  const sizeClass = styles[`size${size}`];
+  const shapeClass =
+    {
+      Round: styles.shapeRound,
+      Circle: styles.shapeCircle,
+    }[shape] || '';
+  const heightClass = styles[`height${height}`];
   const variantClass = styles[`variant${variant}`];
 
-  const buttonClass = [styles.button, shapeClass, sizeClass, variantClass]
+  const buttonClass = [styles.button, shapeClass, heightClass, variantClass]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <button className={buttonClass} disabled={disabled} onClick={onClick}>
+    <button className={buttonClass} {...props}>
       {icon && <span className={styles.icon}>{icon}</span>}
       {children}
     </button>
