@@ -1,0 +1,41 @@
+.container {
+  width: 100%;
+  height: fit-content;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.title {
+  font-weight: 800;
+  font-size: 24px;
+}
+.message {
+  font-weight: 500;
+  font-size: 18px;
+  color: #818181;
+}
+.btn {
+  width: 100%;
+  height: 58px;
+  border: 0;
+  background-color: #99c08e;
+  border-radius: 16px;
+  font-weight: 400;
+  font-size: 18px;
+  text-align: center;
+  color: #fff;
+  margin-top: 40px;
+}
+.children {
+  text-align: left;
+  width: 100%;
+}
