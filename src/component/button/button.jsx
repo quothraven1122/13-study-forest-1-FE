@@ -2,9 +2,9 @@ import styles from './Button.module.css';
 
 export default function Button({
   children,
-  variant = 'primary',
-  size = 'all',
-  shape = 'default', // 'default' | 'round' | 'circle'
+  variant = 'Primary',
+  size = 'All',
+  shape = 'Default', // 'default' | 'round' | 'circle'
   icon = null,
   disabled = false,
   onClick,
@@ -12,8 +12,8 @@ export default function Button({
 }) {
   // Circle은 완전히 다르게 처리
   if (shape === 'circle') {
-    const sizeClass = styles[`size_${size}`] || '';
-    const variantClass = styles[`variant_${variant}`];
+    const sizeClass = styles[`size${size}`] || '';
+    const variantClass = styles[`variant${variant}`];
     const customClass = className ? styles[className] : '';
 
     const circleClass = [styles.circle, sizeClass, variantClass, customClass]
@@ -28,9 +28,9 @@ export default function Button({
   }
 
   // 일반 버튼 + Round
-  const shapeClass = shape === 'round' ? styles.shape_round : '';
-  const sizeClass = styles[`size_${size}`];
-  const variantClass = styles[`variant_${variant}`];
+  const shapeClass = shape === 'Round' ? styles.shapeRound : '';
+  const sizeClass = styles[`size${size}`];
+  const variantClass = styles[`variant${variant}`];
 
   const buttonClass = [styles.button, shapeClass, sizeClass, variantClass]
     .filter(Boolean)
