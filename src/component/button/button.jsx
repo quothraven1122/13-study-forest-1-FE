@@ -4,7 +4,7 @@ export default function Button({
   children,
   variant = 'Primary',
   size = 'All',
-  shape = 'Default', // 'default' | 'round' | 'circle'
+  shape = 'Default', // 'Default' | 'Round' | 'circle'
   icon = null,
   disabled = false,
   onClick,
