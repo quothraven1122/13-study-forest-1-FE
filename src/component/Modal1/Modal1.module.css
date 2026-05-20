@@ -1,0 +1,94 @@
+* {
+  border: none;
+}
+button {
+  cursor: pointer;
+}
+.overlay {
+  display: flex;
+  width: 648px;
+  height: 861px;
+  padding: 40px 24px;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 20px;
+  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+  background: #fff;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.title {
+  color: var(--black-black_414141, #414141);
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+
+.habitListBox {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.habitBox {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.habit {
+  width: 400px;
+  height: 54px;
+  border-radius: 20px;
+  background: var(--gray-gray_EEEEEE, #eee);
+  border: none;
+  color: var(--gray-gray_818181, #818181);
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+}
+
+.deleteBtn {
+  position: absolute;
+  left: calc(100% + 8px);
+  width: 48px;
+  height: 48px;
+  padding: 12px;
+  border-radius: 50px;
+  background: var(--pink-pink_FDE0E9, #fde0e9);
+}
+
+.addBtn {
+  display: flex;
+  width: 400px;
+  height: 54px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  background: #fff;
+  border-radius: 20px;
+  border: 2px solid var(--black-black_414141, #414141);
+  background: rgba(255, 255, 255, 0);
+}
