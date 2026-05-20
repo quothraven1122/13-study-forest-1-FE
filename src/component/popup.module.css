@@ -16,8 +16,8 @@
 }
 
 .popupContent {
-  width: 648px;
-  height: 255px;
+  width: min(648px, calc(100% - 40px));
+  min-height: 255px;
 
   padding: 40px 28px 32px;
 
@@ -28,6 +28,7 @@
   flex-direction: column;
   justify-content: center;
   gap: 56px;
+  /* space-between -> center + gap: 56px 수정 적용 */
 
   box-sizing: border-box;
 }
@@ -44,14 +45,17 @@
 }
 
 .buttonGroup {
+  width: 100%;
+
   display: flex;
   justify-content: center;
   gap: 16px;
 }
 
 .buttonGroup button {
-  width: 288px;
+  flex: 1;
   height: 58px;
+  /* 반응형을 고려해 width:100% 대신 flex: 1; 을 적용했습니다. */
 
   padding: 10px;
 
@@ -61,17 +65,38 @@
   font-size: 18px;
   font-weight: 600;
 
+  color: #ffffff;
+
   cursor: pointer;
 }
 
 /* 취소 버튼 */
 .cancelButton {
   background-color: rgba(221, 221, 221, 1);
-  color: #ffffff;
 }
 
 /* 확인 버튼 */
 .confirmButton {
   background-color: rgba(153, 192, 142, 1);
-  color: #ffffff;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+  .popupContent {
+    width: calc(100% - 32px);
+    min-height: 220px;
+
+    padding: 32px 20px 24px;
+    gap: 36px;
+  }
+
+  .buttonGroup {
+    gap: 12px;
+  }
+
+  .buttonGroup button {
+    height: 52px;
+
+    font-size: 16px;
+  }
 }
