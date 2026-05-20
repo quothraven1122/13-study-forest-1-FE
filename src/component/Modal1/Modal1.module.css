@@ -58,8 +58,16 @@ button {
   display: flex;
   flex-direction: column;
   gap: 20px;
+    /* Firefox */
+  scrollbar-width: none;
+
+  /* IE, Edge */
+  -ms-overflow-style: none;
 }
 
+.habitListBox::-webkit-scrollbar {
+  display: none;
+}
 .habitBox {
   padding-left: 58px;
   display: flex;
