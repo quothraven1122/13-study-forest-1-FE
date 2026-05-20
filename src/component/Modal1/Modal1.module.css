@@ -1,22 +1,38 @@
 * {
-  border: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 button {
+  border: none;
   cursor: pointer;
 }
-.overlay {
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.5);
+
   display: flex;
-  width: 648px;
-  height: 861px;
-  padding: 40px 24px;
-  flex-direction: column;
-  gap: 10px;
-  border-radius: 20px;
-  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
-  background: #fff;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal {
+  min-height: 0;
+  width: 100%;
+  max-width: 648px;
+  max-height: 90vh;
+  height: fit-content;
+  padding: 40px 24px;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+  background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,13 +50,18 @@ button {
 }
 
 .habitListBox {
+  min-height: 0;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .habitBox {
-  position: relative;
+  padding-left: 58px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +69,8 @@ button {
 }
 
 .habit {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   height: 54px;
   border-radius: 20px;
   background: var(--gray-gray_EEEEEE, #eee);
@@ -69,8 +91,6 @@ button {
 }
 
 .deleteBtn {
-  position: absolute;
-  left: calc(100% + 8px);
   width: 48px;
   height: 48px;
   padding: 12px;
@@ -80,7 +100,8 @@ button {
 
 .addBtn {
   display: flex;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   height: 54px;
   flex-direction: column;
   justify-content: center;
@@ -90,5 +111,79 @@ button {
   background: #fff;
   border-radius: 20px;
   border: 2px solid var(--black-black_414141, #414141);
-  background: rgba(255, 255, 255, 0);
+}
+.btnBox {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.cancelBtn {
+  display: flex;
+  width: 288px;
+  height: 58px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  background: #ddd;
+  color: var(--gray-gray_818181, #818181);
+  text-align: center;
+  font-family: EF_jejudoldam;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.saveBtn {
+  display: flex;
+  width: 288px;
+  height: 58px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  background: #99c08e;
+  color: #fff;
+  text-align: center;
+  font-family: EF_jejudoldam;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+@media (max-width: 768px) {
+  .modal {
+    width: 344px;
+    padding: 16px 16px 24px;
+  }
+  .title {
+    font-size: 20px;
+  }
+  .habitListBox {
+    gap: 8px;
+  }
+  .habitBox {
+    padding: 0;
+  }
+  .habit {
+    font-size: 14px;
+  }
+  .addBtn {
+    width: 312px;
+    height: 54px;
+  }
+  .btnBox {
+    gap: 16px;
+  }
+  .cancelBtn {
+    width: 140px;
+    height: 58px;
+  }
+  .saveBtn {
+    width: 140px;
+    height: 58px;
+  }
 }

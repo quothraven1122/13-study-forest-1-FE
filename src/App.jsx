@@ -1,7 +1,5 @@
-import Modal1 from './component/Modal1/Modal1';
-
 function App() {
-  return <Modal1 />;
+  return <></>;
 }
 
 export default App;
