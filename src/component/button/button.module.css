@@ -50,49 +50,27 @@
   color: #fff;
 }
 
-.variant_primary:hover:not(:disabled) {
-  background: #85af7a;
-}
-
 .variant_secondary {
   background: #999;
   color: #fff;
 }
 
-.variant_secondary:hover:not(:disabled) {
-  background: #888;
-}
-
-.variant_white {
-  background: #fff;
-  color: #333;
-  border: 1px solid #ddd;
-}
-
-.variant_white:hover:not(:disabled) {
-  background: #f5f5f5;
-}
-
 .variant_gray {
   background: #ddd;
-  color: #666;
-}
-
-.variant_gray:hover:not(:disabled) {
-  background: #ccc;
+  color: #818181;
 }
 
 .shape_circle {
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   padding: 0;
   box-shadow: none;
 }
 
 .shape_circle.size_small {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
 }
 
 .button:disabled {
