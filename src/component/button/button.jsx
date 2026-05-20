@@ -19,7 +19,7 @@ export default function Button({
     .filter(Boolean)
     .join(' ');
 
-  // 인라인 스타일
+  // 인라인 스타일 - 사용자 지정 너비와 높이
   const buttonStyle = {
     ...(width && { width }),
     ...(height && { height }),
