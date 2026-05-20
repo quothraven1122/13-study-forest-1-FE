@@ -1,0 +1,21 @@
+.button {
+  cursor: pointer;
+  border: 0;
+  width: 100%;
+  height: 54px;
+  border-radius: 20px;
+  background: var(--gray-gray_EEEEEE, #eee);
+  color: var(--gray-gray_818181, #818181);
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.isDone {
+  background: var(--brand-brand_99C08E, #99c08e);
+  color: #fff;
+  text-align: center;
+}
