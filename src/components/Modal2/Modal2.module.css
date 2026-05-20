@@ -1,0 +1,63 @@
+.container {
+  width: 100%;
+  height: fit-content;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+.content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.title {
+  font-weight: 800;
+  font-size: 24px;
+}
+.closeBtnPC {
+  position: absolute;
+  right: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #578246;
+  cursor: pointer;
+}
+.closeBtnMobile {
+  font-size: 16px;
+  font-weight: 500;
+  color: #578246;
+  cursor: pointer;
+  margin-top: 14px;
+}
+.message {
+  font-weight: 500;
+  font-size: 18px;
+  color: #818181;
+}
+.btn {
+  width: 100%;
+  height: 58px;
+  border: 0;
+  background-color: #99c08e;
+  border-radius: 16px;
+  font-weight: 400;
+  font-size: 18px;
+  text-align: center;
+  color: #fff;
+  margin-top: 40px;
+  cursor: pointer;
+}
+.children {
+  text-align: left;
+  width: 100%;
+}

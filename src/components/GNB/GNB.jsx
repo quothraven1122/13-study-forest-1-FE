@@ -1,5 +1,5 @@
 import styles from './GNB.module.css';
-import logo from '../asset/img/logo.png';
+import logo from '../../assets/imgs/logo.png';
 
 function GNB() {
   return (
