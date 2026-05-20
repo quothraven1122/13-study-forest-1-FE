@@ -1,0 +1,33 @@
+.tagGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tagDark {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  padding: 4px 12px;
+}
+
+.tagLight {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #000000;
+  padding: 6px 12px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}

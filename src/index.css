@@ -1,0 +1,62 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+@font-face {
+  font-family: 'EF_jejudoldam';
+  src: url('./asset/font/EF_jejudoldam_TTF_.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-black: #414141;
+
+  --color-gray-dark: #818181;
+  --color-gray-mid: #dddddd;
+  --color-gray-light: #eeeeee;
+
+  --color-bg: #f6f4ef;
+
+  --color-brand: #99c08e;
+
+  --color-red: #c41013;
+  --color-red-mid: #f50e0e;
+  --color-red-bg: #ffa3a5;
+
+  --color-green-bg: #e1edde;
+  --color-green-text: #578246;
+
+  --color-yellow-bg: #fff1cc;
+  --color-yellow-text: #c18e1b;
+
+  --color-blue-bg: #e0f1f5;
+  --color-blue-text: #418099;
+
+  --color-pink-bg: #fde0e9;
+  --color-pink-text: #bc3c6a;
+
+  --font-size-32: 32px;
+  --font-size-24: 24px;
+  --font-size-20: 20px;
+  --font-size-18: 18px;
+  --font-size-16: 16px;
+  --font-size-14: 14px;
+  --font-size-12: 12px;
+  --font-size-10: 10px;
+
+  --font-bold: 700;
+  --font-medium: 500;
+  --font-regular: 400;
+}
+
+body {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: var(--font-regular);
+  background-color: var(--color-bg);
+  color: var(--color-black);
+}
