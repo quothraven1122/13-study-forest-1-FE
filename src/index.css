@@ -1,5 +1,12 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
+@font-face {
+  font-family: 'EF_jejudoldam';
+  src: url('./asset/font/EF_jejudoldam_TTF_.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
