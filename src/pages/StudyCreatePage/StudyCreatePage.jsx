@@ -1,5 +1,96 @@
+import { useState } from 'react';
+import styles from './StudyCreatePage.module.css';
+import Input from '../../components/Input/Input';
+import testImg from '../../assets/imgs/logo.png';
+
 function StudyCreatePage() {
-  return <div>스터디 생성</div>;
+  const [studyData, setStudyData] = useState({
+    nickname: '',
+    studyname: '',
+    description: '',
+    backgroundimg: '',
+    password: '',
+  });
+
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const backgrounds = [
+    testImg,
+    testImg,
+    testImg,
+    testImg,
+    testImg,
+    testImg,
+    testImg,
+    testImg,
+  ];
+
+  return (
+    <>
+      <div className={styles.createContainer}>
+        <form className={styles.createBox}>
+          <h2>스터디 만들기</h2>
+          <div>
+            <p>닉네임</p>
+            <Input
+              value={studyData.nickname}
+              onChange={(e) => setStudyData(e)}
+              placeholder='닉네임을 입력해 주세요'
+            />
+          </div>
+          <div>
+            <p>스터디 이름</p>
+            <Input
+              value={studyData.studyname}
+              onChange={(e) => setStudyData(e)}
+              placeholder='스터디 이름을 입력해주세요'
+            />
+          </div>
+          <div>
+            <p>소개</p>
+            <Input
+              value={studyData.description}
+              onChange={(e) => setStudyData(e)}
+              placeholder='소개 멘트를 작성해 주세요'
+              textarea
+            />
+          </div>
+          <div>
+            <p>배경을 선택해주세요</p>
+            <div className={styles.imageGrid}>
+              {/* <input
+                type='radio'
+                name='backgroundimg'
+                value={testImg}
+                checked={true}
+              /> */}
+              {backgrounds.map((background) => (
+                <label key={background}>
+                  <input type='radio' name='backgroundImg' value={background} />
+                  <img src={background} alt='배경이미지' />
+                </label>
+              ))}
+            </div>
+            <p>비밀번호</p>
+            <Input
+              value={studyData.password}
+              onChange={(e) => setStudyData(e)}
+              placeholder='비밀번호를 입력해 주세요'
+            />
+          </div>
+          <div>
+            <p>비밀번호 확인</p>
+            <Input
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e)}
+              placeholder='비밀번호를 다시 한 번 입력해 주세요'
+            />
+          </div>
+          <button>만들기</button>
+        </form>
+      </div>
+    </>
+  );
 }
 
 export default StudyCreatePage;
