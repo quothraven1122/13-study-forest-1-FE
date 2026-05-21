@@ -1,15 +1,8 @@
 import styles from './Button.module.css';
-// import pauseIcon from '../../assets/icon/ic_pause.svg';
-// import playIcon from '../../assets/icon/ic_play.svg'
-// import restartIcon from '../../assets/icon/ic_restart.svg'
-// import stopIcon from '../../assets/icon/ic_stop.svg'
 
 export default function Button({
   children,
-  // variant = 'Primary', // color
-  height = 'All', // height
-  shape = 'Default', // 'Default' | 'Round' | 'circle'
-  icon = null,
+  shape = 'Default', // 'Default' | 'Round' | 'Circle'
   ...props
 }) {
   const shapeClass =
@@ -17,16 +10,9 @@ export default function Button({
       Round: styles.shapeRound,
       Circle: styles.shapeCircle,
     }[shape] || '';
-  const heightClass = styles[`height${height}`];
-  // const variantClass = styles[`variant${variant}`];
-
-  const buttonClass = [styles.button, shapeClass, heightClass]
-    .filter(Boolean)
-    .join(' ');
 
   return (
-    <button className={buttonClass} {...props}>
-      {icon && <span className={styles.icon}>{icon}</span>}
+    <button className={`${styles.button} ${shapeClass}`} {...props}>
       {children}
     </button>
   );

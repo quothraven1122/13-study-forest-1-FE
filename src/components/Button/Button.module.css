@@ -27,15 +27,6 @@
   outline: none;
 }
 
-.heightAll {
-  font-size: 18px;
-}
-
-.heightSmall {
-  height: 38px;
-  font-size: 12px;
-}
-
 .shapeRound {
   border-radius: 50px;
   font-family: Pretendard;
@@ -80,11 +71,4 @@
   color: #fff;
   text-shadow: none;
   cursor: not-allowed;
-}
-
-/* 아이콘 정렬 */
-.icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
