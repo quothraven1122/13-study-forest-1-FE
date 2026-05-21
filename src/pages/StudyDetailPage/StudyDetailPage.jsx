@@ -23,6 +23,11 @@ const dummy = {
   description: 'Slow And Steady Wins The Race! 다들 오늘 하루도 화이팅 :)',
   point: 310,
   reactions: {
+    '🎉': 107,
+    '📝': 89,
+    '❤️': 88,
+    '🥰': 78,
+    '🍀': 56,
     '😄': 37,
     '👍': 20,
     '⭐': 5,
@@ -46,6 +51,8 @@ function StudyDetailPage() {
   const navigate = useNavigate();
   const size = useResponsiveWidth();
   const { getDaysOfWeek, compareDates } = useDate();
+
+  const [isMoreEmojiOpen, setIsMoreEmojiOpen] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [emoji, setEmoji] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,12 +115,38 @@ function StudyDetailPage() {
 
         <div className={styles.top}>
           <div className={styles.tags}>
-            {Object.entries(dummy.reactions).map(([key, value], index) => (
-              <Tag status='dark' key={index}>
-                {key}
-                {value}
-              </Tag>
-            ))}
+            {Object.entries(dummy.reactions)
+              .slice(0, 3)
+              .map(([key, value], index) => (
+                <Tag status='dark' key={index}>
+                  {key}
+                  {value}
+                </Tag>
+              ))}
+            {Object.keys(dummy.reactions).length > 3 && (
+              <>
+                <div
+                  onClick={() => setIsMoreEmojiOpen((prev) => !prev)}
+                  className={styles.moreTagsContainer}
+                >
+                  <Tag className={styles.moreTags}>
+                    {`+  ${Object.keys(dummy.reactions).length - 3}..`}
+                  </Tag>
+                  {isMoreEmojiOpen && (
+                    <div className={styles.moreTagsContent}>
+                      {Object.entries(dummy.reactions)
+                        .slice(3)
+                        .map(([key, value], index) => (
+                          <Tag status='dark' key={index}>
+                            {key}
+                            {value}
+                          </Tag>
+                        ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
             <div onClick={() => setIsPickerOpen((prev) => !prev)}>
               <Tag className={styles.addTag}>
                 <img src={smile} />

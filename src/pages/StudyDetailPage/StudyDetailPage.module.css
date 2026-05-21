@@ -27,6 +27,29 @@
   display: flex;
   gap: 4px;
 }
+.moreTagsContainer {
+  position: relative;
+}
+.moreTags {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.moreTagsContent {
+  width: fit-content;
+  padding: 12px;
+  position: absolute;
+  right: 0;
+  margin-top: 8px;
+  border: 1px solid var(--color-gray-mid);
+  border-radius: 15px;
+  background-color: #fff;
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  gap: 4px;
+}
 .addTag {
   cursor: pointer;
 }
