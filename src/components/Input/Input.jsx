@@ -6,6 +6,7 @@ export default function Input({
   onChange,
   maxLength = 300,
   textarea = false,
+  ...props
 }) {
   return (
     <div className={styles.wrapper}>
@@ -26,6 +27,7 @@ export default function Input({
           value={value}
           onChange={onChange}
           maxLength={maxLength}
+          {...props}
         />
       )}
     </div>
