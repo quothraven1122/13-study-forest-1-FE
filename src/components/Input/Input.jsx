@@ -24,7 +24,7 @@ export default function Input({
           <input
             {...props}
             className={styles.input}
-            style={{ height: '48px' }}
+            style={{ height: '48px', ...props.style }}
             maxLength={maxLength}
             type={passwordToggle ? (showPassword ? 'text' : 'password') : null}
           />

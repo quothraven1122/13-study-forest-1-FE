@@ -6,6 +6,11 @@
   align-items: center;
   margin: 20px 0;
 }
+.inputText {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
 .container {
   width: 1200px;
   height: fit-content;

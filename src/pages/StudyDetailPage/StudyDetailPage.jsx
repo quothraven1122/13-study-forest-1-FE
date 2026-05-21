@@ -8,7 +8,10 @@ import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 import Button from '../../components/Button/Button';
 import Tag from '../../components/Tag/Tag';
 import Sticker from '../../components/Sticker/Sticker';
+import Modal2 from '../../components/Modal2/Modal2';
+import Input from '../../components/Input/Input';
 
+import modalText from '../../components/Modal2/modalConstant';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 import smile from '../../assets/icons/ic_smile.svg';
 import styles from './StudyDetailPage.module.css';
@@ -45,9 +48,35 @@ function StudyDetailPage() {
   const { getDaysOfWeek, compareDates } = useDate();
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [emoji, setEmoji] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('');
+  const [pwInput, setPwInput] = useState('');
 
   return (
     <div className={styles.page}>
+      {isModalOpen && (
+        <Modal2
+          title={dummy.name}
+          message='권한이 필요해요!'
+          btnText={modalText[modalType]}
+          onExit={() => setIsModalOpen(false)}
+          onClick={() => {
+            if (modalType === 'habits' || modalType === 'focus')
+              navigate(`/studies/${dummy.id}/${modalType}`);
+            if (modalType === 'edit') navigate(`/studies/${dummy.id}/habits`);
+          }}
+        >
+          <div className={styles.inputContainer}>
+            <p className={styles.inputText}>비밀번호</p>
+            <Input
+              placeholder='비밀번호를 입력해 주세요'
+              passwordToggle={true}
+              value={pwInput}
+              onChange={(e) => setPwInput(e.target.value)}
+            />
+          </div>
+        </Modal2>
+      )}
       <div className={styles.container}>
         {size !== 'desktop' && (
           <div className={styles.options}>
@@ -55,10 +84,25 @@ function StudyDetailPage() {
               공유하기
             </p>
             |
-            <p className={`${styles.highlightedOption} ${styles.option}`}>
+            <p
+              onClick={() => {
+                setIsModalOpen(true);
+                setModalType('edit');
+              }}
+              className={`${styles.highlightedOption} ${styles.option}`}
+            >
               수정하기
             </p>
-            |<p className={styles.option}>스터디 삭제하기</p>
+            |
+            <p
+              onClick={() => {
+                setIsModalOpen(true);
+                setModalType('erase');
+              }}
+              className={styles.option}
+            >
+              스터디 삭제하기
+            </p>
           </div>
         )}
 
@@ -103,7 +147,8 @@ function StudyDetailPage() {
           <div className={styles.btnsContainer}>
             <Button
               onClick={() => {
-                navigate(`/studies/${dummy.id}/habits`);
+                setIsModalOpen(true);
+                setModalType('habits');
               }}
               className={styles.btn}
             >
@@ -114,7 +159,8 @@ function StudyDetailPage() {
             </Button>
             <Button
               onClick={() => {
-                navigate(`/studies/${dummy.id}/focus`);
+                setIsModalOpen(true);
+                setModalType('focus');
               }}
               className={styles.btn}
             >
