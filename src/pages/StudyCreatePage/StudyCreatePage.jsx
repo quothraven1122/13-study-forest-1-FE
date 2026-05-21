@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './StudyCreatePage.module.css';
 import Input from '../../components/Input/Input';
 import testImg from '../../assets/imgs/logo.png';
+import Button from '../../components/Button/Button';
 
 function StudyCreatePage() {
   const [studyData, setStudyData] = useState({
@@ -11,6 +12,7 @@ function StudyCreatePage() {
     backgroundimg: '',
     password: '',
   });
+  console.log(studyData);
 
   const [confirmPassword, setConfirmPassword] = useState('');
 
@@ -34,7 +36,9 @@ function StudyCreatePage() {
             <p>닉네임</p>
             <Input
               value={studyData.nickname}
-              onChange={(e) => setStudyData(e)}
+              onChange={(e) =>
+                setStudyData((prev) => ({ ...prev, nickname: e.target.value }))
+              }
               placeholder='닉네임을 입력해 주세요'
             />
           </div>
@@ -42,7 +46,9 @@ function StudyCreatePage() {
             <p>스터디 이름</p>
             <Input
               value={studyData.studyname}
-              onChange={(e) => setStudyData(e)}
+              onChange={(e) =>
+                setStudyData((prev) => ({ ...prev, studyname: e.target.value }))
+              }
               placeholder='스터디 이름을 입력해주세요'
             />
           </div>
@@ -50,7 +56,12 @@ function StudyCreatePage() {
             <p>소개</p>
             <Input
               value={studyData.description}
-              onChange={(e) => setStudyData(e)}
+              onChange={(e) =>
+                setStudyData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
               placeholder='소개 멘트를 작성해 주세요'
               textarea
             />
@@ -64,29 +75,43 @@ function StudyCreatePage() {
                 value={testImg}
                 checked={true}
               /> */}
-              {backgrounds.map((background) => (
-                <label key={background}>
-                  <input type='radio' name='backgroundImg' value={background} />
+              {backgrounds.map((background, index) => (
+                <label key={index} className={styles.imageBox}>
+                  <input
+                    type='radio'
+                    name='backgroundImg'
+                    value={background}
+                    onChange={(e) =>
+                      setStudyData((prev) => ({
+                        ...prev,
+                        backgroundimg: e.target.value,
+                      }))
+                    }
+                  />
                   <img src={background} alt='배경이미지' />
                 </label>
               ))}
             </div>
             <p>비밀번호</p>
             <Input
+              type='password'
               value={studyData.password}
-              onChange={(e) => setStudyData(e)}
+              onChange={(e) =>
+                setStudyData((prev) => ({ ...prev, password: e.target.value }))
+              }
               placeholder='비밀번호를 입력해 주세요'
             />
           </div>
           <div>
             <p>비밀번호 확인</p>
             <Input
+              type='password'
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e)}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder='비밀번호를 다시 한 번 입력해 주세요'
             />
           </div>
-          <button>만들기</button>
+          <Button>만들기</Button>
         </form>
       </div>
     </>
