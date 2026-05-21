@@ -1,33 +1,69 @@
-.tagGroup {
+.pointTag {
+  width: fit-content;
   display: flex;
   align-items: center;
-  gap: 6px;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  gap: 4px;
   border-radius: 50px;
-  font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.emojiTag {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 50px;
+  white-space: nowrap;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* 기존 사이즈 = general */
+.general {
+  font-size: 16px;
+}
+
+.pointTag.general {
+  padding: 6px 12px;
+}
+
+.emojiTag.general {
+  padding: 6px 8px;
+  font-weight: 500;
+}
+
+/* 작은 버전 */
+.small {
+  font-size: 12px;
+}
+
+.pointTag.small {
+  padding: 4px 12px;
+}
+
+.emojiTag.small {
+  padding: 6px 8px;
+  font-weight: 400;
+  height: 28px;
+}
+
 .tagDark {
   background-color: rgba(0, 0, 0, 0.5);
   color: #ffffff;
-  padding: 4px 12px;
 }
 
 .tagLight {
   background-color: rgba(255, 255, 255, 0.3);
   color: #000000;
-  padding: 6px 12px;
 }
 
 .icon {
   width: 16px;
   height: 16px;
+}
+
+.small .icon {
+  width: 14px;
+  height: 14px;
 }
