@@ -124,7 +124,48 @@
   width: 246px;
   text-align: right;
   padding: 22px 24px;
+  font-size: 18px;
 }
 .log {
   vertical-align: middle;
+}
+
+@media (min-width: 721px) and (max-width: 1280px) {
+  .page {
+    padding: 0 16px;
+  }
+  .habitName {
+    min-width: 122px;
+    padding: 11px 10px;
+    font-size: 14px;
+  }
+}
+@media (max-width: 721px) {
+  .page {
+    padding: 0 16px;
+  }
+  .container {
+    width: 100%;
+  }
+  .titleContainer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .recordTable {
+    overflow-x: scroll;
+  }
+  .habitName {
+    min-width: 122px;
+    padding: 11px 10px;
+    font-size: 14px;
+  }
+  .options {
+    margin-left: auto;
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+  .btn {
+    font-size: 14px;
+  }
 }

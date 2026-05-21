@@ -1,8 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import useDate from '../../hooks/useDate';
+import useResponsiveWidth from '../../hooks/useResponsiveWidth';
+
 import Button from '../../components/Button/Button';
 import Tag from '../../components/Tag/Tag';
 import Sticker from '../../components/Sticker/Sticker';
+
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 import smile from '../../assets/icons/ic_smile.svg';
 import styles from './StudyDetailPage.module.css';
@@ -35,10 +38,24 @@ const dummy = {
 
 function StudyDetailPage() {
   const navigate = useNavigate();
+  const size = useResponsiveWidth();
   const { getDaysOfWeek, compareDates } = useDate();
   return (
     <div className={styles.page}>
       <div className={styles.container}>
+        {size !== 'desktop' && (
+          <div className={styles.options}>
+            <p className={`${styles.highlightedOption} ${styles.option}`}>
+              공유하기
+            </p>
+            |
+            <p className={`${styles.highlightedOption} ${styles.option}`}>
+              수정하기
+            </p>
+            |<p className={styles.option}>스터디 삭제하기</p>
+          </div>
+        )}
+
         <div className={styles.top}>
           <div className={styles.tags}>
             {Object.entries(dummy.reactions).map(([key, value], index) => (
@@ -52,16 +69,18 @@ function StudyDetailPage() {
               추가
             </Tag>
           </div>
-          <div className={styles.options}>
-            <p className={`${styles.highlightedOption} ${styles.option}`}>
-              공유하기
-            </p>
-            |
-            <p className={`${styles.highlightedOption} ${styles.option}`}>
-              수정하기
-            </p>
-            |<p className={styles.option}>스터디 삭제하기</p>
-          </div>
+          {size === 'desktop' && (
+            <div className={styles.options}>
+              <p className={`${styles.highlightedOption} ${styles.option}`}>
+                공유하기
+              </p>
+              |
+              <p className={`${styles.highlightedOption} ${styles.option}`}>
+                수정하기
+              </p>
+              |<p className={styles.option}>스터디 삭제하기</p>
+            </div>
+          )}
         </div>
 
         <div className={styles.titleContainer}>
@@ -102,7 +121,7 @@ function StudyDetailPage() {
 
         <div className={styles.recordTable}>
           <h2 className={styles.tableTitle}>습관 기록표</h2>
-          <table>
+          <table className={styles.table}>
             <thead>
               <tr>
                 <th></th>
