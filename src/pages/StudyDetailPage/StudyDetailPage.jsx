@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EmojiPicker from 'emoji-picker-react';
+
 import useDate from '../../hooks/useDate';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 
@@ -40,6 +43,9 @@ function StudyDetailPage() {
   const navigate = useNavigate();
   const size = useResponsiveWidth();
   const { getDaysOfWeek, compareDates } = useDate();
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [emoji, setEmoji] = useState('');
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
@@ -64,10 +70,19 @@ function StudyDetailPage() {
                 {value}
               </Tag>
             ))}
-            <Tag className={styles.addTag}>
-              <img src={smile} />
-              추가
-            </Tag>
+            <div onClick={() => setIsPickerOpen((prev) => !prev)}>
+              <Tag className={styles.addTag}>
+                <img src={smile} />
+                추가
+              </Tag>
+              <div className={styles.emojiPickerContainer}>
+                {isPickerOpen && (
+                  <EmojiPicker
+                    onEmojiClick={(emojiObject) => setEmoji(emojiObject.emoji)}
+                  />
+                )}
+              </div>
+            </div>
           </div>
           {size === 'desktop' && (
             <div className={styles.options}>

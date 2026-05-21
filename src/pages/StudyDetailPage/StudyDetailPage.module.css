@@ -25,6 +25,10 @@
 .addTag {
   cursor: pointer;
 }
+.emojiPickerContainer {
+  position: absolute;
+  margin-top: 5px;
+}
 .options {
   width: fit-content;
   display: flex;
@@ -139,6 +143,11 @@
     padding: 11px 10px;
     font-size: 14px;
   }
+  .options {
+    margin-left: auto;
+    margin-bottom: 16px;
+    gap: 10px;
+  }
 }
 @media (max-width: 721px) {
   .page {
@@ -167,5 +176,8 @@
   }
   .btn {
     font-size: 14px;
+  }
+  .emojiPickerContainer {
+    left: 15px;
   }
 }
