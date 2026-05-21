@@ -94,21 +94,21 @@ function StudyCreatePage() {
             </div>
             <p>비밀번호</p>
             <Input
-              type='password'
               value={studyData.password}
               onChange={(e) =>
                 setStudyData((prev) => ({ ...prev, password: e.target.value }))
               }
               placeholder='비밀번호를 입력해 주세요'
+              passwordToggle='true'
             />
           </div>
           <div>
             <p>비밀번호 확인</p>
             <Input
-              type='password'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder='비밀번호를 다시 한 번 입력해 주세요'
+              passwordToggle='true'
             />
           </div>
           <Button>만들기</Button>
