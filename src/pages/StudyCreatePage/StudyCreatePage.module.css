@@ -39,7 +39,6 @@
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 16px;
   grid-auto-rows: minmax(150px, auto);
-  margin-bottom: 24px;
 }
 
 .imageGrid img {
@@ -63,6 +62,21 @@
 
 input[type='radio']:checked + img {
   border: 2px solid skyblue;
+}
+
+.formField {
+  position: relative;
+}
+
+.formField span {
+  position: absolute;
+  top: 104%;
+  color: var(--red-error_C41013, #c41013);
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 @media (max-width: 744px) {
