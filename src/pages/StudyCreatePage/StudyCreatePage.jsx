@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styles from './StudyCreatePage.module.css';
 import Input from '../../components/Input/Input';
-import testImg from '../../assets/imgs/logo.png';
 import Button from '../../components/Button/Button';
 
 function FormField({
@@ -32,27 +31,6 @@ function FormField({
 }
 
 function StudyCreatePage() {
-  const [studyData, setStudyData] = useState({
-    nickname: '',
-    name: '',
-    description: '',
-    background: 'testImg',
-    password: '',
-  });
-
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  const backgrounds = [
-    testImg,
-    testImg,
-    testImg,
-    testImg,
-    testImg,
-    testImg,
-    testImg,
-    testImg,
-  ];
-
   const validateForm = (studyData, confirmPassword) => {
     const errors = {};
     if (!studyData.nickname.trim()) {
@@ -73,28 +51,37 @@ function StudyCreatePage() {
     return errors;
   };
 
-  const errors = validateForm(studyData, confirmPassword);
+  const [studyData, setStudyData] = useState({
+    nickname: '',
+    name: '',
+    description: '',
+    background: '1번 이미지',
+    password: '',
+  });
+
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const backgrounds = [
+    '1번 이미지',
+    '2번 이미지',
+    '3번 이미지',
+    '4번 이미지',
+    '5번 이미지',
+    '6번 이미지',
+    '7번 이미지',
+    '8번 이미지',
+  ];
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setErrors(validateForm(studyData, confirmPassword));
+  };
 
   return (
     <div className={styles.createContainer}>
-      <form className={styles.createBox}>
+      <form className={styles.createBox} onSubmit={onSubmit}>
         <h2>스터디 만들기</h2>
-        {/* <div className={styles.formField}>
-          <p>닉네임</p>
-          <Input
-            style={
-              errors.nickname && {
-                border: '1px solid var(--red-error_C41013, #C41013)',
-              }
-            }
-            value={studyData.nickname}
-            onChange={(e) =>
-              setStudyData((prev) => ({ ...prev, nickname: e.target.value }))
-            }
-            placeholder='닉네임을 입력해 주세요'
-          />
-          {errors.nickname && <span>*닉네임을 입력해주세요</span>}
-        </div> */}
         <FormField
           error={errors.nickname}
           Data={studyData.nickname}
@@ -135,6 +122,7 @@ function StudyCreatePage() {
                   type='radio'
                   name='background'
                   value={background}
+                  checked={background === studyData.background}
                   onChange={(e) =>
                     setStudyData((prev) => ({
                       ...prev,
@@ -142,7 +130,7 @@ function StudyCreatePage() {
                     }))
                   }
                 />
-                <img src={background} alt='배경이미지' />
+                <img src={background} alt={`배경이미지${index + 1}`} />
               </label>
             ))}
           </div>
@@ -159,30 +147,15 @@ function StudyCreatePage() {
           passwordToggle={true}
         />
 
-        {/* <div className={styles.formField}>
-          <p>비밀번호 확인</p>
-          <Input
-            style={
-              errors.confirmPassword && {
-                border: '1px solid var(--red-error_C41013, #C41013)',
-              }
-            }
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder='비밀번호를 다시 한 번 입력해 주세요'
-            passwordToggle={true}
-          />
-          {errors.confirmPassword && <span>*비밀번호가 일치하지 않습니다</span>}
-        </div> */}
         <FormField
           error={errors.confirmPassword}
-          Data={studyData.confirmPassword}
+          Data={confirmPassword}
           label='비밀번호 확인'
           placeholder='비밀번호를 다시 한 번 입력해 주세요'
           onChange={(e) => setConfirmPassword(e.target.value)}
           passwordToggle={true}
         />
-        <Button>만들기</Button>
+        <Button type='submit'>만들기</Button>
       </form>
     </div>
   );
