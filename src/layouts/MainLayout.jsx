@@ -1,11 +1,16 @@
 import { Outlet } from 'react-router-dom';
 import GNB from '../components/GNB/GNB';
+import styles from './MainLayout.module.css';
+import FocusPage from '../pages/FocusPage/FocusPage';
 
 export default function MainLayout() {
   return (
-    <div>
+    <div className={styles.layout}>
       <GNB />
-      <Outlet />
+      <main className={styles.content}>
+        {/* <Outlet /> */}
+        <FocusPage />
+      </main>
     </div>
   );
 }
