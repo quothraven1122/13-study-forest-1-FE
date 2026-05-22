@@ -1,10 +1,47 @@
 import Dropdown from '../../components/Dropdown/Dropdown.jsx';
 import Tag from '../../components/Tag/Tag.jsx';
 import styles from './HomePage.module.css';
+
+import { useRef } from 'react';
 import search from '../../assets/icons/ic_search.svg';
+import { Link } from 'react-router-dom';
 function HomePage() {
   // const [studies, setStudies] = useState([])
+  const isDragging = useRef(false);
+  const scrollRef = useRef(null);
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const handleMouseDown = (e) => {
+    isDown.current = true;
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+  };
 
+  const handleMouseLeave = () => {
+    isDown.current = false;
+  };
+
+  const handleMouseUp = () => {
+    isDown.current = false;
+
+    setTimeout(() => {
+      isDragging.current = false;
+    }, 0);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDown.current) return;
+
+    isDragging.current = true;
+
+    e.preventDefault();
+
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.2;
+
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  };
   const studies = [
     {
       id: 1,
@@ -76,7 +113,14 @@ function HomePage() {
 
   function StudyCard({ study }) {
     return (
-      <div
+      <Link
+        draggable={false}
+        onClick={(e) => {
+          if (isDragging.current) {
+            e.preventDefault();
+          }
+        }}
+        to={`/study/${study.id}`}
         className={styles.studyCard}
         style={{ backgroundImage: `url(${study.background})` }}
       >
@@ -104,7 +148,7 @@ function HomePage() {
             ))}
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
   return (
@@ -115,7 +159,14 @@ function HomePage() {
           {studies.length === 0 ? (
             <p className={styles.text}>아직 조회한 스터디가 없어요</p>
           ) : (
-            <div className={styles.studyCardGrid}>
+            <div
+              ref={scrollRef}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+              className={styles.recentStudyCardGrid}
+            >
               {studies.slice(0, 3).map((study) => (
                 <StudyCard key={study.id} study={study} />
               ))}
