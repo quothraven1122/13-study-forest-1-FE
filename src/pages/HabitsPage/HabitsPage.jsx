@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import './HabitsPage.css';
+import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
+import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 
 function HabitsPage() {
-  // { habits = [] } => // 추후 props/API 데이터로 교체 예정
-  const [habits /* setHabits*/] = useState([
+  // 추후 props/API 데이터로 교체 예정
+  const [habits] = useState([
     {
       id: 1,
       text: '미라클 모닝 6시 기상',
@@ -18,6 +19,7 @@ function HabitsPage() {
       text: 'React 공부 2시간',
     },
   ]);
+
   const now = new Date();
 
   const formattedDate = now.toLocaleString('ko-KR', {
@@ -29,35 +31,46 @@ function HabitsPage() {
     hour12: true,
   });
 
-  const [isEditMode, setIsEditMode] = useState(false);
-
   return (
-    <div className='container'>
-      <div className='header'>
-        <div className='header-left'>
+    <div className={styles.Container}>
+      <div className={styles.Header}>
+        <div className={styles.HeaderLeft}>
           <h1>연우의 개발공장</h1>
           <p>현재 시간</p>
           <span>{formattedDate}</span>
         </div>
 
-        <div className='header-right'>
-          <button>오늘의 집중 〉</button>
-          <button>홈 〉</button>
+        <div className={styles.HeaderRight}>
+          <button type='button' disabled>
+            오늘의 집중
+            <img src={arrowRight} alt='화살표 아이콘' />
+          </button>
+
+          <button type='button' disabled>
+            홈
+            <img src={arrowRight} alt='화살표 아이콘' />
+          </button>
         </div>
       </div>
 
-      <div className='content'>
-        <div className='content-header'>
+      <div className={styles.Content}>
+        <div className={styles.ContentHeader}>
           <h2>오늘의 습관</h2>
-          <button onClick={() => setIsEditMode(!isEditMode)}>
-            {isEditMode ? '완료' : '목록 수정'}
+
+          <button type='button' disabled>
+            목록 수정
           </button>
         </div>
 
-        <div className='habit-list'>
-          {habits.map((habit) => (
-            <Chip key={habit.id} text={habit.text} />
-          ))}
+        <div className={styles.HabitList}>
+          {habits.length === 0 ? (
+            <div className={styles.EmptyMessage}>
+              <p>아직 습관이 없어요</p>
+              <span>목록 수정을 눌러 습관을 생성해보세요</span>
+            </div>
+          ) : (
+            habits.map((habit) => <Chip key={habit.id} text={habit.text} />)
+          )}
         </div>
       </div>
     </div>
