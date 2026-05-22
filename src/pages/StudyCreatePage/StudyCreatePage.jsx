@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './StudyCreatePage.module.css';
 import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
+import { useNavigate } from 'react-router-dom';
 
 function FormField({
   error,
@@ -73,9 +74,31 @@ function StudyCreatePage() {
     '8번 이미지',
   ];
 
+  const navigate = useNavigate();
+
+  const createStudy = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/studies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...studyData }),
+      });
+      if (!res.ok) throw new Error('생성 실패');
+      const data = await res.json();
+      navigate(`/studies/${data.id}`);
+      console.log(data);
+      console.log(data.id);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    setErrors(validateForm(studyData, confirmPassword));
+    const error = validateForm(studyData, confirmPassword);
+    setErrors(error);
+    if (Object.keys(error).length > 0) return;
+    createStudy();
   };
 
   return (
@@ -87,9 +110,10 @@ function StudyCreatePage() {
           Data={studyData.nickname}
           label='닉네임'
           placeholder='닉네임을 입력해 주세요'
-          onChange={(e) =>
-            setStudyData((prev) => ({ ...prev, nickname: e.target.value }))
-          }
+          onChange={(e) => {
+            setStudyData((prev) => ({ ...prev, nickname: e.target.value }));
+            setErrors((prev) => ({ ...prev, nickname: null }));
+          }}
         />
 
         <FormField
@@ -97,9 +121,10 @@ function StudyCreatePage() {
           Data={studyData.name}
           label='스터디 이름'
           placeholder='스터디 이름을 입력해주세요'
-          onChange={(e) =>
-            setStudyData((prev) => ({ ...prev, name: e.target.value }))
-          }
+          onChange={(e) => {
+            setStudyData((prev) => ({ ...prev, name: e.target.value }));
+            setErrors((prev) => ({ ...prev, name: null }));
+          }}
         />
 
         <FormField
@@ -107,9 +132,10 @@ function StudyCreatePage() {
           Data={studyData.description}
           label='소개'
           placeholder='소개 멘트를 작성해 주세요'
-          onChange={(e) =>
-            setStudyData((prev) => ({ ...prev, description: e.target.value }))
-          }
+          onChange={(e) => {
+            setStudyData((prev) => ({ ...prev, description: e.target.value }));
+            setErrors((prev) => ({ ...prev, description: null }));
+          }}
           textarea
         />
 
@@ -123,12 +149,13 @@ function StudyCreatePage() {
                   name='background'
                   value={background}
                   checked={background === studyData.background}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setStudyData((prev) => ({
                       ...prev,
                       background: e.target.value,
-                    }))
-                  }
+                    }));
+                    setErrors((prev) => ({ ...prev, background: null }));
+                  }}
                 />
                 <img src={background} alt={`배경이미지${index + 1}`} />
               </label>
@@ -141,9 +168,10 @@ function StudyCreatePage() {
           Data={studyData.password}
           label='비밀번호'
           placeholder='비밀번호를 입력해 주세요'
-          onChange={(e) =>
-            setStudyData((prev) => ({ ...prev, password: e.target.value }))
-          }
+          onChange={(e) => {
+            setStudyData((prev) => ({ ...prev, password: e.target.value }));
+            setErrors((prev) => ({ ...prev, password: null }));
+          }}
           passwordToggle={true}
         />
 
@@ -152,7 +180,10 @@ function StudyCreatePage() {
           Data={confirmPassword}
           label='비밀번호 확인'
           placeholder='비밀번호를 다시 한 번 입력해 주세요'
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            setErrors((prev) => ({ ...prev, confirmPassword: null }));
+          }}
           passwordToggle={true}
         />
         <Button type='submit'>만들기</Button>
