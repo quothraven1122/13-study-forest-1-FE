@@ -1,7 +1,3 @@
-/* ============================================================
-   FocusPage.module.css
-   ============================================================ */
-
 /* ── 전체 카드 ───────────────────────────────────────────── */
 .focusPageContainer {
   border-radius: 20px;
@@ -9,6 +5,8 @@
   display: flex;
   flex-direction: column;
   padding: 40px;
+  max-width: 744px;
+  /* margin: 40px auto; */
 }
 
 /* ── 상단 헤더 ───────────────────────────────────────────── */
@@ -107,8 +105,20 @@
 }
 
 .timerSetting {
-  font-size: 14px;
+  font-size: 16px;
   color: #818181;
+  display: flex;
+  padding: 6px 8px;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-start;
+  border-radius: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.3);
+}
+.timerSetting img {
+  width: 19px;
+  height: 19px;
 }
 
 /* ── 타이머 숫자 ─────────────────────────────────────────── */

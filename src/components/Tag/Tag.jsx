@@ -1,5 +1,5 @@
 import styles from './Tag.module.css';
-import pointIcon from '../asset/icon/ic_point.svg';
+import pointIcon from '../../assets/icons/ic_point.svg';
 
 function Tag({ point = 0, memberCount = 0, status = 'light' }) {
   const tagClass = status === 'dark' ? styles.tagDark : styles.tagLight;

@@ -11,10 +11,10 @@ import TimerIcon from '../../assets/icons/ic_timer.svg';
 import RestartIcon from '../../assets/icons/ic_restart.svg';
 import PauseIcon from '../../assets/icons/ic_pause.svg';
 
-export default function FocusPage({
-  userName = '연우',
-  totalEarnedPoints = 310,
-}) {
+export default function FocusPage() {
+  const userName = '연우'; // 일단은...
+  const [totalEarnedPoints, setTotalEarnedPoints] = useState(310);
+
   const navigate = useNavigate();
   const { studyId } = useParams();
 
