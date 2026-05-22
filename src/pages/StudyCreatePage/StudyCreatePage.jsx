@@ -84,10 +84,8 @@ function StudyCreatePage() {
         body: JSON.stringify({ ...studyData }),
       });
       if (!res.ok) throw new Error('생성 실패');
-      const data = await res.json();
-      navigate(`/studies/${data.id}`);
-      console.log(data);
-      console.log(data.id);
+      const result = await res.json();
+      navigate(`/studies/${result.id}`);
     } catch (err) {
       alert(err.message);
     }
