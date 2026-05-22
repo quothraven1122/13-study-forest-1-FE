@@ -16,7 +16,7 @@ export default function Input({
         <textarea
           {...props}
           className={styles.input}
-          style={{ minHeight: '98px' }}
+          style={{ minHeight: '98px', ...props.style }}
           maxLength={maxLength}
         />
       ) : (
