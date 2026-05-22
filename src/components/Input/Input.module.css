@@ -12,7 +12,7 @@
   resize: none;
   box-sizing: border-box;
 
-  color: var(--color-black, #414141);
+  color: var(--color-black);
   font-family: Pretendard;
   font-size: 16px;
   font-style: normal;
@@ -20,12 +20,12 @@
   line-height: normal;
 
   border-radius: 15px;
-  border: 1px solid var(--color-gary-mid, #dddddd);
+  border: 1px solid var(--color-gray-mid);
   background: #fff;
 }
 
 .input::placeholder {
-  color: var(--color-gary-dark, #818181);
+  color: var(--color-gray-dark);
 }
 
 .inputWrapper {
