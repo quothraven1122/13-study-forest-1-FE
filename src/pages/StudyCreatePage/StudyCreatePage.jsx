@@ -40,7 +40,7 @@ function StudyCreatePage() {
     if (!studyData.name.trim()) {
       errors.name = '스터디 이름을 입력해주세요';
     }
-    if (!studyData.description) {
+    if (!studyData.description.trim()) {
       errors.description = '소개를 작성해주세요';
     }
     if (!studyData.password) {
@@ -140,8 +140,8 @@ function StudyCreatePage() {
         <div className={styles.formField}>
           <p>배경을 선택해주세요</p>
           <div className={styles.imageGrid}>
-            {backgrounds.map((background, index) => (
-              <label key={index} className={styles.imageBox}>
+            {backgrounds.map((background) => (
+              <label key={background} className={styles.imageBox}>
                 <input
                   type='radio'
                   name='background'
@@ -155,7 +155,7 @@ function StudyCreatePage() {
                     setErrors((prev) => ({ ...prev, background: null }));
                   }}
                 />
-                <img src={background} alt={`배경이미지${index + 1}`} />
+                <img src={background} alt={`배경이미지`} />
               </label>
             ))}
           </div>
