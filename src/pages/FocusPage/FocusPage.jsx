@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './FocusPage.module.css';
 import Button from '../../components/Button/Button.jsx';
@@ -12,18 +12,59 @@ import RestartIcon from '../../assets/icons/ic_restart.svg';
 import PauseIcon from '../../assets/icons/ic_pause.svg';
 
 export default function FocusPage() {
-  const userName = '연우'; // 일단은...
-  const [totalEarnedPoints, setTotalEarnedPoints] = useState(310);
+  const [timerMinutes, setTimerMinutes] = useState(25);
+  const [userName, setUserName] = useState('');
+  const [totalEarnedPoints, setTotalEarnedPoints] = useState(0);
+  // useEffect(() => {
+  //   const fetchStudyDetail = async () => {
+  //     const response = await fetch(`/api/studies/${studyId}`);
+  //     const data = await response.json();
+  //     setUserName(data.name);
+  //     setTimerMinutes(data.timerMinutes); //
+  //     setTotalEarnedPoints(data.points); // 초기 포인트
+  //   };
+  //   fetchStudyDetail();
+  // }, [studyId]);
 
   const navigate = useNavigate();
   const { studyId } = useParams();
+  const totalSeconds = timerMinutes * 60;
+  const [remaining, setRemaining] = useState(totalSeconds);
+  const [overtime, setOvertime] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   // 'idle' (아무일도 없는 상태 게으른..)
   // 'running' (진행중)
   // 'paused' (일시정지)
   // 'overtime' (시간초과)
   const [status, setStatus] = useState('idle');
-  const [toast, setToast] = useState(null);
+  const [toast, setToast] = useState(null); // { id, message, type }
+  const intervalRef = useRef(null);
+  useEffect(() => {
+    if (status !== 'running' && status !== 'overtime') {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      return;
+    }
+
+    intervalRef.current = setInterval(() => {
+      if (status === 'running') {
+        setRemaining((prev) => {
+          if (prev <= 1) {
+            setStatus('overtime');
+            return 0;
+          }
+          return prev - 1;
+        });
+      } else if (status === 'overtime') {
+        setOvertime((prev) => prev + 1);
+      }
+    }, 1000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [status]);
+
+  const calcPoints = (minutes) => 3 + Math.floor(minutes / 1);
 
   // ── 토스트 제어 핸들러 ───────────────────────────────────────
   const showToast = (message, type = 'success') => {
@@ -48,12 +89,36 @@ export default function FocusPage() {
 
   const handleReset = () => {
     setStatus('idle');
+    setRemaining(totalSeconds); // 처음에 셋팅한 총 s로 돌아감
+    setOvertime(0);
     setToast(null);
   };
 
-  const handleStop = () => {
-    showToast('3포인트를 획득했습니다!', 'success');
+  const handleStop = async () => {
+    clearInterval(intervalRef.current);
+    setLoading(true);
+    const points = calcPoints(timerMinutes);
+
+    // const response = await fetch(`api/studies/${studyId}/points`, {
+    //   method: 'PATCH',
+    //   body: JSON.stringify({ points }),
+    // });
+    // const data = await response.json();
+    // setTotalEarnedPoints(data.point); // points point??? 네이밍 좀 이상한데
+    // try catch 문 필요
+
+    showToast(`${points}포인트를 획득했습니다!`, 'success');
+    setLoading(false);
     setStatus('idle');
+    setRemaining(totalSeconds);
+    setOvertime(0);
+  };
+
+  const format = (secs) => {
+    const abs = Math.abs(secs);
+    const m = String(Math.floor(abs / 60)).padStart(2, '0');
+    const s = String(abs % 60).padStart(2, '0');
+    return `${m}:${s}`;
   };
 
   // ── 스타일 및 UI 분기 변수 ────────────────────────────────────
@@ -64,9 +129,8 @@ export default function FocusPage() {
       : status === 'overtime'
         ? styles.timerGreen
         : '';
-
-  // 퍼블리싱 확인용 고정 시간 텍스트
-  const displayTime = status === 'overtime' ? '00:12' : '25:00';
+  const displayTime =
+    status === 'overtime' ? `${format(overtime)}` : format(remaining);
 
   return (
     <>
@@ -99,7 +163,7 @@ export default function FocusPage() {
             {isActive && (
               <span className={styles.timerSetting}>
                 <img src={TimerIcon} alt='timer' />
-                25:00
+                {format(totalSeconds)}
               </span>
             )}
           </div>
@@ -153,6 +217,7 @@ export default function FocusPage() {
                 shape='Round'
                 className={styles.buttonStop}
                 onClick={handleStop}
+                disabled={loading}
               >
                 <img src={StopIcon} alt='stop' />
                 Stop!
