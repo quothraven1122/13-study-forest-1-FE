@@ -15,19 +15,23 @@ export default function FocusPage() {
   const [timerMinutes, setTimerMinutes] = useState(25);
   const [userName, setUserName] = useState('');
   const [totalEarnedPoints, setTotalEarnedPoints] = useState(0);
+  const { studyId } = useParams();
   useEffect(() => {
     const fetchStudyDetail = async () => {
-      const response = await fetch(`http://localhost:3000/studies/${studyId}`);
+      const response = await fetch(
+        // `http://localhost:3000/studies/${studyId}/focus`
+        `http://localhost:3000/studies/143/focus`
+      );
       const data = await response.json();
+      console.log(data);
       setUserName(data.name);
-      setTimerMinutes(data.timerMinutes);
+      // setTimerMinutes(data.timerMinutes);
       setTotalEarnedPoints(data.point); // 초기 포인트
     };
     fetchStudyDetail();
   }, [studyId]);
 
   const navigate = useNavigate();
-  const { studyId } = useParams();
   const totalSeconds = timerMinutes * 60;
   const [remaining, setRemaining] = useState(totalSeconds);
   const [overtime, setOvertime] = useState(0);
@@ -99,13 +103,18 @@ export default function FocusPage() {
     setLoading(true);
     const points = calcPoints(timerMinutes);
 
-    const response = await fetch(
-      `http://localhost:3000/studies/${studyId}/point`,
-      {
-        method: 'PATCH',
-        body: JSON.stringify({ points }),
-      }
-    );
+    // const response = await fetch(
+    //   `http://localhost:3000/studies/${studyId}/focus/point`,
+    //   {
+    //     method: 'PATCH',
+    //     body: JSON.stringify({ points }),
+    //   }
+    // );
+    const response = await fetch(`http://localhost:3000/studies/143/focus`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ points }),
+    });
     const data = await response.json();
     setTotalEarnedPoints(data.point); // points point??? 네이밍 좀 이상한데
     // try catch 문 필요
@@ -175,7 +184,29 @@ export default function FocusPage() {
           <div
             className={`${styles.timer} ${timerColorClass} ${isActive ? styles.timerBoxActive : ''}`}
           >
-            {displayTime}
+            {status === 'idle' ? (
+              <input
+                type='number'
+                min='1'
+                max='60'
+                value={timerMinutes}
+                className={styles.timer}
+                style={{
+                  border: 'none',
+                  outline: 'none',
+                  width: '100%',
+                  textAlign: 'center',
+                  background: 'transparent',
+                }}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  setTimerMinutes(val);
+                  setRemaining(val * 60);
+                }}
+              />
+            ) : (
+              displayTime
+            )}
           </div>
 
           {/* 하단 제어 버튼 영역 */}
