@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
+import trashIcon from '../../assets/icons/ic_trash.svg';
 
 function HabitsPage() {
   const navigate = useNavigate();
@@ -82,8 +83,8 @@ function HabitsPage() {
 
   const formattedDate = now.toLocaleString('ko-KR', {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
@@ -100,12 +101,20 @@ function HabitsPage() {
           </div>
 
           <div className={styles.HeaderRight}>
-            <button type='button' onClick={handleGoFocus}>
+            <button
+              type='button'
+              className={styles.FocusButton}
+              onClick={handleGoFocus}
+            >
               오늘의 집중
               <img src={arrowRight} alt='화살표 아이콘' />
             </button>
 
-            <button type='button' onClick={handleGoHome}>
+            <button
+              type='button'
+              className={styles.HomeButton}
+              onClick={handleGoHome}
+            >
               홈
               <img src={arrowRight} alt='화살표 아이콘' />
             </button>
@@ -162,7 +171,7 @@ function HabitsPage() {
                     className={styles.DeleteButton}
                     onClick={() => handleDeleteHabit(habit.id)}
                   >
-                    🗑
+                    <img src={trashIcon} alt='삭제 아이콘' />
                   </button>
                 </div>
               ))}

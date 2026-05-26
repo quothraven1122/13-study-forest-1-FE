@@ -2,7 +2,8 @@
   width: calc(100% - 32px);
   max-width: 1248px;
   min-height: 863px;
-  margin: 10px auto;
+
+  margin: 39px auto 0;
   padding: 40px;
 
   background: #fff;
@@ -10,65 +11,121 @@
 }
 
 .Header {
+  width: 100%;
+
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
+.HeaderLeft {
+  display: flex;
+  flex-direction: column;
+}
+
 .HeaderLeft h1 {
+  width: 204px;
+  height: 38px;
+
+  margin: 0;
+
+  font-family: Pretendard;
   font-size: 24px;
+  font-weight: 700;
+  line-height: 38px;
+
   color: #414141;
 }
 
 .HeaderLeft p {
-  margin-top: 16px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+
+  font-family: Pretendard;
   font-size: 14px;
+  font-weight: 400;
+  line-height: 100%;
+
   color: #818181;
 }
 
 .HeaderLeft span {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 6px 12px;
+  width: 184px;
+  height: 35px;
 
-  border: 1px solid #ddd;
-  border-radius: 20px;
+  padding: 8px 12px;
 
+  border: 1px solid #dddddd;
+  border-radius: 50px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-family: Pretendard;
   font-size: 14px;
+  font-weight: 400;
+  line-height: 100%;
+
   color: #414141;
+
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .HeaderRight {
+  width: 242px;
+  height: 48px;
+
   display: flex;
-  gap: 12px;
+  gap: 16px;
 }
 
 .HeaderRight button {
-  padding: 10px 18px;
+  height: 48px;
 
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   border-radius: 12px;
 
+  background: #ffffff;
+
+  font-family: Pretendard;
   font-size: 14px;
+  font-weight: 400;
+  line-height: 100%;
+
   color: #414141;
-  background: #fff;
 
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 4px;
 
   cursor: pointer;
 }
+/* 오늘의 집중 버튼 */
+.FocusButton {
+  width: 144px;
+}
+
+/* 홈 버튼 */
+.HomeButton {
+  width: 82px;
+}
 
 .HeaderRight button img {
   width: 24px;
   height: 24px;
+
+  pointer-events: none;
 }
 
 .Content {
   width: 100%;
   min-height: 631px;
-  margin-top: 40px;
+
+  margin-top: 24px;
+
   padding: 40px 24px;
 
   border: 1px solid #ddd;
@@ -152,100 +209,152 @@
 }
 
 .Modal {
-  width: 344px;
-  padding: 24px 12px 20px;
+  width: 648px;
+  height: 861px;
+  padding: 40px 24px;
 
-  background: #fff;
+  border: 1px solid #dddddd;
   border-radius: 20px;
+
+  background: #ffffff;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .Modal h2 {
+  height: 29px;
+
   text-align: center;
-  font-size: 16px;
+
+  font-family: Pretendard;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 29px;
+
   color: #414141;
 }
 
 .ModalHabitList {
-  margin-top: 20px;
+  width: 600px;
+  height: 728px;
+  margin-top: 24px;
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .ModalHabitItem {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
+  position: relative;
+
+  width: 600px;
+  height: 54px;
 }
 
 .ModalHabitItem input {
-  width: 212px;
-  height: 29px;
+  position: absolute;
+  left: 100px;
+  top: 0;
+
+  width: 400px;
+  height: 54px;
+  padding: 0;
 
   border: 0;
-  border-radius: 20px;
-  background: #eee;
+  border-radius: 16px;
+
+  background: #eeeeee;
+
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 100%;
 
   text-align: center;
-  font-size: 12px;
-  color: #414141;
+  color: #818181;
+}
+
+.ModalHabitItem input:focus {
+  outline: none;
 }
 
 .DeleteButton {
-  width: 28px;
-  height: 28px;
+  position: absolute;
+  left: 510px;
+  top: 3px;
+
+  width: 48px;
+  height: 48px;
 
   border: 0;
-  border-radius: 50%;
+  background: transparent;
 
-  background: #ffe5e9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   cursor: pointer;
 }
 
+.DeleteButton img {
+  width: 24px;
+  height: 24px;
+}
+
 .AddButton {
-  width: 212px;
-  height: 29px;
-  margin: 0 auto;
+  width: 400px;
+  height: 54px;
+
+  margin-left: 100px;
 
   border: 1px solid #414141;
-  border-radius: 20px;
-  background: #fff;
+  border-radius: 16px;
 
-  font-size: 18px;
+  background: #ffffff;
+
+  font-family: Pretendard;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 100%;
+
   cursor: pointer;
 }
 
 .ModalButtons {
-  margin-top: 20px;
+  width: 600px;
+  height: 58px;
+  margin-top: auto;
 
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 24px;
 }
 
 .ModalButtons button {
-  width: 154px;
-  height: 40px;
+  width: 288px;
+  height: 58px;
+  padding: 10px;
 
   border: 0;
-  border-radius: 12px;
+  border-radius: 16px;
 
-  font-size: 14px;
+  font-family: Pretendard;
+  font-size: 16px;
   font-weight: 700;
+  line-height: 100%;
 
   cursor: pointer;
 }
 
 .ModalButtons button:first-child {
-  background: #ddd;
-  color: #fff;
+  background: #dddddd;
+  color: #ffffff;
 }
 
 .ModalButtons button:last-child {
   background: #99c08e;
-  color: #fff;
+  color: #ffffff;
 }
 
 @media (max-width: 744px) {
@@ -271,6 +380,35 @@
 
   .ContentHeader button {
     right: 0;
+  }
+
+  .Modal {
+    width: calc(100% - 32px);
+    height: 80vh;
+    padding: 32px 20px;
+  }
+
+  .ModalHabitList,
+  .ModalHabitItem,
+  .ModalButtons {
+    width: 100%;
+  }
+
+  .ModalHabitItem input {
+    width: calc(100% - 58px);
+  }
+
+  .AddButton {
+    width: calc(100% - 200px);
+    min-width: 240px;
+  }
+
+  .ModalButtons {
+    gap: 12px;
+  }
+
+  .ModalButtons button {
+    width: 50%;
   }
 }
 
@@ -306,6 +444,17 @@
   }
 
   .Modal {
-    width: calc(100% - 32px);
+    width: calc(100% - 20px);
+    height: 80vh;
+    padding: 28px 16px;
+  }
+
+  .Modal h2 {
+    font-size: 20px;
+  }
+
+  .AddButton {
+    width: 100%;
+    min-width: 0;
   }
 }
