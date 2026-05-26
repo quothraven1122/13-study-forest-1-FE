@@ -114,7 +114,11 @@ export default function FocusPage() {
           {/* 하단 제어 버튼 영역 */}
           <div className={styles.controls}>
             {status === 'idle' && (
-              <Button shape='Round' onClick={handleStart}>
+              <Button
+                shape='Round'
+                onClick={handleStart}
+                className={styles.buttonStart}
+              >
                 <img src={PlayIcon} alt='play' />
                 Start!
               </Button>
@@ -134,6 +138,7 @@ export default function FocusPage() {
                   shape='Round'
                   onClick={status === 'running' ? handlePause : handleResume}
                   disabled={status === 'running'}
+                  className={styles.buttonStart}
                 >
                   <img src={PlayIcon} alt='play' />
                   Start!
