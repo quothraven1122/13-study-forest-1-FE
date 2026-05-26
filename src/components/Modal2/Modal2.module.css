@@ -1,11 +1,24 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .container {
-  width: 100%;
+  width: 648px;
   height: fit-content;
   padding: 40px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 20px;
+  background-color: #fff;
+  position: relative;
 }
 .content {
   width: 100%;
@@ -31,6 +44,8 @@
   font-weight: 500;
   color: #578246;
   cursor: pointer;
+  border: 0;
+  background-color: #fff;
 }
 .closeBtnMobile {
   font-size: 16px;
@@ -38,6 +53,8 @@
   color: #578246;
   cursor: pointer;
   margin-top: 14px;
+  border: 0;
+  background-color: #fff;
 }
 .message {
   font-weight: 500;
@@ -60,4 +77,17 @@
 .children {
   text-align: left;
   width: 100%;
+}
+@media (min-width: 721px) and (max-width: 1280px) {
+  .container {
+    width: 648px;
+  }
+}
+@media (max-width: 721px) {
+  .modal {
+    padding: 0 16px;
+  }
+  .container {
+    width: 100%;
+  }
 }
