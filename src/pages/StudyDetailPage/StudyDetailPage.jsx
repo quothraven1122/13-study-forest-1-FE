@@ -167,10 +167,25 @@ function StudyDetailPage() {
                 공유하기
               </p>
               |
-              <p className={`${styles.highlightedOption} ${styles.option}`}>
+              <p
+                onClick={() => {
+                  setIsModalOpen(true);
+                  setModalType('edit');
+                }}
+                className={`${styles.highlightedOption} ${styles.option}`}
+              >
                 수정하기
               </p>
-              |<p className={styles.option}>스터디 삭제하기</p>
+              |
+              <p
+                onClick={() => {
+                  setIsModalOpen(true);
+                  setModalType('erase');
+                }}
+                className={styles.option}
+              >
+                스터디 삭제하기
+              </p>
             </div>
           )}
         </div>
