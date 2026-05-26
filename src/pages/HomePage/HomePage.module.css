@@ -30,6 +30,8 @@ button {
 
 .recentStudiesArea {
   display: flex;
+  justify-content: center;
+  align-items: center;
   height: 243px;
 }
 
@@ -73,7 +75,7 @@ button {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   border-radius: 20px;
 }
 .studyInfoBox {
@@ -89,7 +91,6 @@ button {
   display: flex;
   flex-direction: column;
   gap: 30px;
-  min-height: 120px;
 }
 .studyCardTopBox {
   position: relative;
@@ -112,6 +113,10 @@ button {
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .daysCount {
@@ -130,7 +135,7 @@ button {
   font-weight: 400;
 
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -216,7 +221,9 @@ button {
   align-items: center;
   min-height: 688px;
 }
-
+.studyContent {
+  min-height: 688px; /* empty랑 동일 기준으로 고정 */
+}
 @media (max-width: 1200px) {
   .recentSection,
   .studiesSection {
@@ -238,7 +245,7 @@ button {
 @media (max-width: 767px) {
   .recentStudyCardGrid .studyCard {
     width: 240px;
-    height: fit-content;
+    height: 180px;
     padding: 16px;
   }
   .recentStudyCardGrid {
@@ -289,7 +296,7 @@ button {
 
   .studyCardGrid .studyCard {
     width: 312px;
-    height: fit-content;
+    height: 180px;
     padding: 16px;
   }
   .studyCardArea {
