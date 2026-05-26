@@ -3,6 +3,7 @@ import styles from './Button.module.css';
 export default function Button({
   children,
   shape = 'Default', // 'Default' | 'Round' | 'Circle'
+  className,
   ...props
 }) {
   const shapeClass =
@@ -12,7 +13,10 @@ export default function Button({
     }[shape] || '';
 
   return (
-    <button className={`${styles.button} ${shapeClass}`} {...props}>
+    <button
+      className={`${styles.button} ${shapeClass} ${className}`}
+      {...props}
+    >
       {children}
     </button>
   );
