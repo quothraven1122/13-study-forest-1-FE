@@ -1,5 +1,5 @@
 import styles from './Dropdown.module.css';
-import arrowIcon from '../../asset/icon/ic_toggle.svg';
+import arrowIcon from '../../assets/icons/ic_toggle.svg';
 import { useState } from 'react';
 
 export default function Dropdown({
@@ -18,8 +18,8 @@ export default function Dropdown({
   return (
     <div className={styles.sortContainer} style={{ width }}>
       <div className={styles.sortBox}>
-        <p>{selectedValue}</p>
         <button onClick={() => setIsOpen(!isOpen)}>
+          <p>{selectedValue}</p>
           <img src={arrowIcon} alt='arrow' />
         </button>
       </div>
