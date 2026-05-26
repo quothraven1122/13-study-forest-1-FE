@@ -83,12 +83,12 @@ function HomePage() {
   const [recentStudies, setRecentStudies] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem(RECENT_KEY) || []);
+    const data = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
     setRecentStudies(data);
   }, []);
 
   const saveRecentStudy = (study) => {
-    const prev = JSON.parse(localStorage.getItem(RECENT_KEY)) || [];
+    const prev = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
     const filtered = prev.filter((item) => item.id !== study.id);
     const updated = [study, ...filtered].slice(0, 5);
 
