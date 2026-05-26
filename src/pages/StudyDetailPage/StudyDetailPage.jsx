@@ -37,14 +37,17 @@ function StudyDetailPage() {
     queryKey: ['study', studyId],
     queryFn: () => getStudyDetail(studyId),
   });
+  const checkPWMutation = useMutation({
+    mutationFn: checkPassword,
+    onSuccess: () => {
+      if (modalType === 'habits' || modalType === 'focus')
+        navigate(`/studies/${studyId}/${modalType}`);
+      if (modalType === 'edit') navigate(`/studies/${studyId}/habits`);
+    },
+  });
 
   return (
-    <div
-      className={styles.page}
-      onClick={() => {
-        console.log(data);
-      }}
-    >
+    <div className={styles.page}>
       {isModalOpen && (
         <Modal2
           title={data?.name}
@@ -52,9 +55,7 @@ function StudyDetailPage() {
           btnText={modalText[modalType]}
           onExit={() => setIsModalOpen(false)}
           onClick={() => {
-            if (modalType === 'habits' || modalType === 'focus')
-              navigate(`/studies/${data?.id}/${modalType}`);
-            if (modalType === 'edit') navigate(`/studies/${data?.id}/habits`);
+            checkPWMutation.mutate(studyId, pwInput);
           }}
         >
           <div className={styles.inputContainer}>
