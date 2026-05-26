@@ -15,16 +15,16 @@ export default function FocusPage() {
   const [timerMinutes, setTimerMinutes] = useState(25);
   const [userName, setUserName] = useState('');
   const [totalEarnedPoints, setTotalEarnedPoints] = useState(0);
-  // useEffect(() => {
-  //   const fetchStudyDetail = async () => {
-  //     const response = await fetch(`/api/studies/${studyId}`);
-  //     const data = await response.json();
-  //     setUserName(data.name);
-  //     setTimerMinutes(data.timerMinutes); //
-  //     setTotalEarnedPoints(data.points); // 초기 포인트
-  //   };
-  //   fetchStudyDetail();
-  // }, [studyId]);
+  useEffect(() => {
+    const fetchStudyDetail = async () => {
+      const response = await fetch(`http://localhost:3000/studies/${studyId}`);
+      const data = await response.json();
+      setUserName(data.name);
+      setTimerMinutes(data.timerMinutes);
+      setTotalEarnedPoints(data.point); // 초기 포인트
+    };
+    fetchStudyDetail();
+  }, [studyId]);
 
   const navigate = useNavigate();
   const { studyId } = useParams();
@@ -64,7 +64,7 @@ export default function FocusPage() {
     };
   }, [status]);
 
-  const calcPoints = (minutes) => 3 + Math.floor(minutes / 1);
+  const calcPoints = (minutes) => 3 + Math.floor(minutes / 10);
 
   // ── 토스트 제어 핸들러 ───────────────────────────────────────
   const showToast = (message, type = 'success') => {
@@ -99,12 +99,15 @@ export default function FocusPage() {
     setLoading(true);
     const points = calcPoints(timerMinutes);
 
-    // const response = await fetch(`api/studies/${studyId}/points`, {
-    //   method: 'PATCH',
-    //   body: JSON.stringify({ points }),
-    // });
-    // const data = await response.json();
-    // setTotalEarnedPoints(data.point); // points point??? 네이밍 좀 이상한데
+    const response = await fetch(
+      `http://localhost:3000/studies/${studyId}/point`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ points }),
+      }
+    );
+    const data = await response.json();
+    setTotalEarnedPoints(data.point); // points point??? 네이밍 좀 이상한데
     // try catch 문 필요
 
     showToast(`${points}포인트를 획득했습니다!`, 'success');

@@ -5,7 +5,8 @@
   display: flex;
   flex-direction: column;
   padding: 40px;
-  max-width: 744px;
+  /* max-width: 744px; */
+  max-width: 1168px;
   /* margin: 40px auto; */
 }
 
