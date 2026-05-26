@@ -27,3 +27,18 @@
 .input::placeholder {
   color: var(--color-gary-dark, #818181);
 }
+
+.inputWrapper {
+  display: flex;
+  position: relative;
+}
+
+.pwiconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  right: 2%;
+  top: 25%;
+}
