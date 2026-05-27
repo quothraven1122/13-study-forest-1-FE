@@ -1,0 +1,389 @@
+/* ── 전체 카드 ───────────────────────────────────────────── */
+.focusPageContainer {
+  border-radius: 20px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  max-width: 1168px;
+  width: 100%;
+  margin: 40px auto;
+}
+
+/* ── 상단 헤더 ───────────────────────────────────────────── */
+.titleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  max-height: 694px;
+}
+
+.title {
+  color: #414141;
+  font-family: Pretendard;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: normal;
+  margin: 0;
+}
+
+.navButtons {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── 공용 Button에 넘길 className ───────────────────────── */
+.navButton {
+  width: fit-content;
+  min-width: 120px;
+  height: 48px;
+  border-radius: 15px;
+  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+  background: #fff;
+  padding: 7px 14px;
+  white-space: nowrap;
+  color: var(--gray-gray_818181, #818181);
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.navButton img {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ── 포인트 라벨 ─────────────────────────────────────────── */
+.pointsLabel {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: var(--gray-gray_818181, #818181);
+  font-family: Pretendard;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* ── 타이머 컨테이너 ─────────────────────────────────────── */
+.timerContainer {
+  border-radius: 20px;
+  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 546px;
+  padding: 40px 24px;
+  margin-top: 24px;
+  /* gap: 0; */
+}
+
+.timerHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* 세로 배치 */
+  align-items: center; /* 가운데 정렬 */
+  gap: 6px;
+  /* margin-bottom: 0; */
+  height: 48px;
+}
+
+.timerTitle {
+  color: #414141;
+  font-family: Pretendard;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.timerSetting {
+  font-size: 16px;
+  color: #818181;
+  display: flex;
+  padding: 6px 8px;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-start;
+  border-radius: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.3);
+}
+.timerSetting img {
+  width: 19px;
+  height: 19px;
+}
+
+/* ── 타이머 숫자 ─────────────────────────────────────────── */
+.timer {
+  color: #414141;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 150px;
+  font-weight: 800;
+  line-height: normal;
+  line-height: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  transition: color 0.2s;
+  /* 숫자마다 너비 고정 → 흔들림 방지 */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* 타이머 박스 활성 (running / paused / overtime) */
+.timerBoxActive {
+  /* border: 2px solid #ddd; */
+  /* border-radius: 12px; */
+  padding: 20px 0px; /* 좌우 패딩 넉넉하게 → 너비 고정 효과 */
+  /* flex: unset; 이것만 없어지니깐 버튼 disabled가 갑자기 안먹힘 */
+  width: 100%; /* 고정 너비 → 숫자 변해도 박스 안 흔들림 */
+  /* margin: 24px 0; */
+}
+
+/* 일시정지 → 빨강 */
+.timerRed {
+  color: #e53935;
+}
+
+/* 초과 → 회색 */
+.timerGreen {
+  color: rgb(88, 241, 88);
+}
+
+/* ── 버튼 영역 ───────────────────────────────────────────── */
+.controls {
+  /* width: 485px; */
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  height: 60px;
+}
+
+/* idle / overtime: Start! / Stop! 단일 버튼 */
+.buttonStart,
+.buttonStop {
+  width: 333px;
+  height: 60px;
+  border-radius: 50px;
+  border: none;
+  background: #7dbb7b;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.buttonStart img,
+.buttonStop img {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.buttonStart:hover,
+.buttonStop:hover:not(:disabled) {
+  background: #6aaa68;
+  transform: translateY(-1px);
+}
+
+.buttonStart:disabled {
+  background: #757575;
+  opacity: 1;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* running / paused: 원형 + 중간 버튼 3개 */
+.controlGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  /* width: auto; */
+  /* width: 100%; */
+  height: 60px;
+}
+
+.circleBtn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: #7dbb7b;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+}
+
+.circleBtn:hover:not(:disabled) {
+  background: #6aaa68;
+  transform: scale(1.05);
+}
+
+.circleBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.circleBtn img {
+  width: 35.2px;
+  height: 35.2px;
+}
+
+/* ── 토스트 위치 ─────────────────────────────────────────── */
+.toastWrapper {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+/* ============================================================
+   반응형 - 태블릿 (iPad mini ~768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  .focusPageContainer {
+    padding: 28px 24px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .navButton {
+    min-width: 100px;
+    height: 40px;
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .navButton img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .timerContainer {
+    min-height: 420px;
+    padding: 28px 20px;
+  }
+
+  .timer {
+    font-size: 110px;
+  }
+
+  .buttonStart,
+  .buttonStop {
+    width: 260px;
+    height: 54px;
+    font-size: 18px;
+  }
+}
+
+/* ============================================================
+   반응형 - 모바일 (~480px)
+   ============================================================ */
+@media (max-width: 480px) {
+  .focusPageContainer {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  /* 모바일: 제목 위 / 버튼 아래 (wrap) */
+  .titleContainer {
+    flex-wrap: wrap;
+  }
+
+  .title {
+    font-size: 22px;
+    width: 100%; /* 한 줄 차지 */
+    margin-bottom: 8px;
+  }
+
+  .navButtons {
+    width: 100%;
+  }
+
+  .navButton {
+    flex: 1;
+    min-width: unset;
+    height: 38px;
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .pointsLabel {
+    font-size: 15px;
+    margin-top: 14px;
+  }
+
+  .timerContainer {
+    min-height: 340px;
+    padding: 20px 16px;
+    margin-top: 16px;
+  }
+
+  .timerTitle {
+    font-size: 15px;
+  }
+
+  .timer {
+    font-size: 80px;
+  }
+
+  .buttonStart,
+  .buttonStop {
+    /* width: 100%; */
+    width: 140px;
+    height: 45px;
+    font-size: 18px;
+  }
+  .buttonStart img,
+  .buttonStop img {
+    width: 24px;
+    height: 24px;
+  }
+  /* .buttonStart:disabled {
+    width: 140px;
+    height: 45px;
+  } */
+
+  .circleBtn {
+    width: 44px;
+    height: 44px;
+    font-size: 17px;
+  }
+  .circleBtn img {
+    width: 26.4px;
+    height: 26.4px;
+  }
+}
