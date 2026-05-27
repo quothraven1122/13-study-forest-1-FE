@@ -1,79 +1,141 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
+import Modal1 from '../../components/Modal1/Modal1';
 
 function HabitsPage() {
-  // 추후 props/API 데이터로 교체 예정
-  const [habits] = useState([
-    {
-      id: 1,
-      text: '미라클 모닝 6시 기상',
-    },
-    {
-      id: 2,
-      text: '아침 챙겨 먹기',
-    },
-    {
-      id: 3,
-      text: 'React 공부 2시간',
-    },
-  ]);
+  const navigate = useNavigate();
+  const { studyId } = useParams();
+
+  const [habits, setHabits] = useState(() => {
+    const savedHabits = localStorage.getItem(`habits-${studyId}`);
+    return savedHabits ? JSON.parse(savedHabits) : [];
+  });
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem(`habits-${studyId}`, JSON.stringify(habits));
+  }, [habits, studyId]);
+
+  const handleToggleHabit = (id) => {
+    setHabits((prevHabits) =>
+      prevHabits.map((habit) =>
+        habit.id === id ? { ...habit, isDone: !habit.isDone } : habit
+      )
+    );
+  };
+
+  const handleOpenEditModal = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleSaveHabits = (savedHabits) => {
+    const newHabits = savedHabits
+      .filter((habit) => habit.name.trim() !== '')
+      .map((habit) => ({
+        id: habit.id,
+        name: habit.name,
+        isDone: habit.isDone || false,
+      }));
+
+    setHabits(newHabits);
+    setIsEditModalOpen(false);
+  };
+
+  const handleGoFocus = () => {
+    navigate(`/studies/${studyId}/focus`);
+  };
+
+  const handleGoHome = () => {
+    navigate('/');
+  };
 
   const now = new Date();
 
   const formattedDate = now.toLocaleString('ko-KR', {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
   });
 
   return (
-    <div className={styles.Container}>
-      <div className={styles.Header}>
-        <div className={styles.HeaderLeft}>
-          <h1>연우의 개발공장</h1>
-          <p>현재 시간</p>
-          <span>{formattedDate}</span>
+    <>
+      <div className={styles.Container}>
+        <div className={styles.Header}>
+          <div className={styles.HeaderLeft}>
+            <h1>연우의 개발공장</h1>
+            <p>현재 시간</p>
+            <span>{formattedDate}</span>
+          </div>
+
+          <div className={styles.HeaderRight}>
+            <button
+              type='button'
+              className={styles.FocusButton}
+              onClick={handleGoFocus}
+            >
+              오늘의 집중
+              <img src={arrowRight} alt='화살표 아이콘' />
+            </button>
+
+            <button
+              type='button'
+              className={styles.HomeButton}
+              onClick={handleGoHome}
+            >
+              홈
+              <img src={arrowRight} alt='화살표 아이콘' />
+            </button>
+          </div>
         </div>
 
-        <div className={styles.HeaderRight}>
-          <button type='button' disabled>
-            오늘의 집중
-            <img src={arrowRight} alt='화살표 아이콘' />
-          </button>
+        <div className={styles.Content}>
+          <div className={styles.ContentHeader}>
+            <h2>오늘의 습관</h2>
 
-          <button type='button' disabled>
-            홈
-            <img src={arrowRight} alt='화살표 아이콘' />
-          </button>
+            <button type='button' onClick={handleOpenEditModal}>
+              목록 수정
+            </button>
+          </div>
+
+          <div className={styles.HabitList}>
+            {habits.length === 0 ? (
+              <div className={styles.EmptyMessage}>
+                <p>아직 습관이 없어요</p>
+                <span>목록 수정을 눌러 습관을 생성해보세요</span>
+              </div>
+            ) : (
+              habits.map((habit) => (
+                <Chip
+                  key={habit.id}
+                  text={habit.name}
+                  isDone={habit.isDone}
+                  onClick={() => handleToggleHabit(habit.id)}
+                />
+              ))
+            )}
+          </div>
         </div>
       </div>
 
-      <div className={styles.Content}>
-        <div className={styles.ContentHeader}>
-          <h2>오늘의 습관</h2>
-
-          <button type='button' disabled>
-            목록 수정
-          </button>
-        </div>
-
-        <div className={styles.HabitList}>
-          {habits.length === 0 ? (
-            <div className={styles.EmptyMessage}>
-              <p>아직 습관이 없어요</p>
-              <span>목록 수정을 눌러 습관을 생성해보세요</span>
-            </div>
-          ) : (
-            habits.map((habit) => <Chip key={habit.id} text={habit.text} />)
-          )}
-        </div>
-      </div>
-    </div>
+      {isEditModalOpen && (
+        <Modal1
+          habits={habits}
+          onSave={handleSaveHabits}
+          onCancel={handleCloseEditModal}
+        />
+      )}
+    </>
   );
 }
 

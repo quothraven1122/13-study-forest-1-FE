@@ -2,7 +2,8 @@
   width: calc(100% - 32px);
   max-width: 1248px;
   min-height: 863px;
-  margin: 10px auto;
+
+  margin: 39px auto 0;
   padding: 40px;
 
   background: #fff;
@@ -10,71 +11,122 @@
 }
 
 .Header {
+  width: 100%;
+
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
+.HeaderLeft {
+  display: flex;
+  flex-direction: column;
+}
+
 .HeaderLeft h1 {
+  width: 204px;
+  height: 38px;
+
+  margin: 0;
+
+  font-family: Pretendard;
   font-size: 24px;
+  font-weight: 700;
+  line-height: 38px;
+
   color: #414141;
 }
 
 .HeaderLeft p {
-  margin-top: 16px;
+  margin-top: 24px;
+  margin-bottom: 8px;
+
+  font-family: Pretendard;
   font-size: 14px;
+  font-weight: 400;
+  line-height: 100%;
+
   color: #818181;
 }
 
 .HeaderLeft span {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 6px 12px;
+  width: 184px;
+  height: 35px;
 
-  border: 1px solid #ddd;
-  border-radius: 20px;
+  padding: 8px 12px;
 
-  font-size: 14px;
-  color: #414141;
-}
-
-.HeaderRight {
-  display: flex;
-  gap: 12px;
-}
-
-.HeaderRight button {
-  padding: 10px 18px;
-
-  border: 1px solid #ddd;
-  border-radius: 12px;
-
-  font-size: 14px;
-  color: #414141;
-  background: #fff;
+  border: 1px solid #dddddd;
+  border-radius: 50px;
 
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 100%;
+
+  color: #414141;
+
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
-.HeaderRight button:disabled {
-  opacity: 1;
+.HeaderRight {
+  width: 242px;
+  height: 48px;
+
+  display: flex;
+  gap: 16px;
+}
+
+.HeaderRight button {
+  height: 48px;
+
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 100%;
+
   color: #414141;
-  background: #fff;
-  cursor: default;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+
+  cursor: pointer;
+}
+
+/* 오늘의 집중 버튼 */
+.FocusButton {
+  width: 144px;
+}
+
+/* 홈 버튼 */
+.HomeButton {
+  width: 82px;
 }
 
 .HeaderRight button img {
   width: 24px;
   height: 24px;
+
   pointer-events: none;
 }
 
 .Content {
   width: 100%;
   min-height: 631px;
-  margin-top: 40px;
+
+  margin-top: 24px;
+
   padding: 40px 24px;
 
   border: 1px solid #ddd;
@@ -93,7 +145,10 @@
 }
 
 .ContentHeader h2 {
+  font-family: Pretendard;
   font-size: 20px;
+  font-weight: 700;
+
   color: #414141;
 }
 
@@ -101,17 +156,20 @@
   position: absolute;
   right: calc((100% - 400px) / 2);
 
-  font-size: 12px;
-  color: #818181;
-}
+  border: 0;
+  background: none;
 
-.ContentHeader button:disabled {
-  opacity: 1;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-weight: 400;
+
   color: #818181;
-  cursor: default;
+
+  cursor: pointer;
 }
 
 .HabitList {
+  width: 100%;
   margin-top: 32px;
 
   display: flex;
@@ -131,20 +189,21 @@
 }
 
 .EmptyMessage p {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 700;
 }
 
 .EmptyMessage span {
   margin-top: 8px;
 
-  font-size: 16px;
+  font-size: 14px;
 }
 
 @media (max-width: 744px) {
   .Container {
-    width: calc(100% - 32px);
-    padding: 32px 24px;
+    width: calc(100% - 24px);
+
+    padding: 24px 16px;
   }
 
   .Header {
@@ -158,19 +217,17 @@
   }
 
   .Content {
-    min-height: 560px;
-    padding: 32px 20px;
-  }
-
-  .ContentHeader button {
-    right: 0;
+    padding: 32px 16px;
   }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 480px) {
   .Container {
-    width: calc(100% - 20px);
-    padding: 24px 16px;
+    width: calc(100% - 16px);
+
+    margin-top: 16px;
+    padding: 20px 12px;
+
     border-radius: 16px;
   }
 
@@ -178,23 +235,51 @@
     font-size: 20px;
   }
 
+  .HeaderLeft span {
+    width: 170px;
+
+    font-size: 12px;
+  }
+
   .HeaderRight {
     gap: 8px;
   }
 
+  .FocusButton {
+    width: 120px;
+  }
+
+  .HomeButton {
+    width: 72px;
+  }
+
   .HeaderRight button {
-    padding: 8px 12px;
     font-size: 12px;
   }
 
   .Content {
-    margin-top: 32px;
-    min-height: 480px;
-    padding: 28px 16px;
+    min-height: auto;
+
+    padding: 24px 12px;
+
     border-radius: 16px;
   }
 
   .ContentHeader h2 {
     font-size: 18px;
+  }
+
+  .ContentHeader button {
+    right: 0;
+
+    font-size: 11px;
+  }
+
+  .HabitList {
+    margin-top: 24px;
+  }
+
+  .EmptyMessage {
+    margin-top: 120px;
   }
 }
