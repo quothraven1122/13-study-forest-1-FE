@@ -1,6 +1,13 @@
 import styles from './Modal2.module.css';
 
-export default function Modal2Mobile({ title, message, children, onSubmit }) {
+export default function Modal2Mobile({
+  title,
+  message,
+  btnText,
+  children,
+  onExit,
+  onClick,
+}) {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -13,8 +20,10 @@ export default function Modal2Mobile({ title, message, children, onSubmit }) {
       </div>
 
       {/*임시 버튼 - 나중에 컴포넌트로 대체*/}
-      <button className={styles.btn}>수정하러 가기</button>
-      <button type='button' className={styles.closeBtnMobile}>
+      <button onClick={onClick} className={styles.btn}>
+        {btnText}
+      </button>
+      <button type='button' onClick={onExit} className={styles.closeBtnMobile}>
         나가기
       </button>
     </div>
