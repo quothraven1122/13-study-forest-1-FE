@@ -13,6 +13,9 @@ import PauseIcon from '../../assets/icons/ic_pause.svg';
 
 export default function FocusPage() {
   const [timerMinutes, setTimerMinutes] = useState(25);
+  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [mStr, setMStr] = useState('25');
+  const [sStr, setSStr] = useState('00');
   const [userName, setUserName] = useState('');
   const [totalEarnedPoints, setTotalEarnedPoints] = useState(0);
   const { studyId } = useParams();
@@ -32,7 +35,8 @@ export default function FocusPage() {
   }, [studyId]);
 
   const navigate = useNavigate();
-  const totalSeconds = (Number(timerMinutes) || 1) * 60;
+  const totalSeconds =
+    (Number(timerMinutes) || 0) * 60 + (Number(timerSeconds) || 0) || 60;
   const [remaining, setRemaining] = useState(totalSeconds);
   const [overtime, setOvertime] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -75,9 +79,14 @@ export default function FocusPage() {
 
   // ── UI 인터랙션 핸들러 ───────────────────────────────────────
   const handleStart = () => {
-    const minutes = Math.max(1, Number(timerMinutes) || 1);
-    setTimerMinutes(minutes);
-    setRemaining(minutes * 60);
+    const m = Number(timerMinutes) || 0;
+    const s = Number(timerSeconds) || 0;
+    const total = m * 60 + s || 60;
+    setTimerMinutes(m);
+    setTimerSeconds(s);
+    setMStr(String(m).padStart(2, '0'));
+    setSStr(String(s).padStart(2, '0'));
+    setRemaining(total);
     setStatus('running');
     setToast(null);
   };
@@ -92,11 +101,25 @@ export default function FocusPage() {
     setToast(null);
   };
 
+  const clampTotal = (m, s) => {
+    if (m * 60 + s > 3600) {
+      setTimerMinutes(60);
+      setTimerSeconds(0);
+      setMStr('60');
+      setSStr('00');
+    } else {
+      setMStr(String(m).padStart(2, '0'));
+      setSStr(String(s).padStart(2, '0'));
+    }
+  };
+
   const handleReset = () => {
     setStatus('idle');
     setRemaining(totalSeconds); // 처음에 셋팅한 총 s로 돌아감
     setOvertime(0);
     setToast(null);
+    setMStr(String(timerMinutes).padStart(2, '0'));
+    setSStr(String(timerSeconds).padStart(2, '0'));
   };
 
   const handleStop = async () => {
@@ -186,30 +209,34 @@ export default function FocusPage() {
             className={`${styles.timer} ${timerColorClass} ${isActive ? styles.timerBoxActive : ''}`}
           >
             {status === 'idle' ? (
-              <input
-                type='text'
-                inputMode='numeric'
-                maxLength={2}
-                value={timerMinutes}
-                className={styles.timer}
-                style={{
-                  border: 'none',
-                  outline: 'none',
-                  width: '100%',
-                  textAlign: 'center',
-                  background: 'transparent',
-                }}
-                onChange={(e) => {
-                  const raw = e.target.value.replace(/[^0-9]/g, '');
-                  if (raw === '') {
-                    setTimerMinutes('');
-                    return;
-                  }
-                  const val = Math.min(99, Number(raw));
-                  setTimerMinutes(val);
-                  setRemaining(val * 60);
-                }}
-              />
+              <div className={styles.timerInputGroup}>
+                <input
+                  type='text'
+                  inputMode='numeric'
+                  value={mStr}
+                  className={styles.timerInput}
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(/[^0-9]/g, '').slice(-2);
+                    setMStr(raw);
+                    setTimerMinutes(Number(raw) || 0);
+                  }}
+                  onBlur={() => clampTotal(timerMinutes, timerSeconds)}
+                />
+                <span className={styles.timerColon}>:</span>
+                <input
+                  type='text'
+                  inputMode='numeric'
+                  value={sStr}
+                  className={styles.timerInput}
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(/[^0-9]/g, '').slice(-2);
+                    const val = Math.min(59, Number(raw) || 0);
+                    setSStr(String(val));
+                    setTimerSeconds(val);
+                  }}
+                  onBlur={() => clampTotal(timerMinutes, timerSeconds)}
+                />
+              </div>
             ) : (
               displayTime
             )}

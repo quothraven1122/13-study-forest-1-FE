@@ -159,6 +159,38 @@
   color: var(--gray-gray_818181, #818181);
 }
 
+/* ── 분:초 입력 그룹 (idle 상태) ─────────────────────────── */
+.timerInputGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timerInput {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  line-height: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  text-align: center;
+  width: 1.96ch;
+  min-width: 0;
+  padding: 0;
+  cursor: text;
+}
+
+.timerColon {
+  line-height: 1;
+  user-select: none;
+  position: relative;
+  top: -0.09em;
+}
+
 /* ── 버튼 영역 ───────────────────────────────────────────── */
 .controls {
   /* width: 485px; */
