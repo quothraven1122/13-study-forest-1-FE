@@ -2,7 +2,8 @@
 
 <img width="300" height="150" alt="image" src="https://github.com/user-attachments/assets/9cd9281b-0f57-4eec-8918-e0c5bde8df8a" />
 
-공부의 숲에 오신 것을 환영합니다!
+공부의 숲에 오신 것을 환영합니다!    
+배포: https://study-training-forest.netlify.app/
 
 ## 🔧 기술 스택
 
