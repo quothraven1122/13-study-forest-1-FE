@@ -32,7 +32,7 @@ export default function FocusPage() {
   }, [studyId]);
 
   const navigate = useNavigate();
-  const totalSeconds = timerMinutes * 60;
+  const totalSeconds = (Number(timerMinutes) || 1) * 60;
   const [remaining, setRemaining] = useState(totalSeconds);
   const [overtime, setOvertime] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -75,6 +75,9 @@ export default function FocusPage() {
 
   // ── UI 인터랙션 핸들러 ───────────────────────────────────────
   const handleStart = () => {
+    const minutes = Math.max(1, Number(timerMinutes) || 1);
+    setTimerMinutes(minutes);
+    setRemaining(minutes * 60);
     setStatus('running');
     setToast(null);
   };
@@ -184,9 +187,9 @@ export default function FocusPage() {
           >
             {status === 'idle' ? (
               <input
-                type='number'
-                min='1'
-                max='60'
+                type='text'
+                inputMode='numeric'
+                maxLength={2}
                 value={timerMinutes}
                 className={styles.timer}
                 style={{
@@ -197,7 +200,12 @@ export default function FocusPage() {
                   background: 'transparent',
                 }}
                 onChange={(e) => {
-                  const val = Number(e.target.value);
+                  const raw = e.target.value.replace(/[^0-9]/g, '');
+                  if (raw === '') {
+                    setTimerMinutes('');
+                    return;
+                  }
+                  const val = Math.min(99, Number(raw));
                   setTimerMinutes(val);
                   setRemaining(val * 60);
                 }}
