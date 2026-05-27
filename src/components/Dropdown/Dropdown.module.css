@@ -1,0 +1,72 @@
+.dropdownBox {
+  display: flex;
+  position: absolute;
+  z-index: 10;
+  top: 120%;
+  left: 0%;
+  flex-direction: column;
+  border-radius: 15px;
+  border: 1px solid var(--gray-gray_DDDDDD, #ddd);
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.dropdownBox button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 42px;
+  color: var(--black-black_414141, #414141);
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--gray-gray_DDDDDD, #ddd);
+  cursor: pointer;
+}
+
+.dropdownBox button:last-child {
+  border: none;
+}
+
+.sortContainer {
+  display: flex;
+  position: relative;
+  padding: 9px 20px;
+  flex-direction: column;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.sortBox {
+  width: 140px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+
+.sortBox p {
+  color: #818181;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.sortBox button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
