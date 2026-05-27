@@ -24,7 +24,7 @@ export default function FocusPage() {
       );
       const data = await response.json();
       console.log(data);
-      setUserName(data.name);
+      setUserName(data.nickname);
       // setTimerMinutes(data.timerMinutes);
       setTotalEarnedPoints(data.point); // 초기 포인트
     };
@@ -68,8 +68,6 @@ export default function FocusPage() {
     };
   }, [status]);
 
-  const calcPoints = (minutes) => 3 + Math.floor(minutes / 10);
-
   // ── 토스트 제어 핸들러 ───────────────────────────────────────
   const showToast = (message, type = 'success') => {
     setToast({ id: Date.now(), message, type });
@@ -101,7 +99,7 @@ export default function FocusPage() {
   const handleStop = async () => {
     clearInterval(intervalRef.current);
     setLoading(true);
-    const points = calcPoints(timerMinutes);
+    const points = 3 + Math.floor(overtime / 600); // 600초 === 10분
 
     // const response = await fetch(
     //   `http://localhost:3000/studies/${studyId}/focus/point`,
@@ -136,13 +134,13 @@ export default function FocusPage() {
   // ── 스타일 및 UI 분기 변수 ────────────────────────────────────
   const isActive = status !== 'idle';
   const timerColorClass =
-    status === 'paused'
+    status === 'paused' || (status === 'running' && remaining <= 10)
       ? styles.timerRed
       : status === 'overtime'
-        ? styles.timerGreen
+        ? styles.timerTimeover
         : '';
   const displayTime =
-    status === 'overtime' ? `${format(overtime)}` : format(remaining);
+    status === 'overtime' ? `-${format(overtime)}` : format(remaining);
 
   return (
     <>
@@ -245,6 +243,7 @@ export default function FocusPage() {
                   className={styles.circleBtn}
                   onClick={handleReset}
                   aria-label='리셋'
+                  style={{ backgroundColor: '#99C08E' }}
                 >
                   <img src={RestartIcon} alt='restart' />
                 </Button>

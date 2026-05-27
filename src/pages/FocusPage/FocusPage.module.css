@@ -6,8 +6,8 @@
   flex-direction: column;
   padding: 40px;
   max-width: 1168px;
-  width: 100%;
-  margin: 40px auto;
+  width: calc(100% - 48px);
+  margin: 20px auto;
 }
 
 /* ── 상단 헤더 ───────────────────────────────────────────── */
@@ -53,6 +53,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
+  text-shadow: none;
 }
 
 .navButton img {
@@ -145,20 +146,17 @@
 .timerBoxActive {
   /* border: 2px solid #ddd; */
   /* border-radius: 12px; */
-  padding: 20px 0px; /* 좌우 패딩 넉넉하게 → 너비 고정 효과 */
-  /* flex: unset; 이것만 없어지니깐 버튼 disabled가 갑자기 안먹힘 */
+  padding: 20px 0px;
+  /* flex: unset; 이것만 없어지니깐 버튼 disabled가 갑자기 안먹힘 앤 뭐냐 */
   width: 100%; /* 고정 너비 → 숫자 변해도 박스 안 흔들림 */
-  /* margin: 24px 0; */
 }
 
-/* 일시정지 → 빨강 */
 .timerRed {
   color: #e53935;
 }
 
-/* 초과 → 회색 */
-.timerGreen {
-  color: rgb(88, 241, 88);
+.timerTimeover {
+  color: var(--gray-gray_818181, #818181);
 }
 
 /* ── 버튼 영역 ───────────────────────────────────────────── */
@@ -273,6 +271,7 @@
    ============================================================ */
 @media (max-width: 768px) {
   .focusPageContainer {
+    margin: 30px 24px;
     padding: 28px 24px;
   }
 
@@ -314,6 +313,7 @@
    ============================================================ */
 @media (max-width: 480px) {
   .focusPageContainer {
+    margin: 15px 15px;
     padding: 20px 16px;
     border-radius: 16px;
   }
