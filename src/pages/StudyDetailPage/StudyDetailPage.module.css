@@ -161,6 +161,15 @@
 .log {
   vertical-align: middle;
 }
+.emptyMessage {
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-gray-dark);
+  margin-top: 66px;
+  margin-bottom: 103px;
+}
 
 @media (min-width: 721px) and (max-width: 1280px) {
   .page {
