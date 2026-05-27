@@ -90,7 +90,7 @@ function HomePage() {
   const saveRecentStudy = (study) => {
     const prev = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
     const filtered = prev.filter((item) => item.id !== study.id);
-    const updated = [study, ...filtered].slice(0, 5);
+    const updated = [study, ...filtered].slice(0, 3);
 
     localStorage.setItem(RECENT_KEY, JSON.stringify(updated));
     setRecentStudies(updated);
@@ -158,7 +158,7 @@ function HomePage() {
               onMouseMove={handleMouseMove}
               className={styles.recentStudyCardGrid}
             >
-              {recentStudies.slice(0, 3).map((study) => (
+              {recentStudies.map((study) => (
                 <StudyCard key={study.id} study={study} />
               ))}
             </div>
