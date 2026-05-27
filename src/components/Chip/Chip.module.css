@@ -1,5 +1,8 @@
 .button {
-  width: 400px;
+  cursor: pointer;
+
+  width: 100%;
+  max-width: 400px;
   height: 54px;
 
   border: 0;
@@ -7,16 +10,19 @@
 
   background: #eeeeee;
 
+  color: #818181;
+  text-align: center;
+
   font-family: Pretendard;
   font-size: 16px;
   font-weight: 700;
   line-height: 100%;
 
-  text-align: center;
+  text-decoration: underline;
 
-  color: #818181;
-
-  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .isDone {

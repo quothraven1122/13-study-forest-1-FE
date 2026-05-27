@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
-import trashIcon from '../../assets/icons/ic_trash.svg';
+import Modal1 from '../../components/Modal1/Modal1';
 
 function HabitsPage() {
   const navigate = useNavigate();
@@ -15,7 +15,6 @@ function HabitsPage() {
   });
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editHabits, setEditHabits] = useState([]);
 
   useEffect(() => {
     localStorage.setItem(`habits-${studyId}`, JSON.stringify(habits));
@@ -30,7 +29,6 @@ function HabitsPage() {
   };
 
   const handleOpenEditModal = () => {
-    setEditHabits(habits);
     setIsEditModalOpen(true);
   };
 
@@ -38,36 +36,16 @@ function HabitsPage() {
     setIsEditModalOpen(false);
   };
 
-  const handleAddHabit = () => {
-    const newHabit = {
-      id: Date.now(),
-      text: '',
-      isDone: false,
-    };
+  const handleSaveHabits = (savedHabits) => {
+    const newHabits = savedHabits
+      .filter((habit) => habit.name.trim() !== '')
+      .map((habit) => ({
+        id: habit.id,
+        name: habit.name,
+        isDone: habit.isDone || false,
+      }));
 
-    setEditHabits((prevHabits) => [...prevHabits, newHabit]);
-  };
-
-  const handleChangeHabit = (id, value) => {
-    setEditHabits((prevHabits) =>
-      prevHabits.map((habit) =>
-        habit.id === id ? { ...habit, text: value } : habit
-      )
-    );
-  };
-
-  const handleDeleteHabit = (id) => {
-    setEditHabits((prevHabits) =>
-      prevHabits.filter((habit) => habit.id !== id)
-    );
-  };
-
-  const handleSaveHabits = () => {
-    const filteredHabits = editHabits.filter(
-      (habit) => habit.text.trim() !== ''
-    );
-
-    setHabits(filteredHabits);
+    setHabits(newHabits);
     setIsEditModalOpen(false);
   };
 
@@ -140,7 +118,7 @@ function HabitsPage() {
               habits.map((habit) => (
                 <Chip
                   key={habit.id}
-                  text={habit.text}
+                  text={habit.name}
                   isDone={habit.isDone}
                   onClick={() => handleToggleHabit(habit.id)}
                 />
@@ -151,51 +129,11 @@ function HabitsPage() {
       </div>
 
       {isEditModalOpen && (
-        <div className={styles.ModalOverlay}>
-          <div className={styles.Modal}>
-            <h2>습관 목록</h2>
-
-            <div className={styles.ModalHabitList}>
-              {editHabits.map((habit) => (
-                <div key={habit.id} className={styles.ModalHabitItem}>
-                  <input
-                    value={habit.text}
-                    onChange={(e) =>
-                      handleChangeHabit(habit.id, e.target.value)
-                    }
-                    placeholder='습관을 입력하세요'
-                  />
-
-                  <button
-                    type='button'
-                    className={styles.DeleteButton}
-                    onClick={() => handleDeleteHabit(habit.id)}
-                  >
-                    <img src={trashIcon} alt='삭제 아이콘' />
-                  </button>
-                </div>
-              ))}
-
-              <button
-                type='button'
-                className={styles.AddButton}
-                onClick={handleAddHabit}
-              >
-                +
-              </button>
-            </div>
-
-            <div className={styles.ModalButtons}>
-              <button type='button' onClick={handleCloseEditModal}>
-                취소
-              </button>
-
-              <button type='button' onClick={handleSaveHabits}>
-                수정 완료
-              </button>
-            </div>
-          </div>
-        </div>
+        <Modal1
+          habits={habits}
+          onSave={handleSaveHabits}
+          onCancel={handleCloseEditModal}
+        />
       )}
     </>
   );
