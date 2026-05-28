@@ -11,6 +11,11 @@
   font-size: 18px;
   margin-bottom: 16px;
 }
+.toast {
+  position: absolute;
+  z-index: 550;
+  bottom: 40px;
+}
 .container {
   width: 1200px;
   height: fit-content;
@@ -175,6 +180,9 @@
   .page {
     padding: 0 16px;
   }
+  .title {
+    font-size: 25px;
+  }
   .habitName {
     min-width: 122px;
     padding: 11px 10px;
@@ -189,6 +197,9 @@
 @media (max-width: 721px) {
   .page {
     padding: 0 16px;
+  }
+  .title {
+    font-size: 25px;
   }
   .container {
     width: 100%;
