@@ -22,8 +22,7 @@ export default function FocusPage() {
   useEffect(() => {
     const fetchStudyDetail = async () => {
       const response = await fetch(
-        // `http://localhost:3000/studies/${studyId}/focus`
-        `http://localhost:3000/studies/143/focus`
+        `http://localhost:3000/studies/${studyId}/focus`
       );
       const data = await response.json();
       console.log(data);
@@ -127,18 +126,14 @@ export default function FocusPage() {
     setLoading(true);
     const points = 3 + Math.floor(overtime / 600); // 600초 === 10분
 
-    // const response = await fetch(
-    //   `http://localhost:3000/studies/${studyId}/focus/point`,
-    //   {
-    //     method: 'PATCH',
-    //     body: JSON.stringify({ points }),
-    //   }
-    // );
-    const response = await fetch(`http://localhost:3000/studies/143/focus`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ points }),
-    });
+    const response = await fetch(
+      `http://localhost:3000/studies/${studyId}/focus`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ points }),
+      }
+    );
     const data = await response.json();
     setTotalEarnedPoints(data.point); // points point??? 네이밍 좀 이상한데
     // try catch 문 필요
