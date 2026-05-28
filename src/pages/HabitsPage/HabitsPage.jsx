@@ -129,11 +129,13 @@ function HabitsPage() {
       </div>
 
       {isEditModalOpen && (
-        <Modal1
-          habits={habits}
-          onSave={handleSaveHabits}
-          onCancel={handleCloseEditModal}
-        />
+        <div className={styles.ModalOverlay}>
+          <Modal1
+            habits={habits}
+            onSave={handleSaveHabits}
+            onCancel={handleCloseEditModal}
+          />
+        </div>
       )}
     </>
   );

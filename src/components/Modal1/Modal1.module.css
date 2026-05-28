@@ -58,7 +58,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 20px;
-    /* Firefox */
+  /* Firefox */
   scrollbar-width: none;
 
   /* IE, Edge */
@@ -160,6 +160,14 @@ button {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+
+.habit:focus {
+  outline: none;
+}
+
+.habit:focus-visible {
+  outline: none;
 }
 
 @media (max-width: 768px) {
