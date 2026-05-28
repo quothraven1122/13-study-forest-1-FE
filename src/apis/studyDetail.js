@@ -20,3 +20,15 @@ export const checkPassword = async (studyId, data) => {
 
   return response.json();
 };
+export const postEmoji = async (studyId, data) => {
+  const response = await fetch(
+    `http://localhost:3000/studies/${studyId}/emoji`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }
+  );
+};

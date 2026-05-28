@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import EmojiPicker from 'emoji-picker-react';
 
 import useDate from '../../hooks/useDate';
@@ -12,7 +12,11 @@ import Sticker from '../../components/Sticker/Sticker';
 import Modal2 from '../../components/Modal2/Modal2';
 import Input from '../../components/Input/Input';
 
-import { getStudyDetail, checkPassword } from '../../apis/studyDetail';
+import {
+  getStudyDetail,
+  checkPassword,
+  postEmoji,
+} from '../../apis/studyDetail';
 import modalText from '../../components/Modal2/modalConstant';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 import smile from '../../assets/icons/ic_smile.svg';
@@ -23,6 +27,7 @@ function StudyDetailPage() {
 
   const navigate = useNavigate();
   const size = useResponsiveWidth();
+  const queryClient = useQueryClient();
   const { getDaysOfWeek, compareDates } = useDate();
 
   const [isMoreEmojiOpen, setIsMoreEmojiOpen] = useState(false);
@@ -43,6 +48,14 @@ function StudyDetailPage() {
       if (modalType === 'habits' || modalType === 'focus')
         navigate(`/studies/${studyId}/${modalType}`);
       if (modalType === 'edit') navigate(`/studies/${studyId}/habits`);
+    },
+  });
+  const postEmojiMutation = useMutation({
+    mutationFn: ({ studyId, body }) => postEmoji(studyId, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['study', studyId],
+      });
     },
   });
 
@@ -144,9 +157,13 @@ function StudyDetailPage() {
                 <div className={styles.emojiPickerContainer}>
                   {isPickerOpen && (
                     <EmojiPicker
-                      onEmojiClick={(emojiObject) =>
-                        setEmoji(emojiObject.emoji)
-                      }
+                      onEmojiClick={(emojiObject) => {
+                        setEmoji(emojiObject.emoji);
+                        postEmojiMutation.mutate({
+                          studyId,
+                          body: { emoji: emojiObject.emoji },
+                        });
+                      }}
                     />
                   )}
                 </div>
