@@ -7,6 +7,7 @@ import useDate from '../../hooks/useDate';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 
 import Button from '../../components/Button/Button';
+import Toast from '../../components/Toast/Toast';
 import Tag from '../../components/Tag/Tag';
 import Sticker from '../../components/Sticker/Sticker';
 import Modal2 from '../../components/Modal2/Modal2';
@@ -34,6 +35,7 @@ function StudyDetailPage() {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [emoji, setEmoji] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isToastOpen, setIsToastOpen] = useState(false);
   const [modalType, setModalType] = useState('');
   const [pwInput, setPwInput] = useState('');
 
@@ -49,6 +51,9 @@ function StudyDetailPage() {
         navigate(`/studies/${studyId}/${modalType}`);
       if (modalType === 'edit') navigate(`/studies/${studyId}/habits`);
     },
+    onError: () => {
+      setIsToastOpen(true);
+    },
   });
   const postEmojiMutation = useMutation({
     mutationFn: ({ studyId, body }) => postEmoji(studyId, body),
@@ -62,28 +67,39 @@ function StudyDetailPage() {
   return (
     <div className={styles.page}>
       {isModalOpen && (
-        <Modal2
-          title={data?.name}
-          message='권한이 필요해요!'
-          btnText={modalText[modalType]}
-          onExit={() => setIsModalOpen(false)}
-          onClick={() => {
-            checkPWMutation.mutate({
-              studyId,
-              body: { password: pwInput },
-            });
-          }}
-        >
-          <div className={styles.inputContainer}>
-            <p className={styles.inputText}>비밀번호</p>
-            <Input
-              placeholder='비밀번호를 입력해 주세요'
-              passwordToggle={true}
-              value={pwInput}
-              onChange={(e) => setPwInput(e.target.value)}
+        <>
+          <Modal2
+            title={`${data?.nickname}의 ${data?.name}`}
+            message='권한이 필요해요!'
+            btnText={modalText[modalType]}
+            onExit={() => setIsModalOpen(false)}
+            onClick={() => {
+              checkPWMutation.mutate({
+                studyId,
+                body: { password: pwInput },
+              });
+            }}
+          >
+            <div className={styles.inputContainer}>
+              <p className={styles.inputText}>비밀번호</p>
+              <Input
+                placeholder='비밀번호를 입력해 주세요'
+                passwordToggle={true}
+                value={pwInput}
+                onChange={(e) => setPwInput(e.target.value)}
+              />
+            </div>
+          </Modal2>
+          {isToastOpen && (
+            <Toast
+              id={data.id}
+              message={'비밀번호가 일치하지 않습니다. 다시  입력해주세요.'}
+              type={'error'}
+              onClose={() => setIsToastOpen(false)}
+              className={styles.toast}
             />
-          </div>
-        </Modal2>
+          )}
+        </>
       )}
       <div className={styles.container}>
         {size !== 'desktop' && (
@@ -202,7 +218,9 @@ function StudyDetailPage() {
         </div>
 
         <div className={styles.titleContainer}>
-          <h2 className={styles.title}>{data?.name}</h2>
+          <h2 className={styles.title}>
+            {data?.nickname}의 {data?.name}
+          </h2>
           <div className={styles.btnsContainer}>
             <Button
               onClick={() => {
