@@ -14,10 +14,8 @@ function StudyCardSkeleton() {
           <div className={styles.skeletonTitleLine}></div>
           <div className={styles.skeletonDaysLine}></div>
         </div>
-        {/* 설명글이 들어갈 자리 (중간) */}
         <div className={styles.skeletonDescriptionLine}></div>
       </div>
-      {/* 하단 이모지 태그들이 들어갈 자리 (하단) */}
       <div className={styles.skeletonReactionBox}>
         <div className={styles.skeletonTag}></div>
         <div className={styles.skeletonTag}></div>
@@ -27,7 +25,6 @@ function StudyCardSkeleton() {
   );
 }
 function HomePage() {
-  ///로딩 스켈레톤 구현
   const [isLoding, setIsLoding] = useState(false);
 
   /// 마우스 스크롤 함수
