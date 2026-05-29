@@ -5,7 +5,31 @@ import styles from './HomePage.module.css';
 import { useEffect, useRef, useState } from 'react';
 import searchIc from '../../assets/icons/ic_search.svg';
 import { Link } from 'react-router-dom';
+import useDebounce from '../../hooks/useDebounce.js';
+function StudyCardSkeleton() {
+  return (
+    <div className={styles.lodingCard}>
+      <div className={styles.lodingInfoBox}>
+        <div className={styles.lodingTopBox}>
+          <div className={styles.skeletonTitleLine}></div>
+          <div className={styles.skeletonDaysLine}></div>
+        </div>
+        {/* 설명글이 들어갈 자리 (중간) */}
+        <div className={styles.skeletonDescriptionLine}></div>
+      </div>
+      {/* 하단 이모지 태그들이 들어갈 자리 (하단) */}
+      <div className={styles.skeletonReactionBox}>
+        <div className={styles.skeletonTag}></div>
+        <div className={styles.skeletonTag}></div>
+        <div className={styles.skeletonTag}></div>
+      </div>
+    </div>
+  );
+}
 function HomePage() {
+  ///로딩 스켈레톤 구현
+  const [isLoding, setIsLoding] = useState(false);
+
   /// 마우스 스크롤 함수
   const isDragging = useRef(false);
   const scrollRef = useRef(null);
@@ -45,6 +69,7 @@ function HomePage() {
   /// 스터디 불러오기(검색, 정렬, 페이지네이션)
   const [studies, setStudies] = useState([]);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState('recent');
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -64,19 +89,23 @@ function HomePage() {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getStudies(search, page, sort);
+      if (page === 1) {
+        setStudies([]);
+      }
+      setIsLoding(true);
+      const data = await getStudies(debouncedSearch, page, sort);
 
       if (page === 1) {
         setStudies(data.data);
       } else {
         setStudies((prev) => [...prev, ...data.data]);
       }
-
+      setIsLoding(false);
       setHasNextPage(data.pagination.hasNextPage);
     }
 
     fetchData();
-  }, [search, page, sort]);
+  }, [debouncedSearch, page, sort]);
   /// localStorage 스터디
   const RECENT_KEY = 'recent_studies';
 
@@ -142,6 +171,7 @@ function HomePage() {
       </Link>
     );
   }
+
   return (
     <div className={styles.main}>
       <section className={styles.recentSection}>
@@ -190,22 +220,44 @@ function HomePage() {
           />
         </div>
         <div className={styles.studyContent}>
-          {studies.length === 0 ? (
+          {studies.length === 0 && !isLoding ? (
+            //로딩이 끝났는데 진짜 데이터가 0개 일떄
             <div className={styles.emptyStudiesArea}>
               <p className={styles.text}>아직 둘러 볼 스터디가 없어요</p>
             </div>
-          ) : (
+          ) : studies.length === 0 && isLoding ? (
+            //데이터가 로딩 중일 때(첫 진입)
             <div className={styles.studyCardArea}>
               <div className={styles.studyCardGrid}>
-                {studies.map((study) => (
-                  <StudyCard key={study.id} study={study} />
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <StudyCardSkeleton key={index} />
                 ))}
               </div>
-
-              {hasNextPage && (
+            </div>
+          ) : (
+            //실제 데이터 보여줄 때
+            <div className={styles.studyCardArea}>
+              <div className={styles.lodingSpace}>
+                <div className={styles.studyCardGrid}>
+                  {studies.map((study) => (
+                    <StudyCard key={study.id} study={study} />
+                  ))}
+                </div>
+                {isLoding && (
+                  <div className={styles.studyCardGrid}>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <StudyCardSkeleton key={index} />
+                    ))}
+                  </div>
+                )}
+              </div>
+              {hasNextPage && !isLoding && (
                 <button
                   className={styles.moreBtn}
-                  onClick={() => setPage((prev) => prev + 1)}
+                  onClick={() => {
+                    setPage((prev) => prev + 1);
+                    setIsLoding(true);
+                  }}
                 >
                   더보기
                 </button>

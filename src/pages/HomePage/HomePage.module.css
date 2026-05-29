@@ -199,7 +199,11 @@ button {
   align-items: center;
   gap: 60px;
 }
-
+.lodingSpace {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
 .moreBtn {
   width: 280px;
   height: 53px;
@@ -221,6 +225,86 @@ button {
   align-items: center;
   min-height: 688px;
 }
+.lodingCardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+/* 부모 카드 스타일 (기존 StudyCard와 크기/라운딩 동기화) */
+.lodingCard {
+  position: relative;
+  width: 358px;
+  height: 243px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: #f5f5f5;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* 내부 레이아웃 박스들 */
+.lodingInfoBox {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.lodingTopBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeletonReactionBox {
+  display: flex;
+  gap: 5px;
+}
+
+/* 🌟 반짝이는 펄스 애니메이션 공통 적용 */
+.skeletonTitleLine,
+.skeletonDaysLine,
+.skeletonDescriptionLine,
+.skeletonTag {
+  /* 기본 배경은 미디엄 회색(#7a7a7a), 중간 빛은 조금 더 밝은 회색(#909090) */
+  background: linear-gradient(90deg, #7a7a7a 25%, #909090 50%, #7a7a7a 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite ease-in-out;
+  border-radius: 4px;
+}
+/* 각 선들의 실제 크기 (텍스트 영역 대체) */
+.skeletonTitleLine {
+  width: 60%;
+  height: 20px;
+}
+
+.skeletonDaysLine {
+  width: 35%;
+  height: 14px;
+}
+
+.skeletonDescriptionLine {
+  width: 85%;
+  height: 16px;
+}
+
+.skeletonTag {
+  width: 55px;
+  height: 24px;
+  border-radius: 12px;
+}
+
+/* 🎬 반짝이는 그라데이션 애니메이션 효과 정의 */
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
 
 @media (max-width: 1200px) {
   .recentSection,
@@ -231,11 +315,13 @@ button {
   .studiesArea {
     justify-content: center;
   }
-  .studyCardGrid {
+  .studyCardGrid,
+  .lodingCardGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
-  .studyCardGrid .studyCard {
+  .studyCardGrid .studyCard,
+  .lodingCard {
     width: 312px;
   }
 }
@@ -246,7 +332,8 @@ button {
     height: 180px;
     padding: 16px;
   }
-  .recentStudyCardGrid {
+  .recentStudyCardGrid,
+  .lodingCardGrid {
     display: flex;
     gap: 16px;
   }
@@ -292,7 +379,8 @@ button {
     gap: 16px;
   }
 
-  .studyCardGrid .studyCard {
+  .studyCardGrid .studyCard,
+  .lodingCard {
     width: 312px;
     height: 180px;
     padding: 16px;
