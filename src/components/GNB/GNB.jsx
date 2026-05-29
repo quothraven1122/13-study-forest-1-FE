@@ -1,13 +1,18 @@
 import styles from './GNB.module.css';
 import logo from '../../assets/imgs/logo.png';
+import { Link } from 'react-router-dom';
+import Button from '../Button/Button';
 
 function GNB() {
   return (
     <header className={styles.gnb}>
       <div className={styles.inner}>
-        <a href='/' className={styles.logo}>
+        <Link to='/' className={styles.logo}>
           <img src={logo} alt='공부의 숲 로고' />
-        </a>
+        </Link>
+        <Link to='/studies/new' className={styles.btn}>
+          <Button>스터디 만들기</Button>
+        </Link>
       </div>
     </header>
   );

@@ -15,9 +15,20 @@
   justify-content: space-between;
 }
 
-.logo img {
+.inner img {
   height: 48px;
-  display: block;
+}
+
+.btn {
+  white-space: nowrap;
+  text-decoration: none;
+  width: 252px;
+  height: 48px;
+}
+
+.btn button {
+  height: 100%;
+  border-radius: 16px;
 }
 
 @media (max-width: 768px) {
@@ -28,6 +39,16 @@
   .logo img {
     height: 36px;
   }
+
+  .btn {
+    width: 160px;
+    height: 36px;
+  }
+
+  .btn button {
+    border-radius: 14px;
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 375px) {
@@ -37,5 +58,15 @@
 
   .logo img {
     height: 28px;
+  }
+
+  .btn {
+    width: 106px;
+    height: 38px;
+  }
+
+  .btn button {
+    font-size: 12px;
+    border-radius: 8px;
   }
 }
