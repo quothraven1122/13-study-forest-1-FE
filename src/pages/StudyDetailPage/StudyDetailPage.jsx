@@ -17,6 +17,7 @@ import {
   getStudyDetail,
   checkPassword,
   postEmoji,
+  deleteStudy,
 } from '../../apis/studyDetail';
 import modalText from '../../components/Modal2/modalConstant';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
@@ -73,11 +74,25 @@ function StudyDetailPage() {
             message='권한이 필요해요!'
             btnText={modalText[modalType]}
             onExit={() => setIsModalOpen(false)}
-            onClick={() => {
+            onClick={async () => {
               checkPWMutation.mutate({
                 studyId,
                 body: { password: pwInput },
               });
+              if (modalType === 'erase') {
+                const res = await deleteStudy(studyId, { password: pwInput });
+                console.log(res);
+                if (res.success) {
+                  const storage = JSON.parse(
+                    localStorage.getItem('recent_studies')
+                  );
+                  localStorage.setItem(
+                    'recent_studies',
+                    JSON.stringify(storage.filter((i) => i.id !== data?.id))
+                  );
+                  navigate('/');
+                }
+              }
             }}
           >
             <div className={styles.inputContainer}>
