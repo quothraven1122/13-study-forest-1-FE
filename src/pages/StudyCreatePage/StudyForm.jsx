@@ -4,14 +4,7 @@ import Input from '../../components/Input/Input';
 import Button from '../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 
-function FormField({
-  error,
-  Data,
-  label,
-  placeholder,
-  onChange,
-  ...inputprops
-}) {
+function FormField({ error, Data, label, ...inputprops }) {
   return (
     <div className={styles.formField}>
       <p>{label}</p>
@@ -22,8 +15,6 @@ function FormField({
           }
         }
         value={Data}
-        placeholder={placeholder}
-        onChange={onChange}
         {...inputprops}
       />
       {error && <span>*{error}</span>}
@@ -31,7 +22,7 @@ function FormField({
   );
 }
 
-function StudyForm() {
+function StudyForm({ onSubmitForm, title, btnText }) {
   const validateForm = (studyData, confirmPassword) => {
     const errors = {};
     if (!studyData.nickname.trim()) {
@@ -77,33 +68,29 @@ function StudyForm() {
 
   const navigate = useNavigate();
 
-  const createStudy = async () => {
-    try {
-      const res = await fetch('http://localhost:3000/studies', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...studyData }),
-      });
-      if (!res.ok) throw new Error('생성 실패');
-      const result = await res.json();
-      navigate(`/studies/${result.id}`);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
+  // const updateStudy= async ()=>{
+  //   try{
+  //     const res=await fetch('http://localhost:3000/studies/:id',{
+  //       method:'PATCH',
+  //       headers:{'Content-Type':'application/json'},
+  //       body:JSON.stringify({...studyData}),
+  //     })
+  //   }
+  // }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const error = validateForm(studyData, confirmPassword);
     setErrors(error);
     if (Object.keys(error).length > 0) return;
-    createStudy();
+    const data = await onSubmitForm(studyData);
+    navigate(`/studies/${data.id}`);
   };
 
   return (
     <div className={styles.createContainer}>
       <form className={styles.createBox} onSubmit={onSubmit}>
-        <h2>스터디 만들기</h2>
+        <h2>{title}</h2>
         <FormField
           error={errors.nickname}
           Data={studyData.nickname}
@@ -185,7 +172,7 @@ function StudyForm() {
           }}
           passwordToggle={true}
         />
-        <Button type='submit'>만들기</Button>
+        <Button type='submit'>{btnText}</Button>
       </form>
     </div>
   );
