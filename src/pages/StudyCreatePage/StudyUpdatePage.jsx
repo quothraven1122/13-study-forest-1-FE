@@ -1,5 +1,7 @@
 import { useParams } from 'react-router-dom';
 import StudyForm from './StudyForm';
+import { useEffect, useState } from 'react';
+import { getStudyDetail } from '../../apis/studyDetail';
 
 export default function StudyUpdatePage() {
   const { studyId } = useParams();
@@ -17,6 +19,17 @@ export default function StudyUpdatePage() {
       alert(err.message);
     }
   };
+  const [studyData, setStudyData] = useState(null);
+
+  useEffect(() => {
+    async function getStudy() {
+      const data = await getStudyDetail(studyId);
+      setStudyData({ ...data, password: '' });
+    }
+    getStudy();
+  }, []);
+
+  if (!studyData) return null;
 
   return (
     <>
@@ -24,6 +37,8 @@ export default function StudyUpdatePage() {
         onSubmitForm={updateStudy}
         title='스터디 수정하기'
         btnText='수정완료'
+        studyData={studyData}
+        setStudyData={setStudyData}
       />
     </>
   );
