@@ -39,6 +39,7 @@ export default function StudyUpdatePage() {
         btnText='수정완료'
         studyData={studyData}
         setStudyData={setStudyData}
+        isUpdate={true}
       />
     </>
   );

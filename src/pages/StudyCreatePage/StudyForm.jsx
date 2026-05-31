@@ -22,8 +22,15 @@ function FormField({ error, Data, label, ...inputprops }) {
   );
 }
 
-function StudyForm({ onSubmitForm, title, btnText, studyData, setStudyData }) {
-  const validateForm = (studyData, confirmPassword) => {
+function StudyForm({
+  onSubmitForm,
+  title,
+  btnText,
+  studyData,
+  setStudyData,
+  isUpdate = false,
+}) {
+  const validateForm = (studyData, confirmPassword, isUpdate) => {
     const errors = {};
     if (!studyData.nickname.trim()) {
       errors.nickname = '닉네임을 입력해주세요';
@@ -34,10 +41,10 @@ function StudyForm({ onSubmitForm, title, btnText, studyData, setStudyData }) {
     if (!studyData.description.trim()) {
       errors.description = '소개를 작성해주세요';
     }
-    if (!studyData.password) {
+    if (!isUpdate && !studyData.password) {
       errors.password = '비밀번호를 입력해주세요';
     }
-    if (studyData.password !== confirmPassword) {
+    if (!isUpdate && studyData.password !== confirmPassword) {
       errors.confirmPassword = '비밀번호가 일치하지 않습니다';
     }
     return errors;
@@ -61,7 +68,7 @@ function StudyForm({ onSubmitForm, title, btnText, studyData, setStudyData }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const error = validateForm(studyData, confirmPassword);
+    const error = validateForm(studyData, confirmPassword, isUpdate);
     setErrors(error);
     if (Object.keys(error).length > 0) return;
     const data = await onSubmitForm(studyData);
@@ -129,30 +136,33 @@ function StudyForm({ onSubmitForm, title, btnText, studyData, setStudyData }) {
             ))}
           </div>
         </div>
+        {isUpdate ? null : (
+          <>
+            <FormField
+              error={errors.password}
+              Data={studyData.password}
+              label='비밀번호'
+              placeholder='비밀번호를 입력해 주세요'
+              onChange={(e) => {
+                setStudyData((prev) => ({ ...prev, password: e.target.value }));
+                setErrors((prev) => ({ ...prev, password: null }));
+              }}
+              passwordToggle={true}
+            />
 
-        <FormField
-          error={errors.password}
-          Data={studyData.password}
-          label='비밀번호'
-          placeholder='비밀번호를 입력해 주세요'
-          onChange={(e) => {
-            setStudyData((prev) => ({ ...prev, password: e.target.value }));
-            setErrors((prev) => ({ ...prev, password: null }));
-          }}
-          passwordToggle={true}
-        />
-
-        <FormField
-          error={errors.confirmPassword}
-          Data={confirmPassword}
-          label='비밀번호 확인'
-          placeholder='비밀번호를 다시 한 번 입력해 주세요'
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-            setErrors((prev) => ({ ...prev, confirmPassword: null }));
-          }}
-          passwordToggle={true}
-        />
+            <FormField
+              error={errors.confirmPassword}
+              Data={confirmPassword}
+              label='비밀번호 확인'
+              placeholder='비밀번호를 다시 한 번 입력해 주세요'
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                setErrors((prev) => ({ ...prev, confirmPassword: null }));
+              }}
+              passwordToggle={true}
+            />
+          </>
+        )}
         <Button type='submit'>{btnText}</Button>
       </form>
     </div>
