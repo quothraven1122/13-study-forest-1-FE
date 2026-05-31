@@ -93,13 +93,6 @@ function StudyDetailPage() {
                 const res = await deleteStudy(studyId, { password: pwInput });
                 console.log(res);
                 if (res.success) {
-                  const storage = JSON.parse(
-                    localStorage.getItem('recent_studies')
-                  );
-                  localStorage.setItem(
-                    'recent_studies',
-                    JSON.stringify(storage.filter((i) => i.id !== data?.id))
-                  );
                   navigate('/');
                 }
               }
