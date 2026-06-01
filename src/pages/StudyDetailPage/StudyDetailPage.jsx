@@ -57,10 +57,16 @@ function StudyDetailPage() {
   });
   const checkPWMutation = useMutation({
     mutationFn: ({ studyId, body }) => checkPassword(studyId, body),
-    onSuccess: () => {
+    onSuccess: async () => {
       if (modalType === 'habits' || modalType === 'focus')
         navigate(`/studies/${studyId}/${modalType}`);
-      if (modalType === 'edit') navigate(`/studies/${studyId}/habits`);
+      if (modalType === 'edit') navigate(`/studies/${studyId}/update`);
+      if (modalType === 'erase') {
+        const res = await deleteStudy(studyId, { password: pwInput });
+        if (res.success) {
+          navigate('/');
+        }
+      }
     },
     onError: () => {
       setIsToastOpen(true);
@@ -89,13 +95,6 @@ function StudyDetailPage() {
                 studyId,
                 body: { password: pwInput },
               });
-              if (modalType === 'erase') {
-                const res = await deleteStudy(studyId, { password: pwInput });
-                console.log(res);
-                if (res.success) {
-                  navigate('/');
-                }
-              }
             }}
           >
             <div className={styles.inputContainer}>
