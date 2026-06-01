@@ -4,28 +4,54 @@ import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 import Modal1 from '../../components/Modal1/Modal1';
+import {
+  getHabits,
+  createHabit,
+  updateHabit,
+  deleteHabit,
+} from '../../apis/habit.js';
 
 function HabitsPage() {
   const navigate = useNavigate();
   const { studyId } = useParams();
 
-  const [habits, setHabits] = useState(() => {
-    const savedHabits = localStorage.getItem(`habits-${studyId}`);
-    return savedHabits ? JSON.parse(savedHabits) : [];
-  });
-
+  const [habits, setHabits] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  // 페이지 처음 들어왔을 때 백엔드에서 습관 목록 가져오기
   useEffect(() => {
-    localStorage.setItem(`habits-${studyId}`, JSON.stringify(habits));
-  }, [habits, studyId]);
+    const fetchHabits = async () => {
+      try {
+        const data = await getHabits(studyId);
+        setHabits(data);
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
+    };
 
-  const handleToggleHabit = (id) => {
-    setHabits((prevHabits) =>
-      prevHabits.map((habit) =>
-        habit.id === id ? { ...habit, isDone: !habit.isDone } : habit
-      )
-    );
+    fetchHabits();
+  }, [studyId]);
+
+  // 습관 완료/미완료 토글
+  const handleToggleHabit = async (id) => {
+    const targetHabit = habits.find((habit) => habit.id === id);
+
+    if (!targetHabit) return;
+
+    try {
+      const updatedHabit = await updateHabit(studyId, id, {
+        name: targetHabit.name,
+        isDone: !targetHabit.isDone,
+      });
+
+      setHabits((prevHabits) =>
+        prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit))
+      );
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
   const handleOpenEditModal = () => {
@@ -36,17 +62,51 @@ function HabitsPage() {
     setIsEditModalOpen(false);
   };
 
-  const handleSaveHabits = (savedHabits) => {
-    const newHabits = savedHabits
-      .filter((habit) => habit.name.trim() !== '')
-      .map((habit) => ({
-        id: habit.id,
-        name: habit.name,
-        isDone: habit.isDone || false,
-      }));
+  // 모달에서 수정 완료 눌렀을 때
+  const handleSaveHabits = async (savedHabits) => {
+    const cleanHabits = savedHabits.filter((habit) => habit.name.trim() !== '');
 
-    setHabits(newHabits);
-    setIsEditModalOpen(false);
+    try {
+      // 1. 삭제된 습관 찾기
+      const deletedHabits = habits.filter(
+        (habit) => !cleanHabits.some((savedHabit) => savedHabit.id === habit.id)
+      );
+
+      for (const habit of deletedHabits) {
+        await deleteHabit(studyId, habit.id);
+      }
+
+      // 2. 새로 추가되거나 수정된 습관 처리
+      const nextHabits = [];
+
+      for (const habit of cleanHabits) {
+        const originalHabit = habits.find((item) => item.id === habit.id);
+
+        // 기존에 없던 습관이면 새로 생성
+        if (!originalHabit) {
+          const createdHabit = await createHabit(studyId, {
+            name: habit.name,
+            isDone: habit.isDone || false,
+          });
+
+          nextHabits.push(createdHabit);
+        } else {
+          // 기존 습관이면 수정
+          const updatedHabit = await updateHabit(studyId, habit.id, {
+            name: habit.name,
+            isDone: habit.isDone || false,
+          });
+
+          nextHabits.push(updatedHabit);
+        }
+      }
+
+      setHabits(nextHabits);
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
   const handleGoFocus = () => {
