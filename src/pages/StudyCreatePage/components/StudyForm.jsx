@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import styles from './StudyCreatePage.module.css';
-import Input from '../../components/Input/Input';
-import Button from '../../components/Button/Button';
+import styles from '../StudyCreatePage.module.css';
+import Input from '../../../components/Input/Input';
+import Button from '../../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 
 function FormField({ error, Data, label, ...inputprops }) {

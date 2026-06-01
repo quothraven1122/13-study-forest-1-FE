@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import StudyForm from './StudyForm';
+import StudyForm from './components/StudyForm';
 export default function StudyCreatePage() {
   const [studyData, setStudyData] = useState({
     nickname: '',

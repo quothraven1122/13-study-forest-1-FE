@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-dom';
-import StudyForm from './StudyForm';
+
 import { useEffect, useState } from 'react';
 import { getStudyDetail } from '../../apis/studyDetail';
+import StudyForm from './components/StudyForm';
 
 export default function StudyUpdatePage() {
   const { studyId } = useParams();
