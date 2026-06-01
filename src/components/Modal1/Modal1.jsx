@@ -18,8 +18,16 @@ export default function Modal1({ habits, onSave, onCancel }) {
 
   // 추가
   const onAddHabit = () => {
-    setLocalHabits((prev) => [...prev, { id: Date.now(), name: '' }]);
+    setLocalHabits((prev) => [
+      ...prev,
+      {
+        tempId: Date.now(),
+        name: '',
+        isDone: false,                                    //새로 추가한 습관 id 생성하므로 tempId 사용, 백엔드에서 id 생성되면 tempId로 대체할 예정
+      },
+    ]);
   };
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>

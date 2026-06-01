@@ -25,6 +25,7 @@ import smile from '../../assets/icons/ic_smile.svg';
 import styles from './StudyDetailPage.module.css';
 
 function StudyDetailPage() {
+  
   const date = new Date();
 
   const navigate = useNavigate();

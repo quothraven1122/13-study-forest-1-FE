@@ -4,6 +4,8 @@ import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 import Modal1 from '../../components/Modal1/Modal1';
+import { getStudyDetail } from '../../apis/studyDetail.js';
+
 import {
   getHabits,
   createHabit,
@@ -14,23 +16,27 @@ import {
 function HabitsPage() {
   const navigate = useNavigate();
   const { studyId } = useParams();
+  const [study, setStudy] = useState(null);
 
   const [habits, setHabits] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // 페이지 처음 들어왔을 때 백엔드에서 습관 목록 가져오기
   useEffect(() => {
-    const fetchHabits = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getHabits(studyId);
-        setHabits(data);
+        const habitsData = await getHabits(studyId);
+        const studyData = await getStudyDetail(studyId);
+
+        setHabits(habitsData);
+        setStudy(studyData);
       } catch (error) {
         console.error(error);
         alert(error.message);
       }
     };
 
-    fetchHabits();
+    fetchData();
   }, [studyId]);
 
   // 습관 완료/미완료 토글
@@ -133,7 +139,7 @@ function HabitsPage() {
       <div className={styles.Container}>
         <div className={styles.Header}>
           <div className={styles.HeaderLeft}>
-            <h1>연우의 개발공장</h1>
+            <h1>{study?.name}</h1>
             <p>현재 시간</p>
             <span>{formattedDate}</span>
           </div>
