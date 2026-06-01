@@ -105,6 +105,11 @@ export default function FocusPage() {
       setTimerSeconds(0);
       setMStr('60');
       setSStr('00');
+    } else if (m * 60 + s <= 300) {
+      setTimerMinutes(5);
+      setTimerSeconds(0);
+      setMStr('05');
+      setSStr('00');
     } else {
       setMStr(String(m).padStart(2, '0'));
       setSStr(String(s).padStart(2, '0'));
