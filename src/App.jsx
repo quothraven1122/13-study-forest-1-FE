@@ -1,12 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import HomePage from './pages/HomePage/HomePage';
-import StudyCreatePage from './pages/StudyCreatePage/StudyCreatePage';
+import StudyCreatePage from './pages/StudyPage/StudyCreatePage';
 import StudyDetailPage from './pages/StudyDetailPage/StudyDetailPage';
 import HabitsPage from './pages/HabitsPage/HabitsPage';
 import FocusPage from './pages/FocusPage/FocusPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
-import StudyUpdatePage from './pages/StudyCreatePage/StudyUpdatePage';
+import StudyUpdatePage from './pages/StudyPage/StudyUpdatePage';
 
 function App() {
   return (
