@@ -314,11 +314,13 @@ function StudyDetailPage() {
                 </tr>
               </thead>
               <tbody>
-                {Object.entries(data?.habits).map(([key, value], index1) => (
-                  <tr key={index1}>
-                    <td className={styles.habitName}>{key}</td>
+                {Object.entries(data?.habits).map(([key, value]) => (
+                  <tr key={key}>
+                    <td className={styles.habitName}>{value.name}</td>
                     {getDaysOfWeek(date).map((d, index2) => {
-                      if (value.some((h) => compareDates(new Date(h), d))) {
+                      if (
+                        value.values.some((h) => compareDates(new Date(h), d))
+                      ) {
                         return (
                           <td key={index2} className={styles.log}>
                             <Sticker className={styles.doneSticker} />
