@@ -199,7 +199,7 @@ button {
   align-items: center;
   gap: 60px;
 }
-.lodingSpace {
+.loadingSpace {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -225,13 +225,13 @@ button {
   align-items: center;
   min-height: 688px;
 }
-.lodingCardGrid {
+.loadingCardGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 /* 부모 카드 스타일 (기존 StudyCard와 크기/라운딩 동기화) */
-.lodingCard {
+.loadingCard {
   position: relative;
   width: 358px;
   height: 243px;
@@ -246,13 +246,13 @@ button {
 }
 
 /* 내부 레이아웃 박스들 */
-.lodingInfoBox {
+.loadingInfoBox {
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
-.lodingTopBox {
+.loadingTopBox {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -316,12 +316,12 @@ button {
     justify-content: center;
   }
   .studyCardGrid,
-  .lodingCardGrid {
+  .loadingCardGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
   }
   .studyCardGrid .studyCard,
-  .lodingCard {
+  .loadingCard {
     width: 312px;
   }
 }
@@ -333,7 +333,7 @@ button {
     padding: 16px;
   }
   .recentStudyCardGrid,
-  .lodingCardGrid {
+  .loadingCardGrid {
     display: flex;
     gap: 16px;
   }
@@ -380,7 +380,7 @@ button {
   }
 
   .studyCardGrid .studyCard,
-  .lodingCard {
+  .loadingCard {
     width: 312px;
     height: 180px;
     padding: 16px;

@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 import useDebounce from '../../hooks/useDebounce.js';
 function StudyCardSkeleton() {
   return (
-    <div className={styles.lodingCard}>
-      <div className={styles.lodingInfoBox}>
-        <div className={styles.lodingTopBox}>
+    <div className={styles.loadingCard}>
+      <div className={styles.loadingInfoBox}>
+        <div className={styles.loadingTopBox}>
           <div className={styles.skeletonTitleLine}></div>
           <div className={styles.skeletonDaysLine}></div>
         </div>
@@ -25,7 +25,7 @@ function StudyCardSkeleton() {
   );
 }
 function HomePage() {
-  const [isLoding, setIsLoding] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   /// 마우스 스크롤 함수
   const isDragging = useRef(false);
@@ -89,7 +89,7 @@ function HomePage() {
       if (page === 1) {
         setStudies([]);
       }
-      setIsLoding(true);
+      setIsLoading(true);
       const data = await getStudies(debouncedSearch, page, sort);
 
       if (page === 1) {
@@ -97,7 +97,7 @@ function HomePage() {
       } else {
         setStudies((prev) => [...prev, ...data.data]);
       }
-      setIsLoding(false);
+      setIsLoading(false);
       setHasNextPage(data.pagination.hasNextPage);
     }
 
@@ -217,12 +217,12 @@ function HomePage() {
           />
         </div>
         <div className={styles.studyContent}>
-          {studies.length === 0 && !isLoding ? (
+          {studies.length === 0 && !isLoading ? (
             //로딩이 끝났는데 진짜 데이터가 0개 일떄
             <div className={styles.emptyStudiesArea}>
               <p className={styles.text}>아직 둘러 볼 스터디가 없어요</p>
             </div>
-          ) : studies.length === 0 && isLoding ? (
+          ) : studies.length === 0 && isLoading ? (
             //데이터가 로딩 중일 때(첫 진입)
             <div className={styles.studyCardArea}>
               <div className={styles.studyCardGrid}>
@@ -234,13 +234,13 @@ function HomePage() {
           ) : (
             //실제 데이터 보여줄 때
             <div className={styles.studyCardArea}>
-              <div className={styles.lodingSpace}>
+              <div className={styles.loadingSpace}>
                 <div className={styles.studyCardGrid}>
                   {studies.map((study) => (
                     <StudyCard key={study.id} study={study} />
                   ))}
                 </div>
-                {isLoding && (
+                {isLoading && (
                   <div className={styles.studyCardGrid}>
                     {Array.from({ length: 6 }).map((_, index) => (
                       <StudyCardSkeleton key={index} />
@@ -248,12 +248,12 @@ function HomePage() {
                   </div>
                 )}
               </div>
-              {hasNextPage && !isLoding && (
+              {hasNextPage && !isLoading && (
                 <button
                   className={styles.moreBtn}
                   onClick={() => {
                     setPage((prev) => prev + 1);
-                    setIsLoding(true);
+                    setIsLoading(true);
                   }}
                 >
                   더보기
