@@ -207,9 +207,7 @@ export default function FocusPage() {
           </div>
 
           {/* 타이머 숫자 */}
-          <div
-            className={`${styles.timer} ${timerColorClass} ${isActive ? styles.timerBoxActive : ''}`}
-          >
+          <div className={`${styles.timer} ${timerColorClass}`}>
             {status === 'idle' ? (
               <div className={styles.timerInputGroup}>
                 <input
