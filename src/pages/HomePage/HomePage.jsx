@@ -121,12 +121,14 @@ function HomePage() {
         recentLocalStorage.map((i) => getStudyDetail(i.id))
       );
       const filteredDB = recentDB.filter((i) => i?.id);
+      console.log(filteredDB);
       const result = filteredDB.map((i) => ({
         ...i,
-        reaction: i.reactions,
-        days: Math.floor(
-          (new Date() - new Date(i.createdAt)) / (1000 * 60 * 60 * 24)
-        ),
+        reaction: Object.fromEntries(Object.entries(i.reactions).slice(0, 3)),
+        days:
+          Math.floor(
+            (new Date() - new Date(i.createdAt)) / (1000 * 60 * 60 * 24)
+          ) + 1,
       }));
       localStorage.setItem('recent_studies', JSON.stringify(result));
       setRecentStudies(result);
