@@ -8,11 +8,32 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { getStudyDetail } from '../../apis/studyDetail.js';
 
+import useDebounce from '../../hooks/useDebounce.js';
+function StudyCardSkeleton() {
+  return (
+    <div className={styles.loadingCard}>
+      <div className={styles.loadingInfoBox}>
+        <div className={styles.loadingTopBox}>
+          <div className={styles.skeletonTitleLine}></div>
+          <div className={styles.skeletonDaysLine}></div>
+        </div>
+        <div className={styles.skeletonDescriptionLine}></div>
+      </div>
+      <div className={styles.skeletonReactionBox}>
+        <div className={styles.skeletonTag}></div>
+        <div className={styles.skeletonTag}></div>
+        <div className={styles.skeletonTag}></div>
+      </div>
+    </div>
+  );
+}
 function HomePage() {
   /// localStorage 스터디
   const RECENT_KEY = 'recent_studies';
   const [recentStudies, setRecentStudies] = useState([]);
   const location = useLocation();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   /// 마우스 스크롤 함수
   const isDragging = useRef(false);
@@ -53,6 +74,7 @@ function HomePage() {
   /// 스터디 불러오기(검색, 정렬, 페이지네이션)
   const [studies, setStudies] = useState([]);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState('recent');
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -72,19 +94,24 @@ function HomePage() {
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getStudies(search, page, sort);
+      if (page === 1) {
+        setStudies([]);
+      }
+      setIsLoading(true);
+      const data = await getStudies(debouncedSearch, page, sort);
 
       if (page === 1) {
         setStudies(data.data);
       } else {
         setStudies((prev) => [...prev, ...data.data]);
       }
-
+      setIsLoading(false);
       setHasNextPage(data.pagination.hasNextPage);
     }
 
     fetchData();
-  }, [search, page, sort]);
+  }, [debouncedSearch, page, sort]);
+
   useEffect(() => {
     const recentLocalStorage = JSON.parse(
       localStorage.getItem('recent_studies') || '[]'
@@ -162,6 +189,7 @@ function HomePage() {
       </Link>
     );
   }
+
   return (
     <div className={styles.main}>
       <section className={styles.recentSection}>
@@ -210,22 +238,44 @@ function HomePage() {
           />
         </div>
         <div className={styles.studyContent}>
-          {studies.length === 0 ? (
+          {studies.length === 0 && !isLoading ? (
+            //로딩이 끝났는데 진짜 데이터가 0개 일떄
             <div className={styles.emptyStudiesArea}>
               <p className={styles.text}>아직 둘러 볼 스터디가 없어요</p>
             </div>
-          ) : (
+          ) : studies.length === 0 && isLoading ? (
+            //데이터가 로딩 중일 때(첫 진입)
             <div className={styles.studyCardArea}>
               <div className={styles.studyCardGrid}>
-                {studies.map((study) => (
-                  <StudyCard key={study.id} study={study} />
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <StudyCardSkeleton key={index} />
                 ))}
               </div>
-
-              {hasNextPage && (
+            </div>
+          ) : (
+            //실제 데이터 보여줄 때
+            <div className={styles.studyCardArea}>
+              <div className={styles.loadingSpace}>
+                <div className={styles.studyCardGrid}>
+                  {studies.map((study) => (
+                    <StudyCard key={study.id} study={study} />
+                  ))}
+                </div>
+                {isLoading && (
+                  <div className={styles.studyCardGrid}>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <StudyCardSkeleton key={index} />
+                    ))}
+                  </div>
+                )}
+              </div>
+              {hasNextPage && !isLoading && (
                 <button
                   className={styles.moreBtn}
-                  onClick={() => setPage((prev) => prev + 1)}
+                  onClick={() => {
+                    setPage((prev) => prev + 1);
+                    setIsLoading(true);
+                  }}
                 >
                   더보기
                 </button>
