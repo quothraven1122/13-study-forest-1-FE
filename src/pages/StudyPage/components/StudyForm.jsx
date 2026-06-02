@@ -3,6 +3,18 @@ import styles from '../StudyCreatePage.module.css';
 import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
+import { validateForm } from '../utils/validateForm';
+
+const backgrounds = [
+  'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
+  'https://i.namu.wiki/i/v_zK7er3cBXRkKPgXQKyFnRNCBOmGDKRwDGUI92DDImUKG2kFa8RLZrJdeEZCXnpj8Lsp1efiIFkNwJhQNo3lw.webp',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/AcetoFive.JPG/1280px-AcetoFive.JPG',
+  'https://cdn.imweb.me/upload/S201901155c3d45c030b1a/5c3f4bd73e009.png',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIzS6jib8UzBdBBDr9TFsZY0qs6SLqoQU_Eg&s',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJTI80aFfSGs-0JhK54lx5bzzt2MlN5I23bQ&s',
+  'https://i.namu.wiki/i/0SGoftrehJuPefLVXRPwjyDlkqg0bCp6ZEj4JsHtSDH-WyEIB4I2vdcCDZ_hM4YrHG8jKFytvfoCDMmmgAWAlQ.webp',
+  'https://i.namu.wiki/i/lZoMNR1GxpifZDc57AIQdBBTqsqmIjSkhMhx6CiMjOx9Dcw3AyI-HHU5yKemfGyW20zUrL53hnC91o9zIZj1IQ.webp',
+];
 
 function FormField({ error, Data, label, ...inputprops }) {
   return (
@@ -30,39 +42,8 @@ function StudyForm({
   setStudyData,
   isUpdate = false,
 }) {
-  const validateForm = (studyData, confirmPassword, isUpdate) => {
-    const errors = {};
-    if (!studyData.nickname.trim()) {
-      errors.nickname = '닉네임을 입력해주세요';
-    }
-    if (!studyData.name.trim()) {
-      errors.name = '스터디 이름을 입력해주세요';
-    }
-    if (!studyData.description.trim()) {
-      errors.description = '소개를 작성해주세요';
-    }
-    if (!isUpdate && !studyData.password) {
-      errors.password = '비밀번호를 입력해주세요';
-    }
-    if (!isUpdate && studyData.password !== confirmPassword) {
-      errors.confirmPassword = '비밀번호가 일치하지 않습니다';
-    }
-    return errors;
-  };
-
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
-
-  const backgrounds = [
-    'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
-    'https://i.namu.wiki/i/v_zK7er3cBXRkKPgXQKyFnRNCBOmGDKRwDGUI92DDImUKG2kFa8RLZrJdeEZCXnpj8Lsp1efiIFkNwJhQNo3lw.webp',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/AcetoFive.JPG/1280px-AcetoFive.JPG',
-    'https://cdn.imweb.me/upload/S201901155c3d45c030b1a/5c3f4bd73e009.png',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIzS6jib8UzBdBBDr9TFsZY0qs6SLqoQU_Eg&s',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJTI80aFfSGs-0JhK54lx5bzzt2MlN5I23bQ&s',
-    'https://i.namu.wiki/i/0SGoftrehJuPefLVXRPwjyDlkqg0bCp6ZEj4JsHtSDH-WyEIB4I2vdcCDZ_hM4YrHG8jKFytvfoCDMmmgAWAlQ.webp',
-    'https://i.namu.wiki/i/lZoMNR1GxpifZDc57AIQdBBTqsqmIjSkhMhx6CiMjOx9Dcw3AyI-HHU5yKemfGyW20zUrL53hnC91o9zIZj1IQ.webp',
-  ];
 
   const navigate = useNavigate();
 
