@@ -4,7 +4,10 @@ import styles from './HomePage.module.css';
 
 import { useEffect, useRef, useState } from 'react';
 import searchIc from '../../assets/icons/ic_search.svg';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
+import { getStudyDetail } from '../../apis/studyDetail.js';
+
 import useDebounce from '../../hooks/useDebounce.js';
 function StudyCardSkeleton() {
   return (
@@ -25,6 +28,11 @@ function StudyCardSkeleton() {
   );
 }
 function HomePage() {
+  /// localStorage 스터디
+  const RECENT_KEY = 'recent_studies';
+  const [recentStudies, setRecentStudies] = useState([]);
+  const location = useLocation();
+
   const [isLoading, setIsLoading] = useState(false);
 
   /// 마우스 스크롤 함수
@@ -103,15 +111,30 @@ function HomePage() {
 
     fetchData();
   }, [debouncedSearch, page, sort]);
-  /// localStorage 스터디
-  const RECENT_KEY = 'recent_studies';
-
-  const [recentStudies, setRecentStudies] = useState([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
-    setRecentStudies(data);
-  }, []);
+    const recentLocalStorage = JSON.parse(
+      localStorage.getItem('recent_studies') || '[]'
+    );
+    const checkRecentStudies = async () => {
+      const recentDB = await Promise.all(
+        recentLocalStorage.map((i) => getStudyDetail(i.id))
+      );
+      const filteredDB = recentDB.filter((i) => i?.id);
+      console.log(filteredDB);
+      const result = filteredDB.map((i) => ({
+        ...i,
+        reaction: Object.fromEntries(Object.entries(i.reactions).slice(0, 3)),
+        days:
+          Math.floor(
+            (new Date() - new Date(i.createdAt)) / (1000 * 60 * 60 * 24)
+          ) + 1,
+      }));
+      localStorage.setItem('recent_studies', JSON.stringify(result));
+      setRecentStudies(result);
+    };
+    checkRecentStudies();
+  }, [location.pathname]);
 
   const saveRecentStudy = (study) => {
     const prev = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
@@ -158,7 +181,7 @@ function HomePage() {
             <p className={styles.studyDescription}>{study.description}</p>
           </div>
           <div className={styles.reactionBox}>
-            {Object.entries(study.reaction).map(([emoji, count]) => (
+            {Object.entries(study.reaction || {}).map(([emoji, count]) => (
               <Tag type='small' key={emoji} status='dark'>
                 {emoji} {count}
               </Tag>
