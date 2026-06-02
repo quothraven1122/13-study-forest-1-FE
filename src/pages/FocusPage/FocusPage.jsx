@@ -17,6 +17,7 @@ export default function FocusPage() {
   const [mStr, setMStr] = useState('25');
   const [sStr, setSStr] = useState('00');
   const [userName, setUserName] = useState('');
+  const [studyName, setStudyName] = useState('');
   const [totalEarnedPoints, setTotalEarnedPoints] = useState(0);
   const { studyId } = useParams();
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function FocusPage() {
       const data = await response.json();
       console.log(data);
       setUserName(data.nickname);
+      setStudyName(data.name);
       setTotalEarnedPoints(data.point); // 초기 포인트
     };
     fetchStudyDetail();
@@ -174,7 +176,9 @@ export default function FocusPage() {
     <>
       <div className={styles.focusPageContainer}>
         <div className={styles.titleContainer}>
-          <h1 className={styles.title}>{userName}의 개발공장</h1>
+          <h1 className={styles.title}>
+            {userName}의 {studyName}
+          </h1>
           <div className={styles.navButtons}>
             <Button
               className={styles.navButton}

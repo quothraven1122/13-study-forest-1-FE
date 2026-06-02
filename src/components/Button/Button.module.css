@@ -11,14 +11,14 @@
   height: 58px;
   box-sizing: border-box;
   color: #fff;
-  font-family: EF_jejudoldam;
+  /* font-family: EF_jejudoldam; */
+  font-family: Pretendard;
   font-size: 18px;
   font-weight: 400;
   text-align: center;
   transition: all 0.2s ease;
   outline: none;
   background: var(--color-brand, #99c08e);
-  text-shadow: 0px -2px #578246;
 }
 .button:focus {
   outline: none;
