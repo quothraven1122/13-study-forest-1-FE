@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import EmojiPicker from 'emoji-picker-react';
 
-import useDate from '../../hooks/useDate';
+import { getDaysOfWeek, compareDates } from '../../utils/date';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 
 import Button from '../../components/Button/Button';
@@ -30,7 +30,6 @@ function StudyDetailPage() {
   const navigate = useNavigate();
   const size = useResponsiveWidth();
   const queryClient = useQueryClient();
-  const { getDaysOfWeek, compareDates } = useDate();
 
   const [isMoreEmojiOpen, setIsMoreEmojiOpen] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
@@ -57,10 +56,16 @@ function StudyDetailPage() {
   });
   const checkPWMutation = useMutation({
     mutationFn: ({ studyId, body }) => checkPassword(studyId, body),
-    onSuccess: () => {
+    onSuccess: async () => {
       if (modalType === 'habits' || modalType === 'focus')
         navigate(`/studies/${studyId}/${modalType}`);
-      if (modalType === 'edit') navigate(`/studies/${studyId}/habits`);
+      if (modalType === 'edit') navigate(`/studies/${studyId}/update`);
+      if (modalType === 'erase') {
+        const res = await deleteStudy(studyId, { password: pwInput });
+        if (res.success) {
+          navigate('/');
+        }
+      }
     },
     onError: () => {
       setIsToastOpen(true);
@@ -89,20 +94,6 @@ function StudyDetailPage() {
                 studyId,
                 body: { password: pwInput },
               });
-              if (modalType === 'erase') {
-                const res = await deleteStudy(studyId, { password: pwInput });
-                console.log(res);
-                if (res.success) {
-                  const storage = JSON.parse(
-                    localStorage.getItem('recent_studies')
-                  );
-                  localStorage.setItem(
-                    'recent_studies',
-                    JSON.stringify(storage.filter((i) => i.id !== data?.id))
-                  );
-                  navigate('/');
-                }
-              }
             }}
           >
             <div className={styles.inputContainer}>
