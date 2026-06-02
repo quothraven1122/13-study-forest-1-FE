@@ -5,15 +5,21 @@ import { useState } from 'react';
 export default function Modal1({ habits, onSave, onCancel }) {
   const [localHabits, setLocalHabits] = useState(habits.map((h) => ({ ...h })));
   // 수정
-  const onChangeHabit = (id, value) => {
+  const onChangeHabit = (targetId, value) => {
     setLocalHabits((prev) =>
-      prev.map((h) => (h.id === id ? { ...h, name: value } : h))
+      prev.map((habit) =>
+        (habit.id || habit.tempId) === targetId
+          ? { ...habit, name: value }
+          : habit
+      )
     );
   };
 
   // 삭제
-  const onDeleteHabit = (id) => {
-    setLocalHabits((prev) => prev.filter((h) => h.id !== id));
+  const onDeleteHabit = (targetId) => {
+    setLocalHabits((prev) =>
+      prev.filter((habit) => (habit.id || habit.tempId) !== targetId)
+    );
   };
 
   // 추가
@@ -21,9 +27,9 @@ export default function Modal1({ habits, onSave, onCancel }) {
     setLocalHabits((prev) => [
       ...prev,
       {
-        tempId: Date.now(),
+        tempId: crypto.randomUUID(),
         name: '',
-        isDone: false,                                    //새로 추가한 습관 id 생성하므로 tempId 사용, 백엔드에서 id 생성되면 tempId로 대체할 예정
+        isDone: false,
       },
     ]);
   };
@@ -34,17 +40,19 @@ export default function Modal1({ habits, onSave, onCancel }) {
         <p className={styles.title}>습관 목록</p>
         <div className={styles.habitListBox}>
           {localHabits.map((habit) => (
-            <div className={styles.habitBox} key={habit.id}>
+            <div className={styles.habitBox} key={habit.id || habit.tempId}>
               <input
                 type='text'
                 className={styles.habit}
                 value={habit.name}
-                onChange={(e) => onChangeHabit(habit.id, e.target.value)}
+                onChange={(e) =>
+                  onChangeHabit(habit.id || habit.tempId, e.target.value)
+                }
               />
 
               <button
                 className={styles.deleteBtn}
-                onClick={() => onDeleteHabit(habit.id)}
+                onClick={() => onDeleteHabit(habit.id || habit.tempId)}
               >
                 <img src={ic_trash} alt='습관 삭제' />
               </button>

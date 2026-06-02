@@ -25,7 +25,6 @@ import smile from '../../assets/icons/ic_smile.svg';
 import styles from './StudyDetailPage.module.css';
 
 function StudyDetailPage() {
-  
   const date = new Date();
 
   const navigate = useNavigate();
@@ -56,6 +55,7 @@ function StudyDetailPage() {
     queryKey: ['study', studyId],
     queryFn: () => getStudyDetail(studyId),
   });
+  console.log('스터디 상세 데이터:', data);
   const checkPWMutation = useMutation({
     mutationFn: ({ studyId, body }) => checkPassword(studyId, body),
     onSuccess: () => {
@@ -118,7 +118,7 @@ function StudyDetailPage() {
           </Modal2>
           {isToastOpen && (
             <Toast
-              id={data.id}
+              id={data?.id}
               message={'비밀번호가 일치하지 않습니다. 다시  입력해주세요.'}
               type={'error'}
               onClose={() => setIsToastOpen(false)}
