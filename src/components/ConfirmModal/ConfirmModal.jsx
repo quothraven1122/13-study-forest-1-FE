@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import Modal2PC from './Modal2PC';
-import Modal2Mobile from './Modal2Mobile';
+import ConfirmModalPC from './ConfirmModalPC';
+import ConfirmModalMobile from './ConfirmModalMobile';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
-import styles from './Modal2.module.css';
+import styles from './ConfirmModal.module.css';
 
-export default function Modal2(props) {
+export default function ConfirmModal(props) {
   const size = useResponsiveWidth();
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -16,9 +16,9 @@ export default function Modal2(props) {
   return createPortal(
     <div className={styles.modal}>
       {size === 'mobile' ? (
-        <Modal2Mobile {...props} />
+        <ConfirmModalMobile {...props} />
       ) : (
-        <Modal2PC {...props} />
+        <ConfirmModalPC {...props} />
       )}
     </div>,
     document.getElementById('modal-root')
