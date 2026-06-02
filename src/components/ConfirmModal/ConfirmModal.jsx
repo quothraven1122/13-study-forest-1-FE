@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import ConfirmModalPC from './ConfirmModalPC';
 import ConfirmModalMobile from './ConfirmModalMobile';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
-import styles from './Modal2.module.css';
+import styles from './ConfirmModal.module.css';
 
 export default function ConfirmModal(props) {
   const size = useResponsiveWidth();
