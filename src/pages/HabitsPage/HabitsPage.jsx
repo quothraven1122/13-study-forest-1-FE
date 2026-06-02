@@ -41,7 +41,10 @@ function HabitsPage() {
 
   // 습관 완료/미완료 토글
   const handleToggleHabit = async (id) => {
+    console.log('칩 클릭됨:', id);
+
     const targetHabit = habits.find((habit) => habit.id === id);
+    console.log('targetHabit:', targetHabit);
 
     if (!targetHabit) return;
 
@@ -50,6 +53,8 @@ function HabitsPage() {
         name: targetHabit.name,
         isDone: !targetHabit.isDone,
       });
+
+      console.log('updatedHabit:', updatedHabit);
 
       setHabits((prevHabits) =>
         prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit))
@@ -139,7 +144,10 @@ function HabitsPage() {
       <div className={styles.Container}>
         <div className={styles.Header}>
           <div className={styles.HeaderLeft}>
-            <h1>{study?.name}</h1>
+            <h1 className={styles.studyTitle}>
+              {study?.nickname}의 {study?.name}
+            </h1>
+            {/* 스터디 이름 + 닉네임 */}
             <p>현재 시간</p>
             <span>{formattedDate}</span>
           </div>
