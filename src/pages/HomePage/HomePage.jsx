@@ -9,7 +9,7 @@ import { getStudyDetail } from '../../apis/studyDetail.js';
 import useDebounce from '../../hooks/useDebounce.js';
 import StudyCardSkeleton from './components/StudyCardSkeleton.jsx';
 import StudyCard from './components/StudyCard.jsx';
-import RecentStudiesSection from './components/RecentStudiesSection.jsx'; // ✨ 추가
+import RecentStudiesSection from './components/RecentStudiesSection.jsx'; 
 
 function HomePage() {
   /// localStorage 스터디
