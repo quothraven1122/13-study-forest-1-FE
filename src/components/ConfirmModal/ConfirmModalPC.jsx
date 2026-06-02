@@ -1,6 +1,6 @@
 import styles from './Modal2.module.css';
 
-export default function Modal2PC({
+export default function ConfirmModalPC({
   title,
   message,
   btnText,

@@ -10,7 +10,7 @@ import Button from '../../components/Button/Button';
 import Toast from '../../components/Toast/Toast';
 import Tag from '../../components/Tag/Tag';
 import Sticker from '../../components/Sticker/Sticker';
-import Modal2 from '../../components/Modal2/Modal2';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import Input from '../../components/Input/Input';
 
 import {
@@ -19,7 +19,7 @@ import {
   postEmoji,
   deleteStudy,
 } from '../../apis/studyDetail';
-import modalText from '../../components/Modal2/modalConstant';
+import modalText from '../../components/ConfirmModal/modalConstant';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 import smile from '../../assets/icons/ic_smile.svg';
 import styles from './StudyDetailPage.module.css';
@@ -84,7 +84,7 @@ function StudyDetailPage() {
     <div className={styles.page}>
       {isModalOpen && (
         <>
-          <Modal2
+          <ConfirmModal
             title={`${data?.nickname}의 ${data?.name}`}
             message='권한이 필요해요!'
             btnText={modalText[modalType]}
@@ -105,7 +105,7 @@ function StudyDetailPage() {
                 onChange={(e) => setPwInput(e.target.value)}
               />
             </div>
-          </Modal2>
+          </ConfirmModal>
           {isToastOpen && (
             <Toast
               id={data.id}
