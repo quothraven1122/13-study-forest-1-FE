@@ -21,7 +21,22 @@ function HabitsPage() {
   const [habits, setHabits] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  // 페이지 처음 들어왔을 때 백엔드에서 습관 목록 가져오기
+  // 오늘 날짜에 해당하는 habitLog가 있으면 완료 처리
+  const isDoneToday = (habit) => {
+    const today = new Date();
+
+    return habit.habitLogs?.some((log) => {
+      const logDate = new Date(log.date);
+
+      return (
+        logDate.getFullYear() === today.getFullYear() &&
+        logDate.getMonth() === today.getMonth() &&
+        logDate.getDate() === today.getDate()
+      );
+    });
+  };
+
+  // 페이지 처음 들어왔을 때 백엔드에서 습관 목록과 스터디 정보 가져오기
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,21 +55,10 @@ function HabitsPage() {
   }, [studyId]);
 
   // 습관 완료/미완료 토글
+  // 백엔드에서 오늘 habitLog가 있으면 삭제, 없으면 생성
   const handleToggleHabit = async (id) => {
-    console.log('칩 클릭됨:', id);
-
-    const targetHabit = habits.find((habit) => habit.id === id);
-    console.log('targetHabit:', targetHabit);
-
-    if (!targetHabit) return;
-
     try {
-      const updatedHabit = await updateHabit(studyId, id, {
-        name: targetHabit.name,
-        isDone: !targetHabit.isDone,
-      });
-
-      console.log('updatedHabit:', updatedHabit);
+      const updatedHabit = await updateHabit(studyId, id, {});
 
       setHabits((prevHabits) =>
         prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit))
@@ -97,15 +101,13 @@ function HabitsPage() {
         if (!originalHabit) {
           const createdHabit = await createHabit(studyId, {
             name: habit.name,
-            isDone: habit.isDone || false,
           });
 
           nextHabits.push(createdHabit);
         } else {
-          // 기존 습관이면 수정
+          // 기존 습관이면 이름만 수정
           const updatedHabit = await updateHabit(studyId, habit.id, {
             name: habit.name,
-            isDone: habit.isDone || false,
           });
 
           nextHabits.push(updatedHabit);
@@ -147,7 +149,7 @@ function HabitsPage() {
             <h1 className={styles.studyTitle}>
               {study?.nickname}의 {study?.name}
             </h1>
-            {/* 스터디 이름 + 닉네임 */}
+
             <p>현재 시간</p>
             <span>{formattedDate}</span>
           </div>
@@ -193,7 +195,7 @@ function HabitsPage() {
                 <Chip
                   key={habit.id}
                   text={habit.name}
-                  isDone={habit.isDone}
+                  isDone={isDoneToday(habit)}
                   onClick={() => handleToggleHabit(habit.id)}
                 />
               ))
