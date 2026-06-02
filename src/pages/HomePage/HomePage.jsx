@@ -1,69 +1,14 @@
 import Dropdown from '../../components/Dropdown/Dropdown.jsx';
-import Tag from '../../components/Tag/Tag.jsx';
 import styles from './HomePage.module.css';
-
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import searchIc from '../../assets/icons/ic_search.svg';
-import { Link } from 'react-router-dom';
 import useDebounce from '../../hooks/useDebounce.js';
-function StudyCardSkeleton() {
-  return (
-    <div className={styles.loadingCard}>
-      <div className={styles.loadingInfoBox}>
-        <div className={styles.loadingTopBox}>
-          <div className={styles.skeletonTitleLine}></div>
-          <div className={styles.skeletonDaysLine}></div>
-        </div>
-        <div className={styles.skeletonDescriptionLine}></div>
-      </div>
-      <div className={styles.skeletonReactionBox}>
-        <div className={styles.skeletonTag}></div>
-        <div className={styles.skeletonTag}></div>
-        <div className={styles.skeletonTag}></div>
-      </div>
-    </div>
-  );
-}
+import StudyCardSkeleton from './components/StudyCardSkeleton.jsx';
+import StudyCard from './components/StudyCard.jsx';
+import RecentStudiesSection from './components/RecentStudiesSection.jsx'; // ✨ 추가
+
 function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
-
-  /// 마우스 스크롤 함수
-  const isDragging = useRef(false);
-  const scrollRef = useRef(null);
-  const isDown = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
-  const handleMouseDown = (e) => {
-    isDown.current = true;
-    startX.current = e.pageX - scrollRef.current.offsetLeft;
-    scrollLeft.current = scrollRef.current.scrollLeft;
-  };
-
-  const handleMouseLeave = () => {
-    isDown.current = false;
-  };
-
-  const handleMouseUp = () => {
-    isDown.current = false;
-
-    setTimeout(() => {
-      isDragging.current = false;
-    }, 0);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDown.current) return;
-
-    isDragging.current = true;
-
-    e.preventDefault();
-
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.2;
-
-    scrollRef.current.scrollLeft = scrollLeft.current - walk;
-  };
-  /// 스터디 불러오기(검색, 정렬, 페이지네이션)
   const [studies, setStudies] = useState([]);
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search);
@@ -80,7 +25,6 @@ function HomePage() {
       `http://localhost:3000/studies?search=${searchValue}&page=${pageNum}&sort=${sortValue}`
     );
     const data = await res.json();
-
     return data;
   };
 
@@ -100,12 +44,11 @@ function HomePage() {
       setIsLoading(false);
       setHasNextPage(data.pagination.hasNextPage);
     }
-
     fetchData();
   }, [debouncedSearch, page, sort]);
+
   /// localStorage 스터디
   const RECENT_KEY = 'recent_studies';
-
   const [recentStudies, setRecentStudies] = useState([]);
 
   useEffect(() => {
@@ -121,77 +64,14 @@ function HomePage() {
     localStorage.setItem(RECENT_KEY, JSON.stringify(updated));
     setRecentStudies(updated);
   };
-  /// 스터디 카드 컴포넌트
-  function StudyCard({ study }) {
-    return (
-      <Link
-        draggable={false}
-        onClick={(e) => {
-          if (isDragging.current) {
-            e.preventDefault();
-            return;
-          }
-          saveRecentStudy(study);
-        }}
-        to={`/studies/${study.id}`}
-        className={styles.studyCard}
-        style={{ backgroundImage: `url(${study.background})` }}
-      >
-        <div className={styles.studyInfoBox}>
-          <div className={styles.studyInfo}>
-            <div className={styles.studyCardTopBox}>
-              <div className={styles.studyTitleBox}>
-                <p className={styles.studyTitle}>
-                  {study.nickname}의 {study.name}
-                </p>
-                <div className={styles.point}>
-                  {study.point === 0 ? (
-                    <Tag type='small' point={'0'} status='dark' />
-                  ) : (
-                    <Tag type='small' point={study.point} status='dark' />
-                  )}
-                </div>
-              </div>
-              <p className={styles.daysCount}>{study.days}일째 진행 중</p>
-            </div>
-
-            <p className={styles.studyDescription}>{study.description}</p>
-          </div>
-          <div className={styles.reactionBox}>
-            {Object.entries(study.reaction).map(([emoji, count]) => (
-              <Tag type='small' key={emoji} status='dark'>
-                {emoji} {count}
-              </Tag>
-            ))}
-          </div>
-        </div>
-      </Link>
-    );
-  }
 
   return (
     <div className={styles.main}>
-      <section className={styles.recentSection}>
-        <p className={styles.title}>최근 조회한 스터디</p>
-        <div className={styles.recentStudiesArea}>
-          {recentStudies.length === 0 ? (
-            <p className={styles.text}>아직 조회한 스터디가 없어요</p>
-          ) : (
-            <div
-              ref={scrollRef}
-              onMouseDown={handleMouseDown}
-              onMouseLeave={handleMouseLeave}
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              className={styles.recentStudyCardGrid}
-            >
-              {recentStudies.map((study) => (
-                <StudyCard key={study.id} study={study} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      <RecentStudiesSection
+        recentStudies={recentStudies}
+        saveRecentStudy={saveRecentStudy}
+      />
+
       <section className={styles.studiesSection}>
         <p className={styles.title}>스터디 둘러보기</p>
         <div className={styles.filterBar}>
@@ -218,12 +98,10 @@ function HomePage() {
         </div>
         <div className={styles.studyContent}>
           {studies.length === 0 && !isLoading ? (
-            //로딩이 끝났는데 진짜 데이터가 0개 일떄
             <div className={styles.emptyStudiesArea}>
               <p className={styles.text}>아직 둘러 볼 스터디가 없어요</p>
             </div>
           ) : studies.length === 0 && isLoading ? (
-            //데이터가 로딩 중일 때(첫 진입)
             <div className={styles.studyCardArea}>
               <div className={styles.studyCardGrid}>
                 {Array.from({ length: 6 }).map((_, index) => (
@@ -232,12 +110,16 @@ function HomePage() {
               </div>
             </div>
           ) : (
-            //실제 데이터 보여줄 때
             <div className={styles.studyCardArea}>
               <div className={styles.loadingSpace}>
                 <div className={styles.studyCardGrid}>
                   {studies.map((study) => (
-                    <StudyCard key={study.id} study={study} />
+                    <StudyCard
+                      key={study.id}
+                      study={study}
+                      isDraggingRef={{ current: false }}
+                      onSaveRecent={saveRecentStudy}
+                    />
                   ))}
                 </div>
                 {isLoading && (
