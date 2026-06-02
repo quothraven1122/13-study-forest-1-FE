@@ -1,17 +1,13 @@
 import styles from './Chip.module.css';
 
-export default function Chip({ text }) {
-  const name = text;
-  const selected = true;
-  const className = '';
-  const props = {};
-
+export default function Chip({ text, isDone, onClick }) {
   return (
     <button
-      className={`${styles.button} ${selected ? styles.isDone : ''} ${className}`}
-      {...props}
+      type='button'
+      className={`${styles.button} ${isDone ? styles.isDone : ''}`}
+      onClick={onClick}
     >
-      {name}
+      {text}
     </button>
   );
 }

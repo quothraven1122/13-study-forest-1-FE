@@ -1,17 +1,10 @@
 import { useState } from 'react';
-import styles from './StudyCreatePage.module.css';
-import Input from '../../components/Input/Input';
-import Button from '../../components/Button/Button';
+import styles from '../StudyCreatePage.module.css';
+import Input from '../../../components/Input/Input';
+import Button from '../../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 
-function FormField({
-  error,
-  Data,
-  label,
-  placeholder,
-  onChange,
-  ...inputprops
-}) {
+function FormField({ error, Data, label, ...inputprops }) {
   return (
     <div className={styles.formField}>
       <p>{label}</p>
@@ -22,8 +15,6 @@ function FormField({
           }
         }
         value={Data}
-        placeholder={placeholder}
-        onChange={onChange}
         {...inputprops}
       />
       {error && <span>*{error}</span>}
@@ -31,8 +22,15 @@ function FormField({
   );
 }
 
-function StudyCreatePage() {
-  const validateForm = (studyData, confirmPassword) => {
+function StudyForm({
+  onSubmitForm,
+  title,
+  btnText,
+  studyData,
+  setStudyData,
+  isUpdate = false,
+}) {
+  const validateForm = (studyData, confirmPassword, isUpdate) => {
     const errors = {};
     if (!studyData.nickname.trim()) {
       errors.nickname = '닉네임을 입력해주세요';
@@ -43,66 +41,44 @@ function StudyCreatePage() {
     if (!studyData.description.trim()) {
       errors.description = '소개를 작성해주세요';
     }
-    if (!studyData.password) {
+    if (!isUpdate && !studyData.password) {
       errors.password = '비밀번호를 입력해주세요';
     }
-    if (studyData.password !== confirmPassword) {
+    if (!isUpdate && studyData.password !== confirmPassword) {
       errors.confirmPassword = '비밀번호가 일치하지 않습니다';
     }
     return errors;
   };
 
-  const [studyData, setStudyData] = useState({
-    nickname: '',
-    name: '',
-    description: '',
-    background: '1번 이미지',
-    password: '',
-  });
-
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
 
   const backgrounds = [
-    '1번 이미지',
-    '2번 이미지',
-    '3번 이미지',
-    '4번 이미지',
-    '5번 이미지',
-    '6번 이미지',
-    '7번 이미지',
-    '8번 이미지',
+    'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
+    'https://i.namu.wiki/i/v_zK7er3cBXRkKPgXQKyFnRNCBOmGDKRwDGUI92DDImUKG2kFa8RLZrJdeEZCXnpj8Lsp1efiIFkNwJhQNo3lw.webp',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/AcetoFive.JPG/1280px-AcetoFive.JPG',
+    'https://cdn.imweb.me/upload/S201901155c3d45c030b1a/5c3f4bd73e009.png',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIzS6jib8UzBdBBDr9TFsZY0qs6SLqoQU_Eg&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJTI80aFfSGs-0JhK54lx5bzzt2MlN5I23bQ&s',
+    'https://i.namu.wiki/i/0SGoftrehJuPefLVXRPwjyDlkqg0bCp6ZEj4JsHtSDH-WyEIB4I2vdcCDZ_hM4YrHG8jKFytvfoCDMmmgAWAlQ.webp',
+    'https://i.namu.wiki/i/lZoMNR1GxpifZDc57AIQdBBTqsqmIjSkhMhx6CiMjOx9Dcw3AyI-HHU5yKemfGyW20zUrL53hnC91o9zIZj1IQ.webp',
   ];
 
   const navigate = useNavigate();
 
-  const createStudy = async () => {
-    try {
-      const res = await fetch('http://localhost:3000/studies', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...studyData }),
-      });
-      if (!res.ok) throw new Error('생성 실패');
-      const result = await res.json();
-      navigate(`/studies/${result.id}`);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const error = validateForm(studyData, confirmPassword);
+    const error = validateForm(studyData, confirmPassword, isUpdate);
     setErrors(error);
     if (Object.keys(error).length > 0) return;
-    createStudy();
+    const data = await onSubmitForm(studyData);
+    if (data) navigate(`/studies/${data.id}`);
   };
 
   return (
     <div className={styles.createContainer}>
       <form className={styles.createBox} onSubmit={onSubmit}>
-        <h2>스터디 만들기</h2>
+        <h2>{title}</h2>
         <FormField
           error={errors.nickname}
           Data={studyData.nickname}
@@ -160,34 +136,37 @@ function StudyCreatePage() {
             ))}
           </div>
         </div>
+        {isUpdate ? null : (
+          <>
+            <FormField
+              error={errors.password}
+              Data={studyData.password}
+              label='비밀번호'
+              placeholder='비밀번호를 입력해 주세요'
+              onChange={(e) => {
+                setStudyData((prev) => ({ ...prev, password: e.target.value }));
+                setErrors((prev) => ({ ...prev, password: null }));
+              }}
+              passwordToggle={true}
+            />
 
-        <FormField
-          error={errors.password}
-          Data={studyData.password}
-          label='비밀번호'
-          placeholder='비밀번호를 입력해 주세요'
-          onChange={(e) => {
-            setStudyData((prev) => ({ ...prev, password: e.target.value }));
-            setErrors((prev) => ({ ...prev, password: null }));
-          }}
-          passwordToggle={true}
-        />
-
-        <FormField
-          error={errors.confirmPassword}
-          Data={confirmPassword}
-          label='비밀번호 확인'
-          placeholder='비밀번호를 다시 한 번 입력해 주세요'
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-            setErrors((prev) => ({ ...prev, confirmPassword: null }));
-          }}
-          passwordToggle={true}
-        />
-        <Button type='submit'>만들기</Button>
+            <FormField
+              error={errors.confirmPassword}
+              Data={confirmPassword}
+              label='비밀번호 확인'
+              placeholder='비밀번호를 다시 한 번 입력해 주세요'
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                setErrors((prev) => ({ ...prev, confirmPassword: null }));
+              }}
+              passwordToggle={true}
+            />
+          </>
+        )}
+        <Button type='submit'>{btnText}</Button>
       </form>
     </div>
   );
 }
 
-export default StudyCreatePage;
+export default StudyForm;

@@ -1,4 +1,4 @@
-import styles from './toast.module.css';
+import styles from './Toast.module.css';
 import { useEffect } from 'react';
 
 // 아래 메세지 필요한 곳에 복사해서 쓰시면 됩니다.
@@ -6,7 +6,14 @@ import { useEffect } from 'react';
 /* <Toast message='50포인트를 획득했습니다!' type='success' /> */
 /* <Toast message='집중이 중단되었습니다.' type='error' /> */
 
-function Toast({ id, message, type = 'success', duration = 3000, onClose }) {
+function Toast({
+  id,
+  message,
+  type = 'success',
+  duration = 3000,
+  onClose,
+  className,
+}) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       onClose?.(id);
@@ -19,7 +26,7 @@ function Toast({ id, message, type = 'success', duration = 3000, onClose }) {
 
   return (
     <div
-      className={`${styles.toast} ${styles[type]}`}
+      className={`${styles.toast} ${styles[type]} ${className}`}
       role='status'
       aria-live='polite'
     >

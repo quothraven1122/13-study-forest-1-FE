@@ -1,203 +1,170 @@
 import Dropdown from '../../components/Dropdown/Dropdown.jsx';
-import Tag from '../../components/Tag/Tag.jsx';
 import styles from './HomePage.module.css';
+import { useEffect, useState } from 'react';
+import searchIc from '../../assets/icons/ic_search.svg';
+import { useLocation } from 'react-router-dom';
 
-import { useRef } from 'react';
-import search from '../../assets/icons/ic_search.svg';
-import { Link } from 'react-router-dom';
+import { getStudyDetail } from '../../apis/studyDetail.js';
+
+import useDebounce from '../../hooks/useDebounce.js';
+import StudyCardSkeleton from './components/StudyCardSkeleton.jsx';
+import StudyCard from './components/StudyCard.jsx';
+import RecentStudiesSection from './components/RecentStudiesSection.jsx'; 
+
 function HomePage() {
-  // const [studies, setStudies] = useState([])
-  const isDragging = useRef(false);
-  const scrollRef = useRef(null);
-  const isDown = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
-  const handleMouseDown = (e) => {
-    isDown.current = true;
-    startX.current = e.pageX - scrollRef.current.offsetLeft;
-    scrollLeft.current = scrollRef.current.scrollLeft;
-  };
+  /// localStorage 스터디
+  const RECENT_KEY = 'recent_studies';
+  const [recentStudies, setRecentStudies] = useState([]);
+  const location = useLocation();
 
-  const handleMouseLeave = () => {
-    isDown.current = false;
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [studies, setStudies] = useState([]);
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
+  const [page, setPage] = useState(1);
+  const [sort, setSort] = useState('recent');
+  const [hasNextPage, setHasNextPage] = useState(true);
 
-  const handleMouseUp = () => {
-    isDown.current = false;
-
-    setTimeout(() => {
-      isDragging.current = false;
-    }, 0);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDown.current) return;
-
-    isDragging.current = true;
-
-    e.preventDefault();
-
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX.current) * 1.2;
-
-    scrollRef.current.scrollLeft = scrollLeft.current - walk;
-  };
-  const studies = [
-    {
-      id: 1,
-      name: 'UX 스터디',
-      nickname: '이유디',
-      description: 'Slow And Steady Wins The Race!!',
-      point: 310,
-      reaction: { '👩🏻‍💻': 37, '🔥': 26, '🤍': 14 },
-      daysCount: 68,
-      background:
-        'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
-    },
-    {
-      id: 2,
-      name: 'UX 스터디',
-      nickname: '이유디',
-      description: 'Slow And Steady Wins The Race!!',
-      point: 310,
-      reaction: { '👩🏻‍💻': 37, '🔥': 26, '🤍': 14 },
-      daysCount: 68,
-      background:
-        'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
-    },
-    {
-      id: 3,
-      name: 'UX 스터디',
-      nickname: '이유디',
-      description: 'Slow And Steady Wins The Race!!',
-      point: 310,
-      reaction: { '👩🏻‍💻': 37, '🔥': 26, '🤍': 14 },
-      daysCount: 68,
-      background:
-        'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
-    },
-    {
-      id: 4,
-      name: 'UX 스터디',
-      nickname: '이유디',
-      description: 'Slow And Steady Wins The Race!!',
-      point: 310,
-      reaction: { '👩🏻‍💻': 37, '🔥': 26, '🤍': 14 },
-      daysCount: 68,
-      background:
-        'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
-    },
-    {
-      id: 5,
-      name: 'UX 스터디',
-      nickname: '이유디',
-      description: 'Slow And Steady Wins The Race!!',
-      point: 310,
-      reaction: { '👩🏻‍💻': 37, '🔥': 26, '🤍': 14 },
-      daysCount: 68,
-      background:
-        'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
-    },
-    {
-      id: 6,
-      name: 'UX 스터디',
-      nickname: '이유디',
-      description: 'Slow And Steady Wins The Race!!',
-      point: 310,
-      reaction: { '👩🏻‍💻': 37, '🔥': 26, '🤍': 14 },
-      daysCount: 68,
-      background:
-        'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
-    },
-  ];
-
-  function StudyCard({ study }) {
-    return (
-      <Link
-        draggable={false}
-        onClick={(e) => {
-          if (isDragging.current) {
-            e.preventDefault();
-          }
-        }}
-        to={`/study/${study.id}`}
-        className={styles.studyCard}
-        style={{ backgroundImage: `url(${study.background})` }}
-      >
-        <div className={styles.studyInfoBox}>
-          <div className={styles.studyInfo}>
-            <div className={styles.studyCardTopBox}>
-              <div className={styles.studyTitleBox}>
-                <p className={styles.studyTitle}>
-                  {study.nickname}의 {study.name}
-                </p>
-                <div className={styles.point}>
-                  <Tag type='small' point={study.point} status='dark' />
-                </div>
-              </div>
-              <p className={styles.daysCount}>{study.daysCount}일째 진행 중</p>
-            </div>
-
-            <p className={styles.studyDescription}>{study.description}</p>
-          </div>
-          <div className={styles.reactionBox}>
-            {Object.entries(study.reaction).map(([emoji, count]) => (
-              <Tag type='small' key={emoji} status='dark'>
-                {emoji} {count}
-              </Tag>
-            ))}
-          </div>
-        </div>
-      </Link>
+  const getStudies = async (
+    searchValue = '',
+    pageNum = 1,
+    sortValue = 'recent'
+  ) => {
+    const res = await fetch(
+      `http://localhost:3000/studies?search=${searchValue}&page=${pageNum}&sort=${sortValue}`
     );
-  }
+    const data = await res.json();
+    return data;
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (page === 1) {
+        setStudies([]);
+      }
+      setIsLoading(true);
+      const data = await getStudies(debouncedSearch, page, sort);
+
+      if (page === 1) {
+        setStudies(data.data);
+      } else {
+        setStudies((prev) => [...prev, ...data.data]);
+      }
+      setIsLoading(false);
+      setHasNextPage(data.pagination.hasNextPage);
+    }
+    fetchData();
+  }, [debouncedSearch, page, sort]);
+
+  useEffect(() => {
+    const recentLocalStorage = JSON.parse(
+      localStorage.getItem('recent_studies') || '[]'
+    );
+    const checkRecentStudies = async () => {
+      const recentDB = await Promise.all(
+        recentLocalStorage.map((i) => getStudyDetail(i.id))
+      );
+      const filteredDB = recentDB.filter((i) => i?.id);
+      console.log(filteredDB);
+      const result = filteredDB.map((i) => ({
+        ...i,
+        reaction: Object.fromEntries(Object.entries(i.reactions).slice(0, 3)),
+        days:
+          Math.floor(
+            (new Date() - new Date(i.createdAt)) / (1000 * 60 * 60 * 24)
+          ) + 1,
+      }));
+      localStorage.setItem('recent_studies', JSON.stringify(result));
+      setRecentStudies(result);
+    };
+    checkRecentStudies();
+  }, [location.pathname]);
+
+  const saveRecentStudy = (study) => {
+    const prev = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    const filtered = prev.filter((item) => item.id !== study.id);
+    const updated = [study, ...filtered].slice(0, 3);
+
+    localStorage.setItem(RECENT_KEY, JSON.stringify(updated));
+    setRecentStudies(updated);
+  };
+
   return (
     <div className={styles.main}>
-      <section className={styles.recentSection}>
-        <p className={styles.title}>최근 조회한 스터디</p>
-        <div className={styles.recentStudiesArea}>
-          {studies.length === 0 ? (
-            <p className={styles.text}>아직 조회한 스터디가 없어요</p>
-          ) : (
-            <div
-              ref={scrollRef}
-              onMouseDown={handleMouseDown}
-              onMouseLeave={handleMouseLeave}
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              className={styles.recentStudyCardGrid}
-            >
-              {studies.slice(0, 3).map((study) => (
-                <StudyCard key={study.id} study={study} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      <RecentStudiesSection
+        recentStudies={recentStudies}
+        saveRecentStudy={saveRecentStudy}
+      />
+
       <section className={styles.studiesSection}>
         <p className={styles.title}>스터디 둘러보기</p>
         <div className={styles.filterBar}>
           <div className={styles.searchBar}>
-            <img src={search} alt='습관 검색' />
-            <input className={styles.search} type='text' placeholder='검색' />
+            <img src={searchIc} alt='습관 검색' />
+            <input
+              value={search}
+              className={styles.search}
+              type='text'
+              placeholder='검색'
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+            />
           </div>
-          <Dropdown />
+          <Dropdown
+            value={sort}
+            onChange={(value) => {
+              setSort(value);
+              setPage(1);
+            }}
+          />
         </div>
-        <div
-          className={
-            studies.length === 0 ? styles.emptyStudiesArea : styles.studiesArea
-          }
-        >
-          {studies.length === 0 ? (
-            <p className={styles.text}>아직 둘러 볼 스터디가 없어요</p>
-          ) : (
+        <div className={styles.studyContent}>
+          {studies.length === 0 && !isLoading ? (
+            <div className={styles.emptyStudiesArea}>
+              <p className={styles.text}>아직 둘러 볼 스터디가 없어요</p>
+            </div>
+          ) : studies.length === 0 && isLoading ? (
             <div className={styles.studyCardArea}>
               <div className={styles.studyCardGrid}>
-                {studies.map((study) => (
-                  <StudyCard key={study.id} study={study} />
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <StudyCardSkeleton key={index} />
                 ))}
               </div>
-              <button className={styles.moreBtn}>더보기</button>
+            </div>
+          ) : (
+            <div className={styles.studyCardArea}>
+              <div className={styles.loadingSpace}>
+                <div className={styles.studyCardGrid}>
+                  {studies.map((study) => (
+                    <StudyCard
+                      key={study.id}
+                      study={study}
+                      isDraggingRef={{ current: false }}
+                      onSaveRecent={saveRecentStudy}
+                    />
+                  ))}
+                </div>
+                {isLoading && (
+                  <div className={styles.studyCardGrid}>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <StudyCardSkeleton key={index} />
+                    ))}
+                  </div>
+                )}
+              </div>
+              {hasNextPage && !isLoading && (
+                <button
+                  className={styles.moreBtn}
+                  onClick={() => {
+                    setPage((prev) => prev + 1);
+                    setIsLoading(true);
+                  }}
+                >
+                  더보기
+                </button>
+              )}
             </div>
           )}
         </div>

@@ -11,6 +11,11 @@
   font-size: 18px;
   margin-bottom: 16px;
 }
+.toast {
+  position: absolute;
+  z-index: 550;
+  bottom: 40px;
+}
 .container {
   width: 1200px;
   height: fit-content;
@@ -161,10 +166,22 @@
 .log {
   vertical-align: middle;
 }
+.emptyMessage {
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-gray-dark);
+  margin-top: 66px;
+  margin-bottom: 103px;
+}
 
 @media (min-width: 721px) and (max-width: 1280px) {
   .page {
     padding: 0 16px;
+  }
+  .title {
+    font-size: 25px;
   }
   .habitName {
     min-width: 122px;
@@ -180,6 +197,9 @@
 @media (max-width: 721px) {
   .page {
     padding: 0 16px;
+  }
+  .title {
+    font-size: 25px;
   }
   .container {
     width: 100%;
@@ -208,4 +228,12 @@
   .emojiPickerContainer {
     left: 15px;
   }
+}
+
+.shareToastWrapper {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
 }

@@ -1,21 +1,38 @@
 .button {
   cursor: pointer;
+
+  width: 100%;
+  max-width: 400px;
+  height: 54px;
+
   border: 0;
-  width: 400px;
-  height: 44px;
   border-radius: 16px;
-  background: var(--gray-gray_EEEEEE, #eee);
-  color: var(--gray-gray_818181, #818181);
+
+  background: #eeeeee;
+
+  color: #818181;
   text-align: center;
+
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 700;
-  line-height: normal;
+  line-height: 100%;
+
+  text-decoration: underline;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .isDone {
-  background: var(--brand-brand_99C08E, #99c08e);
-  color: #fff;
-  text-align: center;
+  background: #99c08e;
+  color: #ffffff;
+}
+
+@media (max-width: 744px) {
+  .button {
+    width: 100%;
+    max-width: 400px;
+  }
 }

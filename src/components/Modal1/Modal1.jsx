@@ -1,5 +1,5 @@
-import ic_trash from '../../asset/icon/ic_trash.svg';
-import ic_plus from '../../asset/icon/ic_plus.svg';
+import ic_trash from '../../assets/icons/ic_trash.png';
+import ic_plus from '../../assets/icons/ic_plus.svg';
 import styles from './Modal1.module.css';
 import { useState } from 'react';
 export default function Modal1({ habits, onSave, onCancel }) {
@@ -65,8 +65,8 @@ export default function Modal1({ habits, onSave, onCancel }) {
   );
 }
 //============================UI 확인용 코드===================================
-// import ic_trash from '../../asset/icon/ic_trash.svg';
-// import ic_plus from '../../asset/icon/ic_plus.svg';
+// import ic_trash from '../../assets/icons/ic_trash.png';
+// import ic_plus from '../../assets/icons/ic_plus.svg';
 // import styles from './Modal1.module.css';
 // import { useState } from 'react';
 // export default function Modal1({ onSave, onCancel }) {

@@ -5,24 +5,30 @@ import { useState } from 'react';
 export default function Dropdown({
   options = [
     { value: 'recent', label: '최근 순' },
-    { value: 'latest', label: '오래된 순' },
-    { value: 'maxPoint', label: '많은 포인트 순' },
-    { value: 'minPoint', label: '적은 포인트 순' },
+    { value: 'oldest', label: '오래된 순' },
+    { value: 'highPoint', label: '많은 포인트 순' },
+    { value: 'lowPoint', label: '적은 포인트 순' },
   ],
+  value,
   onChange = () => {},
-  width = 180, //큰 버튼은 180 작은 버튼은 150으로 width설정
+  width = 180,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(options[0].label);
+
+  const selectedLabel =
+    options.find((opt) => opt.value === value)?.label || options[0].label;
 
   return (
     <div className={styles.sortContainer} style={{ width }}>
+      {/* 버튼 */}
       <div className={styles.sortBox}>
-        <button onClick={() => setIsOpen(!isOpen)}>
-          <p>{selectedValue}</p>
+        <button onClick={() => setIsOpen((prev) => !prev)}>
+          <p>{selectedLabel}</p>
           <img src={arrowIcon} alt='arrow' />
         </button>
       </div>
+
+      {/* 옵션 */}
       {isOpen && (
         <div className={styles.dropdownBox} style={{ width }}>
           {options.map((option) => (
@@ -30,7 +36,6 @@ export default function Dropdown({
               key={option.value}
               onClick={() => {
                 onChange(option.value);
-                setSelectedValue(option.label);
                 setIsOpen(false);
               }}
             >
