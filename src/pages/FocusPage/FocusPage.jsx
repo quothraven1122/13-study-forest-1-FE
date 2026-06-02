@@ -131,24 +131,27 @@ export default function FocusPage() {
     clearInterval(intervalRef.current);
     setLoading(true);
     const points = 3 + Math.floor(overtime / 600); // 600초 === 10분
-
-    const response = await fetch(
-      `http://localhost:3000/studies/${studyId}/focus`,
-      {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ points }),
-      }
-    );
-    const data = await response.json();
-    setTotalEarnedPoints(data.point); // points point??? 네이밍 좀 이상한데
-    // try catch 문 필요
-
-    showToast(`${points}포인트를 획득했습니다!`, 'success');
-    setLoading(false);
-    setStatus('idle');
-    setRemaining(totalSeconds);
-    setOvertime(0);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/studies/${studyId}/focus`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ points }),
+        }
+      );
+      if (!response.ok) throw new Error('서버 오류');
+      const data = await response.json();
+      setTotalEarnedPoints(data.point);
+      showToast(`${points}포인트를 획득했습니다!`, 'success');
+    } catch (error) {
+      showToast(`${points}포인트 획득에 실패하셨습니다!`, 'error');
+    } finally {
+      setStatus('idle');
+      setRemaining(totalSeconds);
+      setLoading(false);
+      setOvertime(0);
+    }
   };
 
   const format = (secs) => {
@@ -208,9 +211,7 @@ export default function FocusPage() {
           </div>
 
           {/* 타이머 숫자 */}
-          <div
-            className={`${styles.timer} ${timerColorClass} ${isActive ? styles.timerBoxActive : ''}`}
-          >
+          <div className={`${styles.timer} ${timerColorClass}`}>
             {status === 'idle' ? (
               <div className={styles.timerInputGroup}>
                 <input
