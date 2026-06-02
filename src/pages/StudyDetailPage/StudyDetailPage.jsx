@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import EmojiPicker from 'emoji-picker-react';
 
-import useDate from '../../hooks/useDate';
+import { getDaysOfWeek, compareDates } from '../../utils/date';
 import useResponsiveWidth from '../../hooks/useResponsiveWidth';
 
 import Button from '../../components/Button/Button';
@@ -30,7 +30,6 @@ function StudyDetailPage() {
   const navigate = useNavigate();
   const size = useResponsiveWidth();
   const queryClient = useQueryClient();
-  const { getDaysOfWeek, compareDates } = useDate();
 
   const [isMoreEmojiOpen, setIsMoreEmojiOpen] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
