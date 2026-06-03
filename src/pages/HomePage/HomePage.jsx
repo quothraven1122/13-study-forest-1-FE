@@ -65,7 +65,6 @@ function HomePage() {
         recentLocalStorage.map((i) => getStudyDetail(i.id))
       );
       const filteredDB = recentDB.filter((i) => i?.id);
-      console.log(filteredDB);
       const result = filteredDB.map((i) => ({
         ...i,
         reaction: Object.fromEntries(Object.entries(i.reactions).slice(0, 3)),
