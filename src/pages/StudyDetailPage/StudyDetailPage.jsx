@@ -26,13 +26,13 @@ import styles from './StudyDetailPage.module.css';
 function StudyDetailPage() {
   const date = new Date();
 
+  const { studyId } = useParams();
   const navigate = useNavigate();
   const size = useResponsiveWidth();
 
   const [data, setData] = useState();
   const [isMoreEmojiOpen, setIsMoreEmojiOpen] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
-  const [emoji, setEmoji] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isToastOpen, setIsToastOpen] = useState(false);
   const [modalType, setModalType] = useState('');
@@ -47,15 +47,10 @@ function StudyDetailPage() {
       setShareToast({ message: '링크 복사에 실패했어요.', type: 'error' });
     }
   };
-
-  const { studyId } = useParams();
-  useEffect(() => {
-    async function fetchStudy() {
-      const result = await getStudyDetail(studyId);
-      setData(result);
-    }
-    fetchStudy();
-  }, [studyId, emoji]);
+  const refreshStudy = async () => {
+    const result = await getStudyDetail(studyId);
+    setData(result);
+  };
   const handleCheckPassword = async () => {
     await checkPassword(studyId, { password: pwInput });
     if (modalType === 'habits' || modalType === 'focus') {
@@ -76,6 +71,14 @@ function StudyDetailPage() {
   const handleEmoji = async (emojiObject) => {
     await postEmoji(studyId, { emoji: emojiObject.emoji });
   };
+
+  useEffect(() => {
+    const fetchStudy = async () => {
+      const result = await getStudyDetail(studyId);
+      setData(result);
+    };
+    fetchStudy();
+  }, [studyId]);
 
   return (
     <div className={styles.page}>
@@ -195,7 +198,7 @@ function StudyDetailPage() {
                     <EmojiPicker
                       onEmojiClick={async (emojiObject) => {
                         await handleEmoji(emojiObject);
-                        setEmoji(emojiObject.emoji);
+                        await refreshStudy();
                       }}
                     />
                   )}
