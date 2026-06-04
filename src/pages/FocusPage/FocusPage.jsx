@@ -26,7 +26,6 @@ export default function FocusPage() {
         `http://localhost:3000/studies/${studyId}/focus`
       );
       const data = await response.json();
-      console.log(data);
       setUserName(data.nickname);
       setStudyName(data.name);
       setTotalEarnedPoints(data.point); // 초기 포인트

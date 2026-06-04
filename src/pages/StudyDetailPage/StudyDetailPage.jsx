@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import EmojiPicker from 'emoji-picker-react';
 
 import { getDaysOfWeek, compareDates } from '../../utils/date';
@@ -10,7 +9,7 @@ import Button from '../../components/Button/Button';
 import Toast from '../../components/Toast/Toast';
 import Tag from '../../components/Tag/Tag';
 import Sticker from '../../components/Sticker/Sticker';
-import Modal2 from '../../components/Modal2/Modal2';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import Input from '../../components/Input/Input';
 
 import {
@@ -19,7 +18,7 @@ import {
   postEmoji,
   deleteStudy,
 } from '../../apis/studyDetail';
-import modalText from '../../components/Modal2/modalConstant';
+import modalText from '../../components/ConfirmModal/modalConstant';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 import smile from '../../assets/icons/ic_smile.svg';
 import styles from './StudyDetailPage.module.css';
@@ -29,8 +28,8 @@ function StudyDetailPage() {
 
   const navigate = useNavigate();
   const size = useResponsiveWidth();
-  const queryClient = useQueryClient();
 
+  const [data, setData] = useState();
   const [isMoreEmojiOpen, setIsMoreEmojiOpen] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [emoji, setEmoji] = useState('');
@@ -85,17 +84,12 @@ function StudyDetailPage() {
     <div className={styles.page}>
       {isModalOpen && (
         <>
-          <Modal2
+          <ConfirmModal
             title={`${data?.nickname}의 ${data?.name}`}
             message='권한이 필요해요!'
             btnText={modalText[modalType]}
             onExit={() => setIsModalOpen(false)}
-            onClick={async () => {
-              checkPWMutation.mutate({
-                studyId,
-                body: { password: pwInput },
-              });
-            }}
+            onClick={handleCheckPassword}
           >
             <div className={styles.inputContainer}>
               <p className={styles.inputText}>비밀번호</p>
@@ -106,7 +100,7 @@ function StudyDetailPage() {
                 onChange={(e) => setPwInput(e.target.value)}
               />
             </div>
-          </Modal2>
+          </ConfirmModal>
           {isToastOpen && (
             <Toast
               id={data?.id}
@@ -202,12 +196,9 @@ function StudyDetailPage() {
                 <div className={styles.emojiPickerContainer}>
                   {isPickerOpen && (
                     <EmojiPicker
-                      onEmojiClick={(emojiObject) => {
+                      onEmojiClick={async (emojiObject) => {
+                        await handleEmoji(emojiObject);
                         setEmoji(emojiObject.emoji);
-                        postEmojiMutation.mutate({
-                          studyId,
-                          body: { emoji: emojiObject.emoji },
-                        });
                       }}
                     />
                   )}

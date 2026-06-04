@@ -4,6 +4,7 @@ export const getStudyDetail = async (studyId) => {
   );
   return response.json();
 };
+
 export const checkPassword = async (studyId, data) => {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/studies/${studyId}/confirm-pw`,
@@ -22,6 +23,7 @@ export const checkPassword = async (studyId, data) => {
 
   return response.json();
 };
+
 export const postEmoji = async (studyId, data) => {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/studies/${studyId}/emoji`,
@@ -34,6 +36,7 @@ export const postEmoji = async (studyId, data) => {
     }
   );
 };
+
 export const deleteStudy = async (studyId, data) => {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/studies/${studyId}`,
