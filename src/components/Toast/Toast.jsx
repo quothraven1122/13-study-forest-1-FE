@@ -1,4 +1,4 @@
-import styles from './toast.module.css';
+import styles from './Toast.module.css';
 import { useEffect } from 'react';
 
 // 아래 메세지 필요한 곳에 복사해서 쓰시면 됩니다.

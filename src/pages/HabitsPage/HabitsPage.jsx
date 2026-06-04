@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
-import Modal1 from '../../components/Modal1/Modal1';
+import HabitModal from '../../components/HabitModal/HabitModal';
 
 function HabitsPage() {
   const navigate = useNavigate();
@@ -129,7 +129,7 @@ function HabitsPage() {
       </div>
 
       {isEditModalOpen && (
-        <Modal1
+        <HabitModal
           habits={habits}
           onSave={handleSaveHabits}
           onCancel={handleCloseEditModal}
