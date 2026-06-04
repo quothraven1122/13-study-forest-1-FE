@@ -3,29 +3,70 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
-import HabitModal from '../../components/HabitModal/HabitModal';
+import HabitModal from '../../components/HabitModal/HabitModal.jsx';
+import { getStudyDetail } from '../../apis/studyDetail.js';
+
+import {
+  getHabits,
+  createHabit,
+  updateHabit,
+  deleteHabit,
+} from '../../apis/habit.js';
 
 function HabitsPage() {
   const navigate = useNavigate();
   const { studyId } = useParams();
+  const [study, setStudy] = useState(null);
 
-  const [habits, setHabits] = useState(() => {
-    const savedHabits = localStorage.getItem(`habits-${studyId}`);
-    return savedHabits ? JSON.parse(savedHabits) : [];
-  });
-
+  const [habits, setHabits] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  useEffect(() => {
-    localStorage.setItem(`habits-${studyId}`, JSON.stringify(habits));
-  }, [habits, studyId]);
+  // 오늘 날짜에 해당하는 habitLog가 있으면 완료 처리
+  const isDoneToday = (habit) => {
+    const today = new Date();
 
-  const handleToggleHabit = (id) => {
-    setHabits((prevHabits) =>
-      prevHabits.map((habit) =>
-        habit.id === id ? { ...habit, isDone: !habit.isDone } : habit
-      )
-    );
+    return habit.habitLogs?.some((log) => {
+      const logDate = new Date(log.date);
+
+      return (
+        logDate.getFullYear() === today.getFullYear() &&
+        logDate.getMonth() === today.getMonth() &&
+        logDate.getDate() === today.getDate()
+      );
+    });
+  };
+
+  // 페이지 처음 들어왔을 때 백엔드에서 습관 목록과 스터디 정보 가져오기
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const habitsData = await getHabits(studyId);
+        const studyData = await getStudyDetail(studyId);
+
+        setHabits(habitsData);
+        setStudy(studyData);
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
+    };
+
+    fetchData();
+  }, [studyId]);
+
+  // 습관 완료/미완료 토글
+  // 백엔드에서 오늘 habitLog가 있으면 삭제, 없으면 생성
+  const handleToggleHabit = async (id) => {
+    try {
+      const updatedHabit = await updateHabit(studyId, id, {});
+
+      setHabits((prevHabits) =>
+        prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit))
+      );
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
   const handleOpenEditModal = () => {
@@ -36,17 +77,49 @@ function HabitsPage() {
     setIsEditModalOpen(false);
   };
 
-  const handleSaveHabits = (savedHabits) => {
-    const newHabits = savedHabits
-      .filter((habit) => habit.name.trim() !== '')
-      .map((habit) => ({
-        id: habit.id,
-        name: habit.name,
-        isDone: habit.isDone || false,
-      }));
+  // 모달에서 수정 완료 눌렀을 때
+  const handleSaveHabits = async (savedHabits) => {
+    const cleanHabits = savedHabits.filter((habit) => habit.name.trim() !== '');
 
-    setHabits(newHabits);
-    setIsEditModalOpen(false);
+    try {
+      // 1. 삭제된 습관 찾기
+      const deletedHabits = habits.filter(
+        (habit) => !cleanHabits.some((savedHabit) => savedHabit.id === habit.id)
+      );
+
+      for (const habit of deletedHabits) {
+        await deleteHabit(studyId, habit.id);
+      }
+
+      // 2. 새로 추가되거나 수정된 습관 처리
+      const nextHabits = [];
+
+      for (const habit of cleanHabits) {
+        const originalHabit = habits.find((item) => item.id === habit.id);
+
+        // 기존에 없던 습관이면 새로 생성
+        if (!originalHabit) {
+          const createdHabit = await createHabit(studyId, {
+            name: habit.name,
+          });
+
+          nextHabits.push(createdHabit);
+        } else {
+          // 기존 습관이면 이름만 수정
+          const updatedHabit = await updateHabit(studyId, habit.id, {
+            name: habit.name,
+          });
+
+          nextHabits.push(updatedHabit);
+        }
+      }
+
+      setHabits(nextHabits);
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
   const handleGoFocus = () => {
@@ -73,7 +146,10 @@ function HabitsPage() {
       <div className={styles.Container}>
         <div className={styles.Header}>
           <div className={styles.HeaderLeft}>
-            <h1>연우의 개발공장</h1>
+            <h1 className={styles.studyTitle}>
+              {study?.nickname}의 {study?.name}
+            </h1>
+
             <p>현재 시간</p>
             <span>{formattedDate}</span>
           </div>
@@ -119,7 +195,7 @@ function HabitsPage() {
                 <Chip
                   key={habit.id}
                   text={habit.name}
-                  isDone={habit.isDone}
+                  isDone={isDoneToday(habit)}
                   onClick={() => handleToggleHabit(habit.id)}
                 />
               ))
@@ -129,11 +205,13 @@ function HabitsPage() {
       </div>
 
       {isEditModalOpen && (
-        <HabitModal
-          habits={habits}
-          onSave={handleSaveHabits}
-          onCancel={handleCloseEditModal}
-        />
+        <div className={styles.ModalOverlay}>
+          <HabitModal
+            habits={habits}
+            onSave={handleSaveHabits}
+            onCancel={handleCloseEditModal}
+          />
+        </div>
       )}
     </>
   );
