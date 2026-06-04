@@ -9,8 +9,8 @@ export const validateForm = (studyData, confirmPassword, isUpdate) => {
   if (!studyData.description.trim()) {
     errors.description = '소개를 작성해주세요';
   }
-  if (!isUpdate && !studyData.password) {
-    errors.password = '비밀번호를 입력해주세요';
+  if (!isUpdate && studyData.password.length < 6) {
+    errors.password = '비밀번호는 6자 이상이어야 합니다';
   }
   if (!isUpdate && studyData.password !== confirmPassword) {
     errors.confirmPassword = '비밀번호가 일치하지 않습니다';
