@@ -62,7 +62,7 @@ function HabitsPage() {
 
   const handleToggleHabit = async (id) => {
     // 이미 다른 습관을 처리 중이면 중복 클릭 막기
-    if (togglingHabitId) return;
+    if (togglingHabitId === id) return;
 
     try {
       setTogglingHabitId(id);
