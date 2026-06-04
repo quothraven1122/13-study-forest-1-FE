@@ -49,36 +49,33 @@ function StudyDetailPage() {
   };
 
   const { studyId } = useParams();
-  const { data } = useQuery({
-    queryKey: ['study', studyId],
-    queryFn: () => getStudyDetail(studyId),
-  });
-  console.log('스터디 상세 데이터:', data);
-  const checkPWMutation = useMutation({
-    mutationFn: ({ studyId, body }) => checkPassword(studyId, body),
-    onSuccess: async () => {
-      if (modalType === 'habits' || modalType === 'focus')
-        navigate(`/studies/${studyId}/${modalType}`);
-      if (modalType === 'edit') navigate(`/studies/${studyId}/update`);
-      if (modalType === 'erase') {
-        const res = await deleteStudy(studyId, { password: pwInput });
-        if (res.success) {
-          navigate('/');
-        }
-      }
-    },
-    onError: () => {
-      setIsToastOpen(true);
-    },
-  });
-  const postEmojiMutation = useMutation({
-    mutationFn: ({ studyId, body }) => postEmoji(studyId, body),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['study', studyId],
+  useEffect(() => {
+    async function fetchStudy() {
+      const result = await getStudyDetail(studyId);
+      setData(result);
+    }
+    fetchStudy();
+  }, [studyId, emoji]);
+  const handleCheckPassword = async () => {
+    await checkPassword(studyId, { password: pwInput });
+    if (modalType === 'habits' || modalType === 'focus') {
+      navigate(`/studies/${studyId}/${modalType}`);
+    }
+    if (modalType === 'edit') {
+      navigate(`/studies/${studyId}/update`);
+    }
+    if (modalType === 'erase') {
+      const res = await deleteStudy(studyId, {
+        password: pwInput,
       });
-    },
-  });
+      if (res.success) {
+        navigate('/');
+      }
+    }
+  };
+  const handleEmoji = async (emojiObject) => {
+    await postEmoji(studyId, { emoji: emojiObject.emoji });
+  };
 
   return (
     <div className={styles.page}>
@@ -103,7 +100,7 @@ function StudyDetailPage() {
           </ConfirmModal>
           {isToastOpen && (
             <Toast
-              id={data?.id}
+              id={data.id}
               message={'비밀번호가 일치하지 않습니다. 다시  입력해주세요.'}
               type={'error'}
               onClose={() => setIsToastOpen(false)}
