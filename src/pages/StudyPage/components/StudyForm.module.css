@@ -66,10 +66,22 @@ input[type='radio']:checked + img {
   position: relative;
 }
 
-.formField span {
+.errorMessage {
   position: absolute;
   top: 104%;
   color: var(--red-error_C41013, #c41013);
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.charCount {
+  position: absolute;
+  top: 104%;
+  right: 2%;
+  color: var(--black-black_414141, #414141);
   font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
