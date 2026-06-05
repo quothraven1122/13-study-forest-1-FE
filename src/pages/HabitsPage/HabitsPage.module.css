@@ -72,40 +72,45 @@
 }
 
 .HeaderRight {
-  width: 242px;
-  height: 48px;
-
   display: flex;
+  align-items: center;
+  justify-content: flex-end;
   gap: 16px;
+
+  width: auto;
+  flex-shrink: 0;
 }
 
 .HeaderRight button {
-  height: 48px;
-
+  height: 58px;
+  padding: 12px 24px;
+  gap: 4px;
+  border-radius: 15px;
+  line-height: 24px;
   border: 1px solid #dddddd;
-  border-radius: 12px;
-
   background: #ffffff;
 
   font-family: Pretendard;
   font-size: 16px;
   font-weight: 500;
-  line-height: 100%;
-  letter-spacing: 0;
-  text-align: center;
-
   color: #414141;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4px;
 
+  white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
 }
 
 /* 오늘의 집중 버튼 */
 .FocusButton {
+  width: 144px;
+}
+
+/* 스터디 상세 버튼 */
+.DetailButton {
   width: 144px;
 }
 
@@ -173,6 +178,24 @@
   color: #818181;
 
   cursor: pointer;
+}
+
+.FocusButton,
+.DetailButton,
+.HomeButton {
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .HabitList {
@@ -270,6 +293,10 @@
   }
 
   .FocusButton {
+    width: 120px;
+  }
+
+  .DetailButton {
     width: 120px;
   }
 

@@ -21,7 +21,12 @@ function HabitsPage() {
   const [habits, setHabits] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  // 오늘 날짜에 해당하는 habitLog가 있으면 완료 처리
+  // 저장 중인지 확인하는 상태
+  const [isSaving, setIsSaving] = useState(false);
+
+  // 어떤 습관을 토글 중인지 확인하는 상태
+  const [togglingHabitId, setTogglingHabitId] = useState(null);
+
   const isDoneToday = (habit) => {
     const today = new Date();
 
@@ -36,12 +41,13 @@ function HabitsPage() {
     });
   };
 
-  // 페이지 처음 들어왔을 때 백엔드에서 습관 목록과 스터디 정보 가져오기
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const habitsData = await getHabits(studyId);
-        const studyData = await getStudyDetail(studyId);
+        const [habitsData, studyData] = await Promise.all([
+          getHabits(studyId),
+          getStudyDetail(studyId),
+        ]);
 
         setHabits(habitsData);
         setStudy(studyData);
@@ -54,10 +60,13 @@ function HabitsPage() {
     fetchData();
   }, [studyId]);
 
-  // 습관 완료/미완료 토글
-  // 백엔드에서 오늘 habitLog가 있으면 삭제, 없으면 생성
   const handleToggleHabit = async (id) => {
+    // 이미 다른 습관을 처리 중이면 중복 클릭 막기
+    if (togglingHabitId === id) return;
+
     try {
+      setTogglingHabitId(id);
+
       const updatedHabit = await updateHabit(studyId, id, {});
 
       setHabits((prevHabits) =>
@@ -66,6 +75,8 @@ function HabitsPage() {
     } catch (error) {
       console.error(error);
       alert(error.message);
+    } finally {
+      setTogglingHabitId(null);
     }
   };
 
@@ -74,51 +85,54 @@ function HabitsPage() {
   };
 
   const handleCloseEditModal = () => {
+    if (isSaving) return;
     setIsEditModalOpen(false);
   };
 
-  // 모달에서 수정 완료 눌렀을 때
   const handleSaveHabits = async (savedHabits) => {
+    if (isSaving) return;
+
     const cleanHabits = savedHabits.filter((habit) => habit.name.trim() !== '');
 
     try {
-      // 1. 삭제된 습관 찾기
+      setIsSaving(true);
+
       const deletedHabits = habits.filter(
         (habit) => !cleanHabits.some((savedHabit) => savedHabit.id === habit.id)
       );
 
-      for (const habit of deletedHabits) {
-        await deleteHabit(studyId, habit.id);
-      }
+      const newHabits = cleanHabits.filter(
+        (habit) => !habits.some((item) => item.id === habit.id)
+      );
 
-      // 2. 새로 추가되거나 수정된 습관 처리
-      const nextHabits = [];
-
-      for (const habit of cleanHabits) {
+      const editedHabits = cleanHabits.filter((habit) => {
         const originalHabit = habits.find((item) => item.id === habit.id);
+        return originalHabit && originalHabit.name !== habit.name;
+      });
 
-        // 기존에 없던 습관이면 새로 생성
-        if (!originalHabit) {
-          const createdHabit = await createHabit(studyId, {
+      await Promise.all([
+        ...deletedHabits.map((habit) => deleteHabit(studyId, habit.id)),
+        ...newHabits.map((habit) =>
+          createHabit(studyId, {
             name: habit.name,
-          });
-
-          nextHabits.push(createdHabit);
-        } else {
-          // 기존 습관이면 이름만 수정
-          const updatedHabit = await updateHabit(studyId, habit.id, {
+          })
+        ),
+        ...editedHabits.map((habit) =>
+          updateHabit(studyId, habit.id, {
             name: habit.name,
-          });
+          })
+        ),
+      ]);
 
-          nextHabits.push(updatedHabit);
-        }
-      }
+      const habitsData = await getHabits(studyId);
+      setHabits(habitsData);
 
-      setHabits(nextHabits);
       setIsEditModalOpen(false);
     } catch (error) {
       console.error(error);
       alert(error.message);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -128,6 +142,10 @@ function HabitsPage() {
 
   const handleGoHome = () => {
     navigate('/');
+  };
+
+  const handleGoStudyDetail = () => {
+    navigate(`/studies/${studyId}`);
   };
 
   const now = new Date();
@@ -166,6 +184,15 @@ function HabitsPage() {
 
             <button
               type='button'
+              className={styles.DetailButton}
+              onClick={handleGoStudyDetail}
+            >
+              습관 기록표
+              <img src={arrowRight} alt='화살표 아이콘' />
+            </button>
+
+            <button
+              type='button'
               className={styles.HomeButton}
               onClick={handleGoHome}
             >
@@ -179,7 +206,11 @@ function HabitsPage() {
           <div className={styles.ContentHeader}>
             <h2>오늘의 습관</h2>
 
-            <button type='button' onClick={handleOpenEditModal}>
+            <button
+              type='button'
+              onClick={handleOpenEditModal}
+              disabled={isSaving}
+            >
               목록 수정
             </button>
           </div>
@@ -197,6 +228,7 @@ function HabitsPage() {
                   text={habit.name}
                   isDone={isDoneToday(habit)}
                   onClick={() => handleToggleHabit(habit.id)}
+                  disabled={togglingHabitId === habit.id}
                 />
               ))
             )}
@@ -210,6 +242,7 @@ function HabitsPage() {
             habits={habits}
             onSave={handleSaveHabits}
             onCancel={handleCloseEditModal}
+            isSaving={isSaving}
           />
         </div>
       )}
