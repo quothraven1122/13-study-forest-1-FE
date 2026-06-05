@@ -144,6 +144,10 @@ function HabitsPage() {
     navigate('/');
   };
 
+  const handleGoStudyDetail = () => {
+    navigate(`/studies/${studyId}`);
+  };
+
   const now = new Date();
 
   const formattedDate = now.toLocaleString('ko-KR', {
@@ -175,6 +179,15 @@ function HabitsPage() {
               onClick={handleGoFocus}
             >
               오늘의 집중
+              <img src={arrowRight} alt='화살표 아이콘' />
+            </button>
+
+            <button
+              type='button'
+              className={styles.DetailButton}
+              onClick={handleGoStudyDetail}
+            >
+              스터디 상세
               <img src={arrowRight} alt='화살표 아이콘' />
             </button>
 
