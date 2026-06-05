@@ -6,9 +6,8 @@ export const createStudy = async (studyData) => {
       body: JSON.stringify({ ...studyData }),
     });
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(`${data.message}`);
-    }
+    if (res.status === 409) throw new Error('이미 존재하는 스터디 이름입니다');
+    if (!res.ok) throw new Error(`${data.message}`);
     return data;
   } catch (err) {
     alert(err.message);
@@ -26,6 +25,7 @@ export const updateStudy = async (studyData, studyId) => {
       }
     );
     const data = await res.json();
+    if (res.status === 409) throw new Error('이미 존재하는 스터디 이름입니다');
     if (!res.ok) throw new Error(`${data.message}`);
     return data;
   } catch (err) {
