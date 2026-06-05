@@ -37,7 +37,7 @@ function RecentStudiesSection({ recentStudies, saveRecentStudy }) {
 
   return (
     <section className={styles.recentSection}>
-      <p className={styles.title}>최근 조회한 스터디</p>
+      <h2 className={styles.title}>최근 조회한 스터디</h2>
       <div className={styles.recentStudiesArea}>
         {recentStudies.length === 0 ? (
           <p className={styles.text}>아직 조회한 스터디가 없어요</p>
