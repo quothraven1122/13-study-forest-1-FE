@@ -86,14 +86,14 @@ function HomePage() {
   };
 
   return (
-    <div className={styles.main}>
+    <main className={styles.main}>
       <RecentStudiesSection
         recentStudies={recentStudies}
         saveRecentStudy={saveRecentStudy}
       />
 
       <section className={styles.studiesSection}>
-        <p className={styles.title}>스터디 둘러보기</p>
+        <h2 className={styles.title}>스터디 둘러보기</h2>
         <div className={styles.filterBar}>
           <div className={styles.searchBar}>
             <img src={searchIc} alt='습관 검색' />
@@ -122,13 +122,13 @@ function HomePage() {
               <p className={styles.text}>아직 둘러 볼 스터디가 없어요</p>
             </div>
           ) : studies.length === 0 && isLoading ? (
-            <div className={styles.studyCardArea}>
-              <div className={styles.studyCardGrid}>
+            <ul className={styles.studyCardArea}>
+              <li className={styles.studyCardGrid}>
                 {Array.from({ length: 6 }).map((_, index) => (
                   <StudyCardSkeleton key={index} />
                 ))}
-              </div>
-            </div>
+              </li>
+            </ul>
           ) : (
             <div className={styles.studyCardArea}>
               <div className={styles.loadingSpace}>
@@ -165,7 +165,7 @@ function HomePage() {
           )}
         </div>
       </section>
-    </div>
+    </main>
   );
 }
 
