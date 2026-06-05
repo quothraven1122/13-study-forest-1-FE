@@ -376,9 +376,12 @@
     font-size: 80px;
   }
 
+  .controlGroup {
+    gap: 8px;
+  }
   .buttonStart,
   .buttonStop {
-    width: 140px;
+    width: 130px;
     height: 45px;
     font-size: 18px;
   }
