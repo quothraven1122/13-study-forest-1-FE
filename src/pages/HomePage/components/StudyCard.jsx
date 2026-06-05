@@ -23,9 +23,9 @@ function StudyCard({ study, isDraggingRef, onSaveRecent }) {
         <div className={styles.studyInfo}>
           <div className={styles.studyCardTopBox}>
             <div className={styles.studyTitleBox}>
-              <p className={styles.studyTitle}>
+              <h2 className={styles.studyTitle}>
                 {study.nickname}의 {study.name}
-              </p>
+              </h2>
               <div className={styles.point}>
                 {study.point === 0 ? (
                   <Tag type='small' point={'0'} status='dark' />

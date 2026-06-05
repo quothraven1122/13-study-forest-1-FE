@@ -5,6 +5,8 @@ import Button from '../../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { validateForm } from '../utils/validateForm';
 
+const MAX_NAME_LENGTH = 20;
+const MAX_DESCRIPTION_LENGTH = 100;
 const backgrounds = [
   'https://png.pngtree.com/thumb_back/fh260/background/20241124/pngtree-celestial-circle-of-light-in-space-emitting-a-soft-glow-amidst-image_16630308.jpg',
   'https://i.namu.wiki/i/v_zK7er3cBXRkKPgXQKyFnRNCBOmGDKRwDGUI92DDImUKG2kFa8RLZrJdeEZCXnpj8Lsp1efiIFkNwJhQNo3lw.webp',
@@ -16,7 +18,7 @@ const backgrounds = [
   'https://i.namu.wiki/i/lZoMNR1GxpifZDc57AIQdBBTqsqmIjSkhMhx6CiMjOx9Dcw3AyI-HHU5yKemfGyW20zUrL53hnC91o9zIZj1IQ.webp',
 ];
 
-function FormField({ error, Data, label, ...inputprops }) {
+function FormField({ error, Data, label, maxLength, ...inputprops }) {
   return (
     <div className={styles.formField}>
       <p>{label}</p>
@@ -29,7 +31,12 @@ function FormField({ error, Data, label, ...inputprops }) {
         value={Data}
         {...inputprops}
       />
-      {error && <span>*{error}</span>}
+      {error && <span className={styles.errorMessage}>*{error}</span>}
+      {maxLength && (
+        <span className={styles.charCount}>
+          {Data.length}/{maxLength} 자
+        </span>
+      )}
     </div>
   );
 }
@@ -66,9 +73,16 @@ function StudyForm({
           label='닉네임'
           placeholder='닉네임을 입력해 주세요'
           onChange={(e) => {
-            setStudyData((prev) => ({ ...prev, nickname: e.target.value }));
+            setStudyData((prev) => ({
+              ...prev,
+              nickname:
+                e.target.value.length > MAX_NAME_LENGTH
+                  ? e.target.value.slice(0, MAX_NAME_LENGTH)
+                  : e.target.value,
+            }));
             setErrors((prev) => ({ ...prev, nickname: null }));
           }}
+          maxLength={MAX_NAME_LENGTH}
         />
 
         <FormField
@@ -77,9 +91,16 @@ function StudyForm({
           label='스터디 이름'
           placeholder='스터디 이름을 입력해주세요'
           onChange={(e) => {
-            setStudyData((prev) => ({ ...prev, name: e.target.value }));
+            setStudyData((prev) => ({
+              ...prev,
+              name:
+                e.target.value.length > MAX_NAME_LENGTH
+                  ? e.target.value.slice(0, MAX_NAME_LENGTH)
+                  : e.target.value,
+            }));
             setErrors((prev) => ({ ...prev, name: null }));
           }}
+          maxLength={MAX_NAME_LENGTH}
         />
 
         <FormField
@@ -88,10 +109,17 @@ function StudyForm({
           label='소개'
           placeholder='소개 멘트를 작성해 주세요'
           onChange={(e) => {
-            setStudyData((prev) => ({ ...prev, description: e.target.value }));
+            setStudyData((prev) => ({
+              ...prev,
+              description:
+                e.target.value.length > MAX_DESCRIPTION_LENGTH
+                  ? e.target.value.slice(0, MAX_DESCRIPTION_LENGTH)
+                  : e.target.value,
+            }));
             setErrors((prev) => ({ ...prev, description: null }));
           }}
           textarea
+          maxLength={MAX_DESCRIPTION_LENGTH}
         />
 
         <div className={styles.formField}>
@@ -126,7 +154,9 @@ function StudyForm({
               placeholder='비밀번호를 입력해 주세요'
               onChange={(e) => {
                 setStudyData((prev) => ({ ...prev, password: e.target.value }));
-                setErrors((prev) => ({ ...prev, password: null }));
+                if (e.target.value.length > 5) {
+                  setErrors((prev) => ({ ...prev, password: null }));
+                }
               }}
               passwordToggle={true}
             />
