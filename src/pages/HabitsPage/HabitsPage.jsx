@@ -148,13 +148,21 @@ function HabitsPage() {
     navigate(`/studies/${studyId}`);
   };
 
-  const now = new Date();
+  // 현재 시간을 관리하는 상태 (실시간으로 업데이트)
+  const [currentTime, setCurrentTime] = useState(new Date());
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
 
-  const formattedDate = now.toLocaleString('ko-KR', {
+    return () => clearInterval(timer);
+  }, []);
+
+  const formattedDate = currentTime.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-    hour: 'numeric',
+    hour: '2-digit',
     minute: '2-digit',
     hour12: true,
   });
