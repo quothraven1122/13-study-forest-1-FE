@@ -150,13 +150,6 @@ function HabitsPage() {
 
   // 현재 시간을 관리하는 상태 (실시간으로 업데이트)
   const [currentTime, setCurrentTime] = useState(() => new Date());
-  // 현재 시간을 관리하는 상태 (실시간으로 업데이트)
-  // 리랜더링 될때 위에 코드들이 다다시 실행될텐데 너무 무거우면 1초마다 업데이트하는게 무거울수 있음
-  //근데 위에 코드들이 그렇게 무겁지 않아서 상관없음 (다 함수 정의고 useEffect 한개임)
-  // 걸리는게 있으면 memoization 해줘야함, react compiler이 거의다 해주긴 함
-  // 제어 컴포넌트 (상태 연결된 컴포넌트) - 상태 변겨오딜때마다 리렌더링
-  // 이게 렉이 걸리거나 버벅이면 리렌더링 과정에 문제가 있는거임 (리렌더링이 무거운거임)
-  // 이때 비제어 컴포넌트로 바꿔줘야함 (상태 연결 안된 컴포넌트) - 상태 변경되어도 리렌더링 안됨
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
