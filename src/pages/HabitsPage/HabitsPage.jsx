@@ -187,7 +187,7 @@ function HabitsPage() {
               className={styles.DetailButton}
               onClick={handleGoStudyDetail}
             >
-              스터디 상세
+              습관 기록표
               <img src={arrowRight} alt='화살표 아이콘' />
             </button>
 

@@ -111,7 +111,7 @@
 
 /* 스터디 상세 버튼 */
 .DetailButton {
-  width: 120px;
+  width: 144px;
 }
 
 /* 홈 버튼 */
@@ -297,7 +297,7 @@
   }
 
   .DetailButton {
-    width: 104px;
+    width: 120px;
   }
 
   .HomeButton {
