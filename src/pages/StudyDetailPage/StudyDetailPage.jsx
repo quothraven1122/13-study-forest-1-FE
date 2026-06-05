@@ -52,19 +52,26 @@ function StudyDetailPage() {
     setData(result);
   };
   const handleCheckPassword = async () => {
-    await checkPassword(studyId, { password: pwInput });
-    if (modalType === 'habits' || modalType === 'focus') {
-      navigate(`/studies/${studyId}/${modalType}`);
-    }
-    if (modalType === 'edit') {
-      navigate(`/studies/${studyId}/update`);
-    }
-    if (modalType === 'erase') {
-      const res = await deleteStudy(studyId, {
-        password: pwInput,
-      });
-      if (res.success) {
-        navigate('/');
+    try {
+      await checkPassword(studyId, { password: pwInput });
+      if (modalType === 'habits' || modalType === 'focus') {
+        navigate(`/studies/${studyId}/${modalType}`);
+      }
+      if (modalType === 'edit') {
+        navigate(`/studies/${studyId}/update`);
+      }
+      if (modalType === 'erase') {
+        const res = await deleteStudy(studyId, {
+          password: pwInput,
+        });
+        if (res.success) {
+          navigate('/');
+        }
+      }
+    } catch (e) {
+      if (e.status === 400) {
+        console.log('error');
+        setIsToastOpen(true);
       }
     }
   };
