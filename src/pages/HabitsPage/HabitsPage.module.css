@@ -178,6 +178,7 @@
   color: #818181;
 
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .FocusButton,
