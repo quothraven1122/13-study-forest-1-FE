@@ -60,7 +60,7 @@ function StudyForm({
     setErrors(error);
     if (Object.keys(error).length > 0) return;
     const data = await onSubmitForm(studyData);
-    if (data) navigate(`/studies/${data.id}`);
+    if (data) navigate(`/studies/${data.id}`, { replace: true });
   };
 
   return (
