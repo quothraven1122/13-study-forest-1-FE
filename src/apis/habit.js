@@ -1,7 +1,7 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
-
 export const getHabits = async (studyId) => {
-  const response = await fetch(`${BASE_URL}/studies/${studyId}/habits`);
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/studies/${studyId}/habits`
+  );
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
@@ -12,13 +12,16 @@ export const getHabits = async (studyId) => {
 };
 
 export const createHabit = async (studyId, data) => {
-  const response = await fetch(`${BASE_URL}/studies/${studyId}/habits`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/studies/${studyId}/habits`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
@@ -30,7 +33,7 @@ export const createHabit = async (studyId, data) => {
 
 export const updateHabit = async (studyId, habitId, data) => {
   const response = await fetch(
-    `${BASE_URL}/studies/${studyId}/habits/${habitId}`,
+    `${import.meta.env.VITE_API_URL}/studies/${studyId}/habits/${habitId}`,
     {
       method: 'PATCH',
       headers: {
@@ -50,7 +53,7 @@ export const updateHabit = async (studyId, habitId, data) => {
 
 export const deleteHabit = async (studyId, habitId) => {
   const response = await fetch(
-    `${BASE_URL}/studies/${studyId}/habits/${habitId}`,
+    `${import.meta.env.VITE_API_URL}/studies/${studyId}/habits/${habitId}`,
     {
       method: 'DELETE',
     }
