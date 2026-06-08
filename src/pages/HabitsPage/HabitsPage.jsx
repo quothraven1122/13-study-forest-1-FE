@@ -20,7 +20,6 @@ function HabitsPage() {
 
   const [habits, setHabits] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
   // 저장 중인지 확인하는 상태
   const [isSaving, setIsSaving] = useState(false);
 
@@ -67,8 +66,24 @@ function HabitsPage() {
     try {
       setTogglingHabitId(id);
 
-      const updatedHabit = await updateHabit(studyId, id, {});
+      //낙관적 업데이트
+      setHabits((prevHabits) =>
+        prevHabits.map((item) => {
+          if (item.id !== id) return item;
+          return {
+            ...item,
+            habitLogs: [
+              {
+                date:
+                  item.habitLogs.length === 0 ? [new Date().toISOString()] : [],
+              },
+            ],
+          };
+        })
+      );
 
+      //DB상 업데이트
+      const updatedHabit = await updateHabit(studyId, id, {});
       setHabits((prevHabits) =>
         prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit))
       );

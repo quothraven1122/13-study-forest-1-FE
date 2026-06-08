@@ -18,7 +18,10 @@ export const checkPassword = async (studyId, data) => {
   );
 
   if (!response.ok) {
-    throw new Error('비밀번호가 틀렸습니다.');
+    const error = new Error('비밀번호가 틀렸습니다.');
+    error.status = response.status;
+
+    throw error;
   }
 
   return response.json();
