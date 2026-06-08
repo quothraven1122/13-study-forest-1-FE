@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getFocusDetail, patchFocusPoints } from '../../apis/focus.js';
 import styles from './FocusPage.module.css';
 import Button from '../../components/Button/Button.jsx';
 import Toast from '../../components/Toast/Toast.jsx';
@@ -22,14 +23,10 @@ export default function FocusPage() {
   const { studyId } = useParams();
   useEffect(() => {
     const fetchStudyDetail = async () => {
-      const response = await fetch(
-        `http://localhost:3000/studies/${studyId}/focus`
-      );
-      const data = await response.json();
-      console.log(data);
+      const data = await getFocusDetail(studyId);
       setUserName(data.nickname);
       setStudyName(data.name);
-      setTotalEarnedPoints(data.point); // 초기 포인트
+      setTotalEarnedPoints(data.point);
     };
     fetchStudyDetail();
   }, [studyId]);
@@ -132,16 +129,7 @@ export default function FocusPage() {
     setLoading(true);
     const points = 3 + Math.floor(overtime / 600); // 600초 === 10분
     try {
-      const response = await fetch(
-        `http://localhost:3000/studies/${studyId}/focus`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ points }),
-        }
-      );
-      if (!response.ok) throw new Error('서버 오류');
-      const data = await response.json();
+      const data = await patchFocusPoints(studyId, points);
       setTotalEarnedPoints(data.point);
       showToast(`${points}포인트를 획득했습니다!`, 'success');
     } catch (error) {

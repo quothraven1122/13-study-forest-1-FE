@@ -9,7 +9,8 @@ import { getStudyDetail } from '../../apis/studyDetail.js';
 import useDebounce from '../../hooks/useDebounce.js';
 import StudyCardSkeleton from './components/StudyCardSkeleton.jsx';
 import StudyCard from './components/StudyCard.jsx';
-import RecentStudiesSection from './components/RecentStudiesSection.jsx'; 
+import RecentStudiesSection from './components/RecentStudiesSection.jsx';
+import { getStudies } from '../../apis/home.js';
 
 function HomePage() {
   /// localStorage 스터디
@@ -25,34 +26,30 @@ function HomePage() {
   const [sort, setSort] = useState('recent');
   const [hasNextPage, setHasNextPage] = useState(true);
 
-  const getStudies = async (
-    searchValue = '',
-    pageNum = 1,
-    sortValue = 'recent'
-  ) => {
-    const res = await fetch(
-      `http://localhost:3000/studies?search=${searchValue}&page=${pageNum}&sort=${sortValue}`
-    );
-    const data = await res.json();
-    return data;
-  };
-
   useEffect(() => {
     async function fetchData() {
       if (page === 1) {
         setStudies([]);
       }
       setIsLoading(true);
-      const data = await getStudies(debouncedSearch, page, sort);
 
-      if (page === 1) {
-        setStudies(data.data);
-      } else {
-        setStudies((prev) => [...prev, ...data.data]);
+      try {
+        const data = await getStudies(debouncedSearch, page, sort);
+
+        if (page === 1) {
+          setStudies(data.data);
+        } else {
+          setStudies((prev) => [...prev, ...data.data]);
+        }
+
+        setHasNextPage(data.pagination.hasNextPage);
+      } catch (error) {
+        console.error('스터디 데이터 로딩 실패:', error.message);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
-      setHasNextPage(data.pagination.hasNextPage);
     }
+
     fetchData();
   }, [debouncedSearch, page, sort]);
 
@@ -65,7 +62,6 @@ function HomePage() {
         recentLocalStorage.map((i) => getStudyDetail(i.id))
       );
       const filteredDB = recentDB.filter((i) => i?.id);
-      console.log(filteredDB);
       const result = filteredDB.map((i) => ({
         ...i,
         reaction: Object.fromEntries(Object.entries(i.reactions).slice(0, 3)),
@@ -90,14 +86,14 @@ function HomePage() {
   };
 
   return (
-    <div className={styles.main}>
+    <main className={styles.main}>
       <RecentStudiesSection
         recentStudies={recentStudies}
         saveRecentStudy={saveRecentStudy}
       />
 
       <section className={styles.studiesSection}>
-        <p className={styles.title}>스터디 둘러보기</p>
+        <h2 className={styles.title}>스터디 둘러보기</h2>
         <div className={styles.filterBar}>
           <div className={styles.searchBar}>
             <img src={searchIc} alt='습관 검색' />
@@ -126,13 +122,13 @@ function HomePage() {
               <p className={styles.text}>아직 둘러 볼 스터디가 없어요</p>
             </div>
           ) : studies.length === 0 && isLoading ? (
-            <div className={styles.studyCardArea}>
-              <div className={styles.studyCardGrid}>
+            <ul className={styles.studyCardArea}>
+              <li className={styles.studyCardGrid}>
                 {Array.from({ length: 6 }).map((_, index) => (
                   <StudyCardSkeleton key={index} />
                 ))}
-              </div>
-            </div>
+              </li>
+            </ul>
           ) : (
             <div className={styles.studyCardArea}>
               <div className={styles.loadingSpace}>
@@ -169,7 +165,7 @@ function HomePage() {
           )}
         </div>
       </section>
-    </div>
+    </main>
   );
 }
 

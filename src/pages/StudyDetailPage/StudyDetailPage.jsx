@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import EmojiPicker from 'emoji-picker-react';
 
 import { getDaysOfWeek, compareDates } from '../../utils/date';
@@ -10,7 +9,7 @@ import Button from '../../components/Button/Button';
 import Toast from '../../components/Toast/Toast';
 import Tag from '../../components/Tag/Tag';
 import Sticker from '../../components/Sticker/Sticker';
-import Modal2 from '../../components/Modal2/Modal2';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import Input from '../../components/Input/Input';
 
 import {
@@ -19,7 +18,7 @@ import {
   postEmoji,
   deleteStudy,
 } from '../../apis/studyDetail';
-import modalText from '../../components/Modal2/modalConstant';
+import modalText from '../../components/ConfirmModal/modalConstant';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
 import smile from '../../assets/icons/ic_smile.svg';
 import styles from './StudyDetailPage.module.css';
@@ -27,13 +26,13 @@ import styles from './StudyDetailPage.module.css';
 function StudyDetailPage() {
   const date = new Date();
 
+  const { studyId } = useParams();
   const navigate = useNavigate();
   const size = useResponsiveWidth();
-  const queryClient = useQueryClient();
 
+  const [data, setData] = useState();
   const [isMoreEmojiOpen, setIsMoreEmojiOpen] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
-  const [emoji, setEmoji] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isToastOpen, setIsToastOpen] = useState(false);
   const [modalType, setModalType] = useState('');
@@ -48,53 +47,56 @@ function StudyDetailPage() {
       setShareToast({ message: '링크 복사에 실패했어요.', type: 'error' });
     }
   };
-
-  const { studyId } = useParams();
-  const { data } = useQuery({
-    queryKey: ['study', studyId],
-    queryFn: () => getStudyDetail(studyId),
-  });
-  const checkPWMutation = useMutation({
-    mutationFn: ({ studyId, body }) => checkPassword(studyId, body),
-    onSuccess: async () => {
-      if (modalType === 'habits' || modalType === 'focus')
+  const refreshStudy = async () => {
+    const result = await getStudyDetail(studyId);
+    setData(result);
+  };
+  const handleCheckPassword = async () => {
+    try {
+      await checkPassword(studyId, { password: pwInput });
+      if (modalType === 'habits' || modalType === 'focus') {
         navigate(`/studies/${studyId}/${modalType}`);
-      if (modalType === 'edit') navigate(`/studies/${studyId}/update`);
+      }
+      if (modalType === 'edit') {
+        navigate(`/studies/${studyId}/update`);
+      }
       if (modalType === 'erase') {
-        const res = await deleteStudy(studyId, { password: pwInput });
+        const res = await deleteStudy(studyId, {
+          password: pwInput,
+        });
         if (res.success) {
           navigate('/');
         }
       }
-    },
-    onError: () => {
-      setIsToastOpen(true);
-    },
-  });
-  const postEmojiMutation = useMutation({
-    mutationFn: ({ studyId, body }) => postEmoji(studyId, body),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['study', studyId],
-      });
-    },
-  });
+    } catch (e) {
+      if (e.status === 400) {
+        console.log('error');
+        setIsToastOpen(true);
+      }
+    }
+  };
+  const handleEmoji = async (emojiObject) => {
+    await postEmoji(studyId, { emoji: emojiObject.emoji });
+  };
+
+  useEffect(() => {
+    const fetchStudy = async () => {
+      const result = await getStudyDetail(studyId);
+      setData(result);
+    };
+    fetchStudy();
+  }, [studyId]);
 
   return (
     <div className={styles.page}>
       {isModalOpen && (
         <>
-          <Modal2
+          <ConfirmModal
             title={`${data?.nickname}의 ${data?.name}`}
             message='권한이 필요해요!'
             btnText={modalText[modalType]}
             onExit={() => setIsModalOpen(false)}
-            onClick={async () => {
-              checkPWMutation.mutate({
-                studyId,
-                body: { password: pwInput },
-              });
-            }}
+            onClick={handleCheckPassword}
           >
             <div className={styles.inputContainer}>
               <p className={styles.inputText}>비밀번호</p>
@@ -105,7 +107,7 @@ function StudyDetailPage() {
                 onChange={(e) => setPwInput(e.target.value)}
               />
             </div>
-          </Modal2>
+          </ConfirmModal>
           {isToastOpen && (
             <Toast
               id={data.id}
@@ -201,12 +203,9 @@ function StudyDetailPage() {
                 <div className={styles.emojiPickerContainer}>
                   {isPickerOpen && (
                     <EmojiPicker
-                      onEmojiClick={(emojiObject) => {
-                        setEmoji(emojiObject.emoji);
-                        postEmojiMutation.mutate({
-                          studyId,
-                          body: { emoji: emojiObject.emoji },
-                        });
+                      onEmojiClick={async (emojiObject) => {
+                        await handleEmoji(emojiObject);
+                        await refreshStudy();
                       }}
                     />
                   )}

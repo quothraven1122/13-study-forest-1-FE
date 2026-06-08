@@ -3,29 +3,96 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './HabitsPage.module.css';
 import Chip from '../../components/Chip/Chip';
 import arrowRight from '../../assets/icons/ic_arrow_right.svg';
-import Modal1 from '../../components/Modal1/Modal1';
+import HabitModal from '../../components/HabitModal/HabitModal.jsx';
+import { getStudyDetail } from '../../apis/studyDetail.js';
+
+import {
+  getHabits,
+  createHabit,
+  updateHabit,
+  deleteHabit,
+} from '../../apis/habit.js';
 
 function HabitsPage() {
   const navigate = useNavigate();
   const { studyId } = useParams();
+  const [study, setStudy] = useState(null);
 
-  const [habits, setHabits] = useState(() => {
-    const savedHabits = localStorage.getItem(`habits-${studyId}`);
-    return savedHabits ? JSON.parse(savedHabits) : [];
-  });
-
+  const [habits, setHabits] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  // 저장 중인지 확인하는 상태
+  const [isSaving, setIsSaving] = useState(false);
+
+  // 어떤 습관을 토글 중인지 확인하는 상태
+  const [togglingHabitId, setTogglingHabitId] = useState(null);
+
+  const isDoneToday = (habit) => {
+    const today = new Date();
+
+    return habit.habitLogs?.some((log) => {
+      const logDate = new Date(log.date);
+
+      return (
+        logDate.getFullYear() === today.getFullYear() &&
+        logDate.getMonth() === today.getMonth() &&
+        logDate.getDate() === today.getDate()
+      );
+    });
+  };
 
   useEffect(() => {
-    localStorage.setItem(`habits-${studyId}`, JSON.stringify(habits));
-  }, [habits, studyId]);
+    const fetchData = async () => {
+      try {
+        const [habitsData, studyData] = await Promise.all([
+          getHabits(studyId),
+          getStudyDetail(studyId),
+        ]);
 
-  const handleToggleHabit = (id) => {
-    setHabits((prevHabits) =>
-      prevHabits.map((habit) =>
-        habit.id === id ? { ...habit, isDone: !habit.isDone } : habit
-      )
-    );
+        setHabits(habitsData);
+        setStudy(studyData);
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
+    };
+
+    fetchData();
+  }, [studyId]);
+
+  const handleToggleHabit = async (id) => {
+    // 이미 다른 습관을 처리 중이면 중복 클릭 막기
+    if (togglingHabitId === id) return;
+
+    try {
+      setTogglingHabitId(id);
+
+      //낙관적 업데이트
+      setHabits((prevHabits) =>
+        prevHabits.map((item) => {
+          if (item.id !== id) return item;
+          return {
+            ...item,
+            habitLogs: [
+              {
+                date:
+                  item.habitLogs.length === 0 ? [new Date().toISOString()] : [],
+              },
+            ],
+          };
+        })
+      );
+
+      //DB상 업데이트
+      const updatedHabit = await updateHabit(studyId, id, {});
+      setHabits((prevHabits) =>
+        prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit))
+      );
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      setTogglingHabitId(null);
+    }
   };
 
   const handleOpenEditModal = () => {
@@ -33,20 +100,55 @@ function HabitsPage() {
   };
 
   const handleCloseEditModal = () => {
+    if (isSaving) return;
     setIsEditModalOpen(false);
   };
 
-  const handleSaveHabits = (savedHabits) => {
-    const newHabits = savedHabits
-      .filter((habit) => habit.name.trim() !== '')
-      .map((habit) => ({
-        id: habit.id,
-        name: habit.name,
-        isDone: habit.isDone || false,
-      }));
+  const handleSaveHabits = async (savedHabits) => {
+    if (isSaving) return;
 
-    setHabits(newHabits);
-    setIsEditModalOpen(false);
+    const cleanHabits = savedHabits.filter((habit) => habit.name.trim() !== '');
+
+    try {
+      setIsSaving(true);
+
+      const deletedHabits = habits.filter(
+        (habit) => !cleanHabits.some((savedHabit) => savedHabit.id === habit.id)
+      );
+
+      const newHabits = cleanHabits.filter(
+        (habit) => !habits.some((item) => item.id === habit.id)
+      );
+
+      const editedHabits = cleanHabits.filter((habit) => {
+        const originalHabit = habits.find((item) => item.id === habit.id);
+        return originalHabit && originalHabit.name !== habit.name;
+      });
+
+      await Promise.all([
+        ...deletedHabits.map((habit) => deleteHabit(studyId, habit.id)),
+        ...newHabits.map((habit) =>
+          createHabit(studyId, {
+            name: habit.name,
+          })
+        ),
+        ...editedHabits.map((habit) =>
+          updateHabit(studyId, habit.id, {
+            name: habit.name,
+          })
+        ),
+      ]);
+
+      const habitsData = await getHabits(studyId);
+      setHabits(habitsData);
+
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleGoFocus = () => {
@@ -57,13 +159,25 @@ function HabitsPage() {
     navigate('/');
   };
 
-  const now = new Date();
+  const handleGoStudyDetail = () => {
+    navigate(`/studies/${studyId}`);
+  };
 
-  const formattedDate = now.toLocaleString('ko-KR', {
+  // 현재 시간을 관리하는 상태 (실시간으로 업데이트)
+  const [currentTime, setCurrentTime] = useState(() => new Date());
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const formattedDate = currentTime.toLocaleString('ko-KR', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-    hour: 'numeric',
+    hour: '2-digit',
     minute: '2-digit',
     hour12: true,
   });
@@ -73,7 +187,10 @@ function HabitsPage() {
       <div className={styles.Container}>
         <div className={styles.Header}>
           <div className={styles.HeaderLeft}>
-            <h1>연우의 개발공장</h1>
+            <h1 className={styles.studyTitle}>
+              {study?.nickname}의 {study?.name}
+            </h1>
+
             <p>현재 시간</p>
             <span>{formattedDate}</span>
           </div>
@@ -85,6 +202,15 @@ function HabitsPage() {
               onClick={handleGoFocus}
             >
               오늘의 집중
+              <img src={arrowRight} alt='화살표 아이콘' />
+            </button>
+
+            <button
+              type='button'
+              className={styles.DetailButton}
+              onClick={handleGoStudyDetail}
+            >
+              습관 기록표
               <img src={arrowRight} alt='화살표 아이콘' />
             </button>
 
@@ -103,7 +229,11 @@ function HabitsPage() {
           <div className={styles.ContentHeader}>
             <h2>오늘의 습관</h2>
 
-            <button type='button' onClick={handleOpenEditModal}>
+            <button
+              type='button'
+              onClick={handleOpenEditModal}
+              disabled={isSaving}
+            >
               목록 수정
             </button>
           </div>
@@ -119,8 +249,9 @@ function HabitsPage() {
                 <Chip
                   key={habit.id}
                   text={habit.name}
-                  isDone={habit.isDone}
+                  isDone={isDoneToday(habit)}
                   onClick={() => handleToggleHabit(habit.id)}
+                  disabled={togglingHabitId === habit.id}
                 />
               ))
             )}
@@ -129,11 +260,14 @@ function HabitsPage() {
       </div>
 
       {isEditModalOpen && (
-        <Modal1
-          habits={habits}
-          onSave={handleSaveHabits}
-          onCancel={handleCloseEditModal}
-        />
+        <div className={styles.ModalOverlay}>
+          <HabitModal
+            habits={habits}
+            onSave={handleSaveHabits}
+            onCancel={handleCloseEditModal}
+            isSaving={isSaving}
+          />
+        </div>
       )}
     </>
   );

@@ -4,6 +4,7 @@ export const getStudyDetail = async (studyId) => {
   );
   return response.json();
 };
+
 export const checkPassword = async (studyId, data) => {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/studies/${studyId}/confirm-pw`,
@@ -17,11 +18,15 @@ export const checkPassword = async (studyId, data) => {
   );
 
   if (!response.ok) {
-    throw new Error('비밀번호가 틀렸습니다.');
+    const error = new Error('비밀번호가 틀렸습니다.');
+    error.status = response.status;
+
+    throw error;
   }
 
   return response.json();
 };
+
 export const postEmoji = async (studyId, data) => {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/studies/${studyId}/emoji`,
@@ -34,6 +39,7 @@ export const postEmoji = async (studyId, data) => {
     }
   );
 };
+
 export const deleteStudy = async (studyId, data) => {
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/studies/${studyId}`,

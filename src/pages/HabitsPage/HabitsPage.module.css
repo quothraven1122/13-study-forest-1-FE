@@ -24,15 +24,13 @@
 }
 
 .HeaderLeft h1 {
-  width: 204px;
-  height: 38px;
-
   margin: 0;
 
   font-family: Pretendard;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 38px;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 100%;
+  letter-spacing: 0;
 
   color: #414141;
 }
@@ -74,38 +72,45 @@
 }
 
 .HeaderRight {
-  width: 242px;
-  height: 48px;
-
   display: flex;
+  align-items: center;
+  justify-content: flex-end;
   gap: 16px;
+
+  width: auto;
+  flex-shrink: 0;
 }
 
 .HeaderRight button {
-  height: 48px;
-
+  height: 58px;
+  padding: 12px 24px;
+  gap: 4px;
+  border-radius: 15px;
+  line-height: 24px;
   border: 1px solid #dddddd;
-  border-radius: 12px;
-
   background: #ffffff;
 
   font-family: Pretendard;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 100%;
-
+  font-size: 16px;
+  font-weight: 500;
   color: #414141;
 
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4px;
 
+  white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
 }
 
 /* 오늘의 집중 버튼 */
 .FocusButton {
+  width: 144px;
+}
+
+/* 스터디 상세 버튼 */
+.DetailButton {
   width: 144px;
 }
 
@@ -156,16 +161,42 @@
   position: absolute;
   right: calc((100% - 400px) / 2);
 
+  width: 52px;
+  height: 17px;
+
   border: 0;
   background: none;
+  padding: 0;
 
   font-family: Pretendard;
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 100%;
+  letter-spacing: 0;
+  text-align: center;
 
   color: #818181;
 
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.FocusButton,
+.DetailButton,
+.HomeButton {
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .HabitList {
@@ -197,6 +228,23 @@
   margin-top: 8px;
 
   font-size: 14px;
+}
+
+.ModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
 }
 
 @media (max-width: 744px) {
@@ -246,6 +294,10 @@
   }
 
   .FocusButton {
+    width: 120px;
+  }
+
+  .DetailButton {
     width: 120px;
   }
 
